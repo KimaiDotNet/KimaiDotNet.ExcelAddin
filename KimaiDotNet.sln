@@ -1,0 +1,160 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30709.64
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3F4A1FDE-A863-4AC4-A51B-228BCB3A31DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KimaiDotNet.Core", "src\KimaiDotNet.Core\KimaiDotNet.Core.csproj", "{1522AB8B-41DA-4F65-9666-2FCA563C4555}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ADEC8EE5-8ADA-4E81-8A29-B9BFEA3EA1DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KimaiDotNet.Core.Tests", "tests\KimaiDotNet.Core.Tests\KimaiDotNet.Core.Tests.csproj", "{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{836557FA-5534-4C8D-B91A-5089DF002B07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KimaiDotNet.Console", "samples\KimaiDotNet.Console\KimaiDotNet.Console.csproj", "{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{470B1BF6-A1D6-4DC9-9375-B09743727673}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7CF85999-9A1A-4FA1-B20F-8FAB45EA9D75}"
+	ProjectSection(SolutionItems) = preProject
+		csharp-dotnet2-client\docs\Activity.md = csharp-dotnet2-client\docs\Activity.md
+		csharp-dotnet2-client\docs\ActivityApi.md = csharp-dotnet2-client\docs\ActivityApi.md
+		csharp-dotnet2-client\docs\ActivityCollection.md = csharp-dotnet2-client\docs\ActivityCollection.md
+		csharp-dotnet2-client\docs\ActivityEditForm.md = csharp-dotnet2-client\docs\ActivityEditForm.md
+		csharp-dotnet2-client\docs\ActivityEntity.md = csharp-dotnet2-client\docs\ActivityEntity.md
+		csharp-dotnet2-client\docs\ActivityExpanded.md = csharp-dotnet2-client\docs\ActivityExpanded.md
+		csharp-dotnet2-client\docs\ActivityMeta.md = csharp-dotnet2-client\docs\ActivityMeta.md
+		csharp-dotnet2-client\docs\ActivityRate.md = csharp-dotnet2-client\docs\ActivityRate.md
+		csharp-dotnet2-client\docs\ActivityRateForm.md = csharp-dotnet2-client\docs\ActivityRateForm.md
+		csharp-dotnet2-client\docs\Body.md = csharp-dotnet2-client\docs\Body.md
+		csharp-dotnet2-client\docs\Body_1.md = csharp-dotnet2-client\docs\Body_1.md
+		csharp-dotnet2-client\docs\Body_2.md = csharp-dotnet2-client\docs\Body_2.md
+		csharp-dotnet2-client\docs\Body_3.md = csharp-dotnet2-client\docs\Body_3.md
+		csharp-dotnet2-client\docs\Body_4.md = csharp-dotnet2-client\docs\Body_4.md
+		csharp-dotnet2-client\docs\Customer.md = csharp-dotnet2-client\docs\Customer.md
+		csharp-dotnet2-client\docs\CustomerApi.md = csharp-dotnet2-client\docs\CustomerApi.md
+		csharp-dotnet2-client\docs\CustomerCollection.md = csharp-dotnet2-client\docs\CustomerCollection.md
+		csharp-dotnet2-client\docs\CustomerEditForm.md = csharp-dotnet2-client\docs\CustomerEditForm.md
+		csharp-dotnet2-client\docs\CustomerEntity.md = csharp-dotnet2-client\docs\CustomerEntity.md
+		csharp-dotnet2-client\docs\CustomerMeta.md = csharp-dotnet2-client\docs\CustomerMeta.md
+		csharp-dotnet2-client\docs\CustomerRate.md = csharp-dotnet2-client\docs\CustomerRate.md
+		csharp-dotnet2-client\docs\CustomerRateForm.md = csharp-dotnet2-client\docs\CustomerRateForm.md
+		csharp-dotnet2-client\docs\DefaultApi.md = csharp-dotnet2-client\docs\DefaultApi.md
+		csharp-dotnet2-client\docs\I18nConfig.md = csharp-dotnet2-client\docs\I18nConfig.md
+		csharp-dotnet2-client\docs\Project.md = csharp-dotnet2-client\docs\Project.md
+		csharp-dotnet2-client\docs\ProjectApi.md = csharp-dotnet2-client\docs\ProjectApi.md
+		csharp-dotnet2-client\docs\ProjectCollection.md = csharp-dotnet2-client\docs\ProjectCollection.md
+		csharp-dotnet2-client\docs\ProjectEditForm.md = csharp-dotnet2-client\docs\ProjectEditForm.md
+		csharp-dotnet2-client\docs\ProjectEntity.md = csharp-dotnet2-client\docs\ProjectEntity.md
+		csharp-dotnet2-client\docs\ProjectExpanded.md = csharp-dotnet2-client\docs\ProjectExpanded.md
+		csharp-dotnet2-client\docs\ProjectMeta.md = csharp-dotnet2-client\docs\ProjectMeta.md
+		csharp-dotnet2-client\docs\ProjectRate.md = csharp-dotnet2-client\docs\ProjectRate.md
+		csharp-dotnet2-client\docs\ProjectRateForm.md = csharp-dotnet2-client\docs\ProjectRateForm.md
+		docs\swagger.yaml = docs\swagger.yaml
+		csharp-dotnet2-client\docs\TagApi.md = csharp-dotnet2-client\docs\TagApi.md
+		csharp-dotnet2-client\docs\TagEditForm.md = csharp-dotnet2-client\docs\TagEditForm.md
+		csharp-dotnet2-client\docs\TagEntity.md = csharp-dotnet2-client\docs\TagEntity.md
+		csharp-dotnet2-client\docs\Team.md = csharp-dotnet2-client\docs\Team.md
+		csharp-dotnet2-client\docs\TeamApi.md = csharp-dotnet2-client\docs\TeamApi.md
+		csharp-dotnet2-client\docs\TeamCollection.md = csharp-dotnet2-client\docs\TeamCollection.md
+		csharp-dotnet2-client\docs\TeamEditForm.md = csharp-dotnet2-client\docs\TeamEditForm.md
+		csharp-dotnet2-client\docs\TeamEntity.md = csharp-dotnet2-client\docs\TeamEntity.md
+		csharp-dotnet2-client\docs\TimesheetApi.md = csharp-dotnet2-client\docs\TimesheetApi.md
+		csharp-dotnet2-client\docs\TimesheetCollection.md = csharp-dotnet2-client\docs\TimesheetCollection.md
+		csharp-dotnet2-client\docs\TimesheetCollectionExpanded.md = csharp-dotnet2-client\docs\TimesheetCollectionExpanded.md
+		csharp-dotnet2-client\docs\TimesheetConfig.md = csharp-dotnet2-client\docs\TimesheetConfig.md
+		csharp-dotnet2-client\docs\TimesheetEditForm.md = csharp-dotnet2-client\docs\TimesheetEditForm.md
+		csharp-dotnet2-client\docs\TimesheetEntity.md = csharp-dotnet2-client\docs\TimesheetEntity.md
+		csharp-dotnet2-client\docs\TimesheetEntityExpanded.md = csharp-dotnet2-client\docs\TimesheetEntityExpanded.md
+		csharp-dotnet2-client\docs\TimesheetMeta.md = csharp-dotnet2-client\docs\TimesheetMeta.md
+		csharp-dotnet2-client\docs\User.md = csharp-dotnet2-client\docs\User.md
+		csharp-dotnet2-client\docs\UserApi.md = csharp-dotnet2-client\docs\UserApi.md
+		csharp-dotnet2-client\docs\UserCollection.md = csharp-dotnet2-client\docs\UserCollection.md
+		csharp-dotnet2-client\docs\UserCreateForm.md = csharp-dotnet2-client\docs\UserCreateForm.md
+		csharp-dotnet2-client\docs\UserEditForm.md = csharp-dotnet2-client\docs\UserEditForm.md
+		csharp-dotnet2-client\docs\UserEntity.md = csharp-dotnet2-client\docs\UserEntity.md
+		csharp-dotnet2-client\docs\Version.md = csharp-dotnet2-client\docs\Version.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A92C0157-2A06-4898-ADD3-D566D55BD4EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|x64.Build.0 = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Debug|x86.Build.0 = Debug|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|x64.ActiveCfg = Release|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|x64.Build.0 = Release|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|x86.ActiveCfg = Release|Any CPU
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555}.Release|x86.Build.0 = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|x64.Build.0 = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Debug|x86.Build.0 = Debug|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|x64.ActiveCfg = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|x64.Build.0 = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|x86.ActiveCfg = Release|Any CPU
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99}.Release|x86.Build.0 = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|x64.Build.0 = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Debug|x86.Build.0 = Debug|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|x64.ActiveCfg = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|x64.Build.0 = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|x86.ActiveCfg = Release|Any CPU
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A}.Release|x86.Build.0 = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|x64.Build.0 = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|x64.ActiveCfg = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|x64.Build.0 = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1522AB8B-41DA-4F65-9666-2FCA563C4555} = {3F4A1FDE-A863-4AC4-A51B-228BCB3A31DB}
+		{1BECBB3E-09F6-4B30-A6F5-8A4C5B5BEC99} = {ADEC8EE5-8ADA-4E81-8A29-B9BFEA3EA1DB}
+		{13DBE2AD-3FEE-43CB-9591-1FCF303FE57A} = {836557FA-5534-4C8D-B91A-5089DF002B07}
+		{E1C1B65F-1EF0-407C-AB2E-F0249E694DD4} = {A92C0157-2A06-4898-ADD3-D566D55BD4EC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE0972FC-1A73-4909-B9D7-80386767C50C}
+	EndGlobalSection
+EndGlobal
