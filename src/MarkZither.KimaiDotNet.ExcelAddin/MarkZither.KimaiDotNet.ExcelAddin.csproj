@@ -169,6 +169,8 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\IKimaiServices.cs" />
+    <Compile Include="Services\KimaiServices.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>

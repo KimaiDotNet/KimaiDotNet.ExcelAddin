@@ -40,10 +40,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.tglApiCreds = this.Factory.CreateRibbonToggleButton();
             this.btnConnect = this.Factory.CreateRibbonButton();
             this.group2 = this.Factory.CreateRibbonGroup();
+            this.btnSync = this.Factory.CreateRibbonButton();
             this.grpVersion = this.Factory.CreateRibbonGroup();
             this.lblVersion = this.Factory.CreateRibbonLabel();
             this.lblVersionNo = this.Factory.CreateRibbonLabel();
-            this.btnSync = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -68,8 +68,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             // tglApiCreds
             // 
+            this.tglApiCreds.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.tglApiCreds.Label = "API Credentials";
             this.tglApiCreds.Name = "tglApiCreds";
+            this.tglApiCreds.OfficeImageId = "PivotTableFieldSettings";
+            this.tglApiCreds.ScreenTip = "test tip";
+            this.tglApiCreds.ShowImage = true;
+            this.tglApiCreds.SuperTip = "test super tip";
             this.tglApiCreds.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.tglApiCreds_Click);
             // 
             // btnConnect
@@ -85,6 +90,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.group2.Items.Add(this.btnSync);
             this.group2.Label = "group2";
             this.group2.Name = "group2";
+            // 
+            // btnSync
+            // 
+            this.btnSync.Label = "Sync Data";
+            this.btnSync.Name = "btnSync";
+            this.btnSync.OfficeImageId = "ReplicationSynchronizeNow";
+            this.btnSync.ShowImage = true;
+            this.btnSync.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSync_Click);
             // 
             // grpVersion
             // 
@@ -102,14 +115,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.lblVersionNo.Label = "Not Connected";
             this.lblVersionNo.Name = "lblVersionNo";
-            // 
-            // btnSync
-            // 
-            this.btnSync.Label = "Sync Data";
-            this.btnSync.Name = "btnSync";
-            this.btnSync.OfficeImageId = "ReplicationSynchronizeNow";
-            this.btnSync.ShowImage = true;
-            this.btnSync.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSync_Click);
             // 
             // KimaiRibbon
             // 

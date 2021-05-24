@@ -10,6 +10,8 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using System.Xml.Serialization;
 using MarkZither.KimaiDotNet.ExcelAddin.Properties;
+using MarkZither.KimaiDotNet.Models;
+using System.Diagnostics;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -20,10 +22,51 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
-        #endregion
-
+        public List<ProjectCollection> Projects { get; set; }
+        public List<ActivityCollection> Activities { get; set; }
+        public List<CustomerCollection> Customers { get; set; }
         //https://docs.microsoft.com/en-us/visualstudio/vsto/walkthrough-synchronizing-a-custom-task-pane-with-a-ribbon-button?view=vs-2019
         private Microsoft.Office.Tools.CustomTaskPane apiCredentialsTaskPane;
+        public Microsoft.Office.Tools.CustomTaskPane TaskPane
+        {
+            get
+            {
+                return apiCredentialsTaskPane;
+            }
+        }
+
+        #endregion
+
+        public ProjectCollection GetProjectById(int id)
+        {
+            var project = Projects.SingleOrDefault(x => x.Id.Equals(id));
+            if(project == default(ProjectCollection))
+            {
+                Debug.Write($"Id not found: {id}");
+            }
+            return project;
+        }
+
+        public ActivityCollection GetActivityById(int id)
+        {
+            var activity = Activities.SingleOrDefault(x => x.Id.Equals(id));
+            if (activity == default(ActivityCollection))
+            {
+                Debug.Write($"Id not found: {id}");
+            }
+            return activity;
+        }
+
+        public ProjectCollection GetProjectByName(string name)
+        {
+            var project = Projects.SingleOrDefault(x => x.Name.Equals(name));
+            if (project == default(ProjectCollection))
+            {
+                Debug.WriteLine($"Id not found: {name}");
+            }
+            return project;
+        }
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             var myUserControl1 = new ucApiCredentials();
@@ -54,14 +97,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             Globals.Ribbons.KimaiRibbon.tglApiCreds.Checked =
                 apiCredentialsTaskPane.Visible;
-        }
-
-        public Microsoft.Office.Tools.CustomTaskPane TaskPane
-        {
-            get
-            {
-                return apiCredentialsTaskPane;
-            }
         }
 
         #region VSTO generated code
