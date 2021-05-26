@@ -22,9 +22,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
-        public List<ProjectCollection> Projects { get; set; }
-        public List<ActivityCollection> Activities { get; set; }
-        public List<CustomerCollection> Customers { get; set; }
+        public IList<ProjectCollection> Projects { get; set; }
+        public IList<ActivityCollection> Activities { get; set; }
+        public IList<CustomerCollection> Customers { get; set; }
+        public IList<TimesheetCollection> Timesheets { get; set; }
         //https://docs.microsoft.com/en-us/visualstudio/vsto/walkthrough-synchronizing-a-custom-task-pane-with-a-ribbon-button?view=vs-2019
         private Microsoft.Office.Tools.CustomTaskPane apiCredentialsTaskPane;
         public Microsoft.Office.Tools.CustomTaskPane TaskPane

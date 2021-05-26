@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -36,7 +37,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Globals.ThisAddIn.ApiUsername = txtApiUsername.Text;
                 Globals.ThisAddIn.ApiPassword = txtApiPassword.Text;
 
-                KimaiServices services = new KimaiServices();
+                IKimaiServices services;
+                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+                {
+                    services = new MockKimaiServices();
+                }
+                else
+                {
+                    services = new KimaiServices();
+                }
                 var version = await services.GetVersion();
                 Globals.Ribbons.GetRibbon<KimaiRibbon>().lblVersionNo.Label = version.VersionProperty;
             }
@@ -52,10 +61,18 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             client.DefaultRequestHeaders.Add("X-AUTH-USER", userName);
             client.DefaultRequestHeaders.Add("X-AUTH-TOKEN", password);
 
-            Kimai2APIDocs docs = new Kimai2APIDocs(client, false);
+            IKimaiServices services;
+            if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+            {
+                services = new MockKimaiServices();
+            }
+            else
+            {
+                services = new KimaiServices();
+            }
             try
             {
-                var version = docs.VersionMethod();
+                _ = services.GetPing();
                 lblConnectionStatus.ForeColor = Color.Green;
                 lblConnectionStatus.Text = "Success";
             }
