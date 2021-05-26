@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,13 +28,17 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             if(this.ValidateChildren())
             {
                 Globals.ThisAddIn.ApiUrl = txtAPIUrl.Text;
                 Globals.ThisAddIn.ApiUsername = txtApiUsername.Text;
                 Globals.ThisAddIn.ApiPassword = txtApiPassword.Text;
+
+                KimaiServices services = new KimaiServices();
+                var version = await services.GetVersion();
+                Globals.Ribbons.GetRibbon<KimaiRibbon>().lblVersionNo.Label = version.VersionProperty;
             }
         }
 

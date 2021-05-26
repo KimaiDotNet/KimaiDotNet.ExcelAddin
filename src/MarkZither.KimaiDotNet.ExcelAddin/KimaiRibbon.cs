@@ -26,7 +26,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             string cellAddress = Target.get_Address(
                 Microsoft.Office.Interop.Excel.XlReferenceStyle.xlA1);
-            System.Windows.Forms.MessageBox.Show("Cell " + cellAddress + " changed.");
         }
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
@@ -77,6 +76,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet;
 
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+            sheet.Unprotect();
             Globals.ThisAddIn.Application.Cells.Locked = false;
 
             sheet.Change -= new Microsoft.Office.Interop.Excel.
@@ -153,10 +153,81 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
             Globals.ThisAddIn.Application.Cells.Locked = false;
-            Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count}").Locked = true;
+            Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count + 1}").Locked = true;
             sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
+            try
+            {
+                //find a row with no id to post
+                for (int i = timesheets.Count; i < 10000; i++)
+                {
+                    dynamic id = ((Excel.Range)sheet.Cells[i, IdColumnIndex]).Value2;
+                    if(id is int || id is double)
+                    {
+
+                    }
+                    if (id is string)
+                    {
+
+                    }
+                    if(id is null)
+                    {
+                        dynamic date = ((Excel.Range)sheet.Cells[i, DateColumnIndex]).Value2;
+                        if (date != null && date is DateTime)
+                        {
+                            var timesheet = await service.PostTimesheet(new Models.TimesheetEditForm()
+                            {
+                                Project = 1,
+                                Activity = 1,
+                                Begin = DateTime.Now,
+                                End = DateTime.Now.AddHours(1),
+                                User = 5,
+                                Description = $"mark {DateTime.Now.Ticks}"
+                            });
+
+                            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+                            sheet.Unprotect();
+                            Globals.ThisAddIn.Application.Cells.Locked = false;
+                            sheet.Change -= new Microsoft.Office.Interop.Excel.
+                            DocEvents_ChangeEventHandler(changesRange_Change);
+
+                            ((Excel.Range)sheet.Cells[i, IdColumnIndex]).Value2 = timesheet.Id;
+                            //((Excel.Range)sheet.Cells[timesheets.Count + 2, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                            ((Excel.Range)sheet.Cells[i, DateColumnIndex]).Value2 = timesheet.Begin.Date.ToOADate();
+                            if (timesheet.Project.HasValue)
+                            {
+                                var project = Globals.ThisAddIn.GetProjectById(timesheet.Project.Value);
+                                ((Excel.Range)sheet.Cells[i, CustomerColumnIndex]).Value2 = project.ParentTitle; // timesheets[idxRow - 1].cu;
+                                ((Excel.Range)sheet.Cells[i, ProjectColumnIndex]).Value2 = project.Name;
+                            }
+                            if (timesheet.Activity.HasValue)
+                            {
+                                var activity = Globals.ThisAddIn.GetActivityById(timesheet.Activity.Value);
+                                ((Excel.Range)sheet.Cells[i, ActivityColumnIndex]).Value2 = activity.Name;
+                            }
+                ((Excel.Range)sheet.Cells[i, DescColumnIndex]).Value2 = timesheet.Description;
+
+                            sheet.Change += new Microsoft.Office.Interop.Excel.
+                            DocEvents_ChangeEventHandler(changesRange_Change);
+
+                            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+                            Globals.ThisAddIn.Application.Cells.Locked = false;
+                            Globals.ThisAddIn.Application.get_Range("A1", $"A{i}").Locked = true;
+                            sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                              Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errors = ex.Message;
+            }
         }
 
         private void AddDataValidationToColumn(Worksheet sheet, string flatList, int ColumnIndex)

@@ -1,5 +1,7 @@
 ﻿using MarkZither.KimaiDotNet.Models;
 
+using Microsoft.Rest;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +66,30 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync();
 
             return timesheets;
+        }
+
+        public async Task<HttpOperationResponse> GetPing()
+        {
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            var ping = await docs.PingWithHttpMessagesAsync();
+
+            return ping;
+        }
+
+        public async Task<Models.Version> GetVersion()
+        {
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            var version = await docs.VersionMethodAsync();
+
+            return version;
+        }
+
+        public async Task<TimesheetEntity> PostTimesheet(TimesheetEditForm timesheetEditForm)
+        {
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            var timesheet = await docs.CreateTimesheetRecordUsingPostAsync(timesheetEditForm);
+
+            return timesheet;
         }
     }
 }
