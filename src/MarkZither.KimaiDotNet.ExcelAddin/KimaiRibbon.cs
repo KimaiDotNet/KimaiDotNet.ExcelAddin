@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -299,6 +300,21 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             cell.Validation.IgnoreBlank = true;
             cell.Validation.InCellDropdown = true;
+        }
+
+        private void btnSettings_Click(object sender, RibbonControlEventArgs e)
+        {
+
+        }
+
+        private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
+        {
+            MessageBox.Show("Coming Soon!");
+        }
+
+        private void btnSyncPremuim_Click(object sender, RibbonControlEventArgs e)
+        {
+            MessageBox.Show("This is a premium feature please consider sponsoring the project.");
         }
     }
 }

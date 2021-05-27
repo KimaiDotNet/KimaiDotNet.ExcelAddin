@@ -18,7 +18,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         private string Password { get; set; }
         private string ApiUrl { get; set; }
         private HttpClient Client { get; set; }
-        Random rnd = new Random(DateTime.Now.Millisecond);
+
+        readonly Random rnd = new Random(DateTime.Now.Millisecond); //DevSkim: ignore DS148264
         public MockKimaiServices()
         {
             Username = Globals.ThisAddIn.ApiUsername;

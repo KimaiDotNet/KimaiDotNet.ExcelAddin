@@ -36,35 +36,48 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void InitializeComponent()
         {
             this.tab1 = this.Factory.CreateRibbonTab();
-            this.group1 = this.Factory.CreateRibbonGroup();
+            this.grpSettings = this.Factory.CreateRibbonGroup();
             this.tglApiCreds = this.Factory.CreateRibbonToggleButton();
             this.btnConnect = this.Factory.CreateRibbonButton();
-            this.group2 = this.Factory.CreateRibbonGroup();
+            this.btnSettings = this.Factory.CreateRibbonButton();
+            this.grpTimesheets = this.Factory.CreateRibbonGroup();
             this.btnSync = this.Factory.CreateRibbonButton();
+            this.btnCalendar = this.Factory.CreateRibbonButton();
+            this.grpAdmin = this.Factory.CreateRibbonGroup();
+            this.btnSyncCustomers = this.Factory.CreateRibbonButton();
+            this.btnSyncProjects = this.Factory.CreateRibbonButton();
             this.grpVersion = this.Factory.CreateRibbonGroup();
             this.lblVersion = this.Factory.CreateRibbonLabel();
             this.lblVersionNo = this.Factory.CreateRibbonLabel();
+            this.grpSupport = this.Factory.CreateRibbonGroup();
+            this.btnSponsor = this.Factory.CreateRibbonButton();
+            this.btnBuy = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
-            this.group1.SuspendLayout();
-            this.group2.SuspendLayout();
+            this.grpSettings.SuspendLayout();
+            this.grpTimesheets.SuspendLayout();
+            this.grpAdmin.SuspendLayout();
             this.grpVersion.SuspendLayout();
+            this.grpSupport.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
-            this.tab1.Groups.Add(this.group1);
-            this.tab1.Groups.Add(this.group2);
+            this.tab1.Groups.Add(this.grpSettings);
+            this.tab1.Groups.Add(this.grpTimesheets);
+            this.tab1.Groups.Add(this.grpAdmin);
+            this.tab1.Groups.Add(this.grpSupport);
             this.tab1.Groups.Add(this.grpVersion);
             this.tab1.Label = "Kimai";
             this.tab1.Name = "tab1";
             // 
-            // group1
+            // grpSettings
             // 
-            this.group1.Items.Add(this.tglApiCreds);
-            this.group1.Items.Add(this.btnConnect);
-            this.group1.Label = "group1";
-            this.group1.Name = "group1";
+            this.grpSettings.Items.Add(this.tglApiCreds);
+            this.grpSettings.Items.Add(this.btnConnect);
+            this.grpSettings.Items.Add(this.btnSettings);
+            this.grpSettings.Label = "Settings";
+            this.grpSettings.Name = "grpSettings";
             // 
             // tglApiCreds
             // 
@@ -85,19 +98,53 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnConnect.ShowImage = true;
             this.btnConnect.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConnect_Click);
             // 
-            // group2
+            // btnSettings
             // 
-            this.group2.Items.Add(this.btnSync);
-            this.group2.Label = "group2";
-            this.group2.Name = "group2";
+            this.btnSettings.Label = "Settings";
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSettings_Click);
+            // 
+            // grpTimesheets
+            // 
+            this.grpTimesheets.Items.Add(this.btnSync);
+            this.grpTimesheets.Items.Add(this.btnCalendar);
+            this.grpTimesheets.Label = "Timesheets";
+            this.grpTimesheets.Name = "grpTimesheets";
             // 
             // btnSync
             // 
+            this.btnSync.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnSync.Label = "Sync Data";
             this.btnSync.Name = "btnSync";
             this.btnSync.OfficeImageId = "ReplicationSynchronizeNow";
             this.btnSync.ShowImage = true;
             this.btnSync.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSync_Click);
+            // 
+            // btnCalendar
+            // 
+            this.btnCalendar.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnCalendar.Label = "Import Calendar";
+            this.btnCalendar.Name = "btnCalendar";
+            this.btnCalendar.ShowImage = true;
+            this.btnCalendar.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCalendar_Click);
+            // 
+            // grpAdmin
+            // 
+            this.grpAdmin.Items.Add(this.btnSyncCustomers);
+            this.grpAdmin.Items.Add(this.btnSyncProjects);
+            this.grpAdmin.Label = "Admin";
+            this.grpAdmin.Name = "grpAdmin";
+            // 
+            // btnSyncCustomers
+            // 
+            this.btnSyncCustomers.Label = "Sync Customers";
+            this.btnSyncCustomers.Name = "btnSyncCustomers";
+            // 
+            // btnSyncProjects
+            // 
+            this.btnSyncProjects.Label = "Sync Projects";
+            this.btnSyncProjects.Name = "btnSyncProjects";
+            this.btnSyncProjects.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
             // grpVersion
             // 
@@ -116,6 +163,23 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.lblVersionNo.Label = "Not Connected";
             this.lblVersionNo.Name = "lblVersionNo";
             // 
+            // grpSupport
+            // 
+            this.grpSupport.Items.Add(this.btnSponsor);
+            this.grpSupport.Items.Add(this.btnBuy);
+            this.grpSupport.Label = "Support";
+            this.grpSupport.Name = "grpSupport";
+            // 
+            // btnSponsor
+            // 
+            this.btnSponsor.Label = "Sponsor";
+            this.btnSponsor.Name = "btnSponsor";
+            // 
+            // btnBuy
+            // 
+            this.btnBuy.Label = "Buy";
+            this.btnBuy.Name = "btnBuy";
+            // 
             // KimaiRibbon
             // 
             this.Name = "KimaiRibbon";
@@ -124,12 +188,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.KimaiRibbon_Load);
             this.tab1.ResumeLayout(false);
             this.tab1.PerformLayout();
-            this.group1.ResumeLayout(false);
-            this.group1.PerformLayout();
-            this.group2.ResumeLayout(false);
-            this.group2.PerformLayout();
+            this.grpSettings.ResumeLayout(false);
+            this.grpSettings.PerformLayout();
+            this.grpTimesheets.ResumeLayout(false);
+            this.grpTimesheets.PerformLayout();
+            this.grpAdmin.ResumeLayout(false);
+            this.grpAdmin.PerformLayout();
             this.grpVersion.ResumeLayout(false);
             this.grpVersion.PerformLayout();
+            this.grpSupport.ResumeLayout(false);
+            this.grpSupport.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -137,14 +205,22 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         #endregion
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpSettings;
         internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton tglApiCreds;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnConnect;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpTimesheets;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpVersion;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblVersion;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblVersionNo;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSync;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSettings;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnCalendar;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpAdmin;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSyncCustomers;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSyncProjects;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpSupport;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSponsor;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnBuy;
     }
 
     partial class ThisRibbonCollection
