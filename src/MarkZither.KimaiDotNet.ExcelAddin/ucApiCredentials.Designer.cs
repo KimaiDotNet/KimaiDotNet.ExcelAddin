@@ -41,7 +41,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.lblConnectionStatus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // txtApiUsername
@@ -103,6 +105,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.txtAPIUrl.Size = new System.Drawing.Size(153, 20);
             this.txtAPIUrl.TabIndex = 5;
             this.txtAPIUrl.Validating += new System.ComponentModel.CancelEventHandler(this.txtAPIUrl_Validating);
+            this.txtAPIUrl.Validated += new System.EventHandler(this.txtAPIUrl_Validated);
             // 
             // toolTip1
             // 
@@ -136,6 +139,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.panel1.Size = new System.Drawing.Size(153, 52);
             this.panel1.TabIndex = 9;
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // ucApiCredentials
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,8 +158,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.Controls.Add(this.txtApiUsername);
             this.Name = "ucApiCredentials";
             this.Size = new System.Drawing.Size(194, 311);
+            this.Validating += new System.ComponentModel.CancelEventHandler(this.ucApiCredentials_Validating);
+            this.Validated += new System.EventHandler(this.ucApiCredentials_Validated);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -171,5 +181,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private System.Windows.Forms.Button btnTestConnection;
         private System.Windows.Forms.Label lblConnectionStatus;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

@@ -6,8 +6,10 @@ using Microsoft.Office.Tools.Ribbon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Deployment.Application;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,7 +36,21 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         }
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
+            lblAddinVersionNo.Label = GetVersionNumber();
+        }
 
+        private string GetVersionNumber()
+        {
+            string version = string.Empty;
+            if(ApplicationDeployment.IsNetworkDeployed)
+            {
+                version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            else
+            {
+                version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+            return version;
         }
 
         private void tglApiCreds_Click(object sender, RibbonControlEventArgs e)
@@ -45,26 +61,36 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private async void btnConnect_Click(object sender, RibbonControlEventArgs e)
         {
             IKimaiServices services;
+            try
+            {
+                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+                {
+                    services = new MockKimaiServices();
+                }
+                else
+                {
+                    services = new KimaiServices();
+                }
+                var version = await services.GetVersion().ConfigureAwait(false);
+
+                lblVersionNo.Label = version.VersionProperty;
+
+                btnSync.Enabled = true;
+            }
+            catch(Exception ex)
+            { 
+            }
+        }
+
+        private async void btnSync_Click(object sender, RibbonControlEventArgs e)
+        {
+            IKimaiServices services;
             if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
             {
                 services = new MockKimaiServices();
             }
             else
             {
-                services = new KimaiServices();
-            }
-            var version = await services.GetVersion().ConfigureAwait(false);
-
-            lblVersionNo.Label = version.VersionProperty;
-        }
-
-        private async void btnSync_Click(object sender, RibbonControlEventArgs e)
-        {
-            IKimaiServices services;
-            if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)) {
-                services = new MockKimaiServices();
-            }
-            else {
                 services = new KimaiServices();
             }
 
@@ -77,12 +103,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             var activities = await services.GetActivities().ConfigureAwait(false);
             Globals.ThisAddIn.Activities = activities.ToList();
 
-            var timesheets = await services.GetTimesheets().ConfigureAwait(false);
-            Globals.ThisAddIn.Timesheets = timesheets.ToList();
             // https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-programmatically-display-a-string-in-a-worksheet-cell?view=vs-2019
             // https://stackoverflow.com/questions/856196/vsto-write-to-a-cell-in-excel
             // https://docs.microsoft.com/en-us/previous-versions/office/troubleshoot/office-developer/automate-excel-using-visual-c-fill-data
-            Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet;
+            Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
+            if (Globals.ThisAddIn.Timesheets != null)
+            {
+                await SyncNewRowsToKimai(services, Globals.ThisAddIn.Timesheets, sheet).ConfigureAwait(false);
+            }
+            var timesheets = await services.GetTimesheets().ConfigureAwait(false);
+            Globals.ThisAddIn.Timesheets = timesheets.ToList();
 
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
             sheet.Unprotect();
@@ -91,29 +121,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             sheet.Change -= new Microsoft.Office.Interop.Excel.
                 DocEvents_ChangeEventHandler(changesRange_Change);
 
-            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Date";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).Value2 = "Customer";
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
-            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).Value2 = "Project";
-            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).EntireColumn.ColumnWidth = 30;
-            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).Value2 = "Activity";
-            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).EntireColumn.ColumnWidth = 30;
-            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).Value2 = "Description";
-            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).EntireColumn.ColumnWidth = 80;
-            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).Value2 = "Begin Time";
-            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).EntireColumn.ColumnWidth = 25;
-            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).Value2 = "End Time";
-            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).EntireColumn.ColumnWidth = 25;
-
-            // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
-            var cell = (Range)sheet.Range[sheet.Cells[2, DateColumnIndex], sheet.Cells[10000, DateColumnIndex]];
-            cell.NumberFormat = "dd-MMM-yyyy"; // e.g. dd-MMM-yyyy
-            var cellBegin = (Range)sheet.Range[sheet.Cells[2, BeginTimeIndex], sheet.Cells[10000, BeginTimeIndex]];
-            cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
-            var cellEnd = (Range)sheet.Range[sheet.Cells[2, EndTimeIndex], sheet.Cells[10000, EndTimeIndex]];
-            cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            SetupHeaderRow(sheet);
 
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
@@ -178,8 +186,33 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count + 1}").Locked = true;
             sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+        }
 
-            await SyncNewRowsToKimai(services, timesheets, sheet).ConfigureAwait(false);
+        private static void SetupHeaderRow(Worksheet sheet)
+        {
+            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Date";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).Value2 = "Customer";
+            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).Value2 = "Project";
+            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).EntireColumn.ColumnWidth = 30;
+            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).Value2 = "Activity";
+            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).EntireColumn.ColumnWidth = 30;
+            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).Value2 = "Description";
+            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).EntireColumn.ColumnWidth = 80;
+            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).Value2 = "Begin Time";
+            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).Value2 = "End Time";
+            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).EntireColumn.ColumnWidth = 25;
+
+            // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
+            var cell = (Range)sheet.Range[sheet.Cells[2, DateColumnIndex], sheet.Cells[10000, DateColumnIndex]];
+            cell.NumberFormat = "dd-MMM-yyyy"; // e.g. dd-MMM-yyyy
+            var cellBegin = (Range)sheet.Range[sheet.Cells[2, BeginTimeIndex], sheet.Cells[10000, BeginTimeIndex]];
+            cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            var cellEnd = (Range)sheet.Range[sheet.Cells[2, EndTimeIndex], sheet.Cells[10000, EndTimeIndex]];
+            cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
         }
 
         private async Task SyncNewRowsToKimai(IKimaiServices service, IList<Models.TimesheetCollection> timesheets, Worksheet sheet)
@@ -286,20 +319,28 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return lastTimeEntry.Value.Hour * 60 + lastTimeEntry.Value.Minute;
         }
 
-        private void AddDataValidationToColumn(Worksheet sheet, string flatList, int ColumnIndex)
+        private void AddDataValidationToColumn(Worksheet sheet, string flatList, int columnIndex)
         {
             // https://stackoverflow.com/questions/2333202/how-do-i-get-an-excel-range-using-row-and-column-numbers-in-vsto-c
-            var cell = (Range)sheet.Range[sheet.Cells[1, ColumnIndex], sheet.Cells[10000, ColumnIndex]];
-            cell.Validation.Delete();
-            cell.Validation.Add(
-               XlDVType.xlValidateList,
-               XlDVAlertStyle.xlValidAlertInformation,
-               XlFormatConditionOperator.xlBetween,
-               flatList,
-               Type.Missing);
+            var cell = (Range)sheet.Range[sheet.Cells[1, columnIndex], sheet.Cells[10000, columnIndex]];
 
-            cell.Validation.IgnoreBlank = true;
-            cell.Validation.InCellDropdown = true;
+            try
+            {
+                cell.Validation.Delete();
+                cell.Validation.Add(
+                   XlDVType.xlValidateList,
+                   XlDVAlertStyle.xlValidAlertInformation,
+                   XlFormatConditionOperator.xlBetween,
+                   flatList,
+                   Type.Missing);
+
+                cell.Validation.IgnoreBlank = true;
+                cell.Validation.InCellDropdown = true;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Failed to set validation on column index ${columnIndex}");
+            }
         }
 
         private void btnSettings_Click(object sender, RibbonControlEventArgs e)
@@ -315,6 +356,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void btnSyncPremuim_Click(object sender, RibbonControlEventArgs e)
         {
             MessageBox.Show("This is a premium feature please consider sponsoring the project.");
+        }
+
+        private void btnInfo_Click(object sender, RibbonControlEventArgs e)
+        {
+            //https://stackoverflow.com/questions/19458721/cant-type-on-a-wpf-window-in-a-vsto-addin
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.Show();
         }
     }
 }

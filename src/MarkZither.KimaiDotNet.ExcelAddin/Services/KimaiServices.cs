@@ -63,7 +63,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<TimesheetCollection>> GetTimesheets()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(null, null, null, null, null, null, null, null, null, null, "begin", "ASC");
+            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(null, null, null, null, null, null, null, null, "150", null, "begin", "ASC", DateTime.Now.AddDays(-21).ToString("yyyy-MM-ddT00:00:00")).ConfigureAwait(false);
 
             return timesheets;
         }
