@@ -136,6 +136,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -191,6 +192,11 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Connected Services\EWSServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GlobalAspects.cs" />
@@ -250,6 +256,748 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="App.config" />
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddDelegateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddDelegateResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddDistributionGroupToImListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddDistributionGroupToImListResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddImContactToGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddImContactToGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddImGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddImGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddNewImContactToGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddNewImContactToGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddNewTelUriContactToGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddNewTelUriContactToGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddTagResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.AddTagResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ApplyConversationActionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ApplyConversationActionResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ArchiveItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ArchiveItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ConvertIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ConvertIdResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CopyFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CopyFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CopyItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CopyItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateAttachmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateAttachmentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateFolderPathResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateFolderPathResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateManagedFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateManagedFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateMeetingInstanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateMeetingInstanceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateMeetingSpaceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateMeetingSpaceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateUserConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.CreateUserConfigurationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteAttachmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteAttachmentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteMeetingInstanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteMeetingInstanceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteMeetingSpaceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteMeetingSpaceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteSearchSuggestionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteSearchSuggestionResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteUserConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DeleteUserConfigurationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DisableAppResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DisableAppResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DisconnectPhoneCallResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.DisconnectPhoneCallResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.EmptyFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.EmptyFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.EndSearchSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.EndSearchSessionResponseMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExecuteSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExecuteSearchResponseMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExpandDLResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExpandDLResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExportItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ExportItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindAvailableMeetingTimesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindAvailableMeetingTimesResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindConversationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindConversationResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMeetingSpaceByJoinUrlResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMeetingSpaceByJoinUrlResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMeetingTimeCandidatesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMeetingTimeCandidatesResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMessageTrackingReportResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindMessageTrackingReportResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindPeopleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindPeopleResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindTagsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.FindTagsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAppManifestsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAppManifestsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAppMarketplaceUrlResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAppMarketplaceUrlResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAttachmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetAttachmentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetClientAccessTokenResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetClientAccessTokenResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetConversationItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetConversationItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetDelegateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetDelegateResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetDiscoverySearchConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetDiscoverySearchConfigurationResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetEventsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetEventsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetHoldOnMailboxesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetHoldOnMailboxesResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetImItemListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetImItemListResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetImItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetImItemsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetInboxRulesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetInboxRulesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetLastPrivateCatalogUpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetLastPrivateCatalogUpdateResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMailTipsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMailTipsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMeetingInstanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMeetingInstanceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMeetingSpaceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMeetingSpaceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMessageTrackingReportResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetMessageTrackingReportResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetNonIndexableItemDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetNonIndexableItemDetailsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetNonIndexableItemStatisticsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetNonIndexableItemStatisticsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPasswordExpirationDateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPasswordExpirationDateResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPersonaResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPersonaResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPhoneCallInformationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPhoneCallInformationResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPrivateCatalogAddInsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetPrivateCatalogAddInsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetRoomListsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetRoomListsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetRoomsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetRoomsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSearchableMailboxesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSearchableMailboxesResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSearchSuggestionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSearchSuggestionsResponseMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetServerTimeZonesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetServerTimeZonesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetServiceConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetServiceConfigurationResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSharingFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSharingFolderResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSharingMetadataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSharingMetadataResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSpecificUserConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetSpecificUserConfigurationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetStreamingEventsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetStreamingEventsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserAvailabilityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserAvailabilityResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserConfigurationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserOofSettingsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserOofSettingsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserPhotoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserPhotoResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserRetentionPolicyTagsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.GetUserRetentionPolicyTagsResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.HideTagResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.HideTagResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.InstallAppResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.InstallAppResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MarkAllItemsAsReadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MarkAllItemsAsReadResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MarkAsJunkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MarkAsJunkResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MoveFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MoveFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MoveItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.MoveItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.PlayOnPhoneResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.PlayOnPhoneResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RefreshSharingFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RefreshSharingFolderResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveContactFromImListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveContactFromImListResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveDelegateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveDelegateResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveDistributionGroupFromImListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveDistributionGroupFromImListResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveImContactFromGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveImContactFromGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveImGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.RemoveImGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ReportMessageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ReportMessageResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ResolveNamesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ResolveNamesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SearchMailboxesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SearchMailboxesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SendItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SendItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.ServerVersionInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetHoldOnMailboxesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetHoldOnMailboxesResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetImGroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetImGroupResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetImListMigrationCompletedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetImListMigrationCompletedResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetTeamMailboxResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetTeamMailboxResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetUserOofSettingsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetUserOofSettingsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetUserPhotoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SetUserPhotoResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.StartSearchSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.StartSearchSessionResponseMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SubscribeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SubscribeResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SyncFolderHierarchyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SyncFolderHierarchyResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SyncFolderItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.SyncFolderItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UninstallAppResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UninstallAppResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UnpinTeamMailboxResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UnpinTeamMailboxResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UnsubscribeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UnsubscribeResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateDelegateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateDelegateResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateFolderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateFolderResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateInboxRulesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateInboxRulesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateItemInRecoverableItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateItemInRecoverableItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateMeetingInstanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateMeetingInstanceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateMeetingSpaceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateMeetingSpaceResponseMessageType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateUserConfigurationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UpdateUserConfigurationResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UploadItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\MarkZither.KimaiDotNet.ExcelAddin.EWSServices.UploadItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EWSServices\messages.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\EWSServices\Services.wsdl" />
+    <None Include="Connected Services\EWSServices\types.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -303,6 +1051,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
       <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Exchange.WebServices">
+      <Version>2.2.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Rest.ClientRuntime">
       <Version>2.3.23</Version>
@@ -369,9 +1120,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\EWSServices\configuration91.svcinfo" />
+    <None Include="Connected Services\EWSServices\configuration.svcinfo" />
+    <None Include="Connected Services\EWSServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Resources\kimai_set_api_password.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\EWSServices\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
