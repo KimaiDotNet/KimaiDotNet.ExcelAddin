@@ -37,25 +37,25 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.grpSettings = this.Factory.CreateRibbonGroup();
-            this.grpTimesheets = this.Factory.CreateRibbonGroup();
-            this.grpAdmin = this.Factory.CreateRibbonGroup();
-            this.grpSupport = this.Factory.CreateRibbonGroup();
-            this.grpVersion = this.Factory.CreateRibbonGroup();
-            this.lblVersion = this.Factory.CreateRibbonLabel();
-            this.lblVersionNo = this.Factory.CreateRibbonLabel();
-            this.lblAddinVersionNo = this.Factory.CreateRibbonLabel();
-            this.lblServerVersion = this.Factory.CreateRibbonLabel();
-            this.separator1 = this.Factory.CreateRibbonSeparator();
             this.tglApiCreds = this.Factory.CreateRibbonToggleButton();
             this.btnConnect = this.Factory.CreateRibbonButton();
             this.btnSettings = this.Factory.CreateRibbonButton();
+            this.grpTimesheets = this.Factory.CreateRibbonGroup();
             this.btnSync = this.Factory.CreateRibbonButton();
             this.btnCalendar = this.Factory.CreateRibbonButton();
+            this.grpAdmin = this.Factory.CreateRibbonGroup();
             this.btnSyncCustomers = this.Factory.CreateRibbonButton();
             this.btnSyncProjects = this.Factory.CreateRibbonButton();
-            this.btnSponsor = this.Factory.CreateRibbonButton();
+            this.grpSupport = this.Factory.CreateRibbonGroup();
             this.btnBuy = this.Factory.CreateRibbonButton();
+            this.btnSponsor = this.Factory.CreateRibbonButton();
             this.btnInfo = this.Factory.CreateRibbonButton();
+            this.grpVersion = this.Factory.CreateRibbonGroup();
+            this.lblVersion = this.Factory.CreateRibbonLabel();
+            this.lblAddinVersionNo = this.Factory.CreateRibbonLabel();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.lblServerVersion = this.Factory.CreateRibbonLabel();
+            this.lblVersionNo = this.Factory.CreateRibbonLabel();
             this.tab1.SuspendLayout();
             this.grpSettings.SuspendLayout();
             this.grpTimesheets.SuspendLayout();
@@ -83,62 +83,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpSettings.Label = "Settings";
             this.grpSettings.Name = "grpSettings";
             // 
-            // grpTimesheets
-            // 
-            this.grpTimesheets.Items.Add(this.btnSync);
-            this.grpTimesheets.Items.Add(this.btnCalendar);
-            this.grpTimesheets.Label = "Timesheets";
-            this.grpTimesheets.Name = "grpTimesheets";
-            // 
-            // grpAdmin
-            // 
-            this.grpAdmin.Items.Add(this.btnSyncCustomers);
-            this.grpAdmin.Items.Add(this.btnSyncProjects);
-            this.grpAdmin.Label = "Admin";
-            this.grpAdmin.Name = "grpAdmin";
-            // 
-            // grpSupport
-            // 
-            this.grpSupport.Items.Add(this.btnBuy);
-            this.grpSupport.Items.Add(this.btnSponsor);
-            this.grpSupport.Items.Add(this.btnInfo);
-            this.grpSupport.Label = "Support";
-            this.grpSupport.Name = "grpSupport";
-            // 
-            // grpVersion
-            // 
-            this.grpVersion.Items.Add(this.lblVersion);
-            this.grpVersion.Items.Add(this.lblAddinVersionNo);
-            this.grpVersion.Items.Add(this.separator1);
-            this.grpVersion.Items.Add(this.lblServerVersion);
-            this.grpVersion.Items.Add(this.lblVersionNo);
-            this.grpVersion.Label = "Version";
-            this.grpVersion.Name = "grpVersion";
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Label = "Addin Version";
-            this.lblVersion.Name = "lblVersion";
-            // 
-            // lblVersionNo
-            // 
-            this.lblVersionNo.Label = "Not Connected";
-            this.lblVersionNo.Name = "lblVersionNo";
-            // 
-            // lblAddinVersionNo
-            // 
-            this.lblAddinVersionNo.Label = "0.0.0.0";
-            this.lblAddinVersionNo.Name = "lblAddinVersionNo";
-            // 
-            // lblServerVersion
-            // 
-            this.lblServerVersion.Label = "Server Version";
-            this.lblServerVersion.Name = "lblServerVersion";
-            // 
-            // separator1
-            // 
-            this.separator1.Name = "separator1";
-            // 
             // tglApiCreds
             // 
             this.tglApiCreds.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -164,6 +108,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSettings_Click);
             // 
+            // grpTimesheets
+            // 
+            this.grpTimesheets.Items.Add(this.btnSync);
+            this.grpTimesheets.Items.Add(this.btnCalendar);
+            this.grpTimesheets.Label = "Timesheets";
+            this.grpTimesheets.Name = "grpTimesheets";
+            // 
             // btnSync
             // 
             this.btnSync.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -183,6 +134,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnCalendar.ShowImage = true;
             this.btnCalendar.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCalendar_Click);
             // 
+            // grpAdmin
+            // 
+            this.grpAdmin.Items.Add(this.btnSyncCustomers);
+            this.grpAdmin.Items.Add(this.btnSyncProjects);
+            this.grpAdmin.Label = "Admin";
+            this.grpAdmin.Name = "grpAdmin";
+            // 
             // btnSyncCustomers
             // 
             this.btnSyncCustomers.Label = "Sync Customers";
@@ -195,17 +153,25 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSyncProjects.Name = "btnSyncProjects";
             this.btnSyncProjects.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
-            // btnSponsor
+            // grpSupport
             // 
-            this.btnSponsor.Label = "Sponsor";
-            this.btnSponsor.Name = "btnSponsor";
-            this.btnSponsor.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
+            this.grpSupport.Items.Add(this.btnBuy);
+            this.grpSupport.Items.Add(this.btnSponsor);
+            this.grpSupport.Items.Add(this.btnInfo);
+            this.grpSupport.Label = "Support";
+            this.grpSupport.Name = "grpSupport";
             // 
             // btnBuy
             // 
             this.btnBuy.Label = "Buy";
             this.btnBuy.Name = "btnBuy";
             this.btnBuy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
+            // 
+            // btnSponsor
+            // 
+            this.btnSponsor.Label = "Sponsor";
+            this.btnSponsor.Name = "btnSponsor";
+            this.btnSponsor.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
             // btnInfo
             // 
@@ -215,6 +181,40 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnInfo.OfficeImageId = "About";
             this.btnInfo.ShowImage = true;
             this.btnInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInfo_Click);
+            // 
+            // grpVersion
+            // 
+            this.grpVersion.Items.Add(this.lblVersion);
+            this.grpVersion.Items.Add(this.lblAddinVersionNo);
+            this.grpVersion.Items.Add(this.separator1);
+            this.grpVersion.Items.Add(this.lblServerVersion);
+            this.grpVersion.Items.Add(this.lblVersionNo);
+            this.grpVersion.Label = "Version";
+            this.grpVersion.Name = "grpVersion";
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Label = "Addin Version";
+            this.lblVersion.Name = "lblVersion";
+            // 
+            // lblAddinVersionNo
+            // 
+            this.lblAddinVersionNo.Label = "0.0.0.0";
+            this.lblAddinVersionNo.Name = "lblAddinVersionNo";
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
+            // lblServerVersion
+            // 
+            this.lblServerVersion.Label = "Server Version";
+            this.lblServerVersion.Name = "lblServerVersion";
+            // 
+            // lblVersionNo
+            // 
+            this.lblVersionNo.Label = "Not Connected";
+            this.lblVersionNo.Name = "lblVersionNo";
             // 
             // KimaiRibbon
             // 

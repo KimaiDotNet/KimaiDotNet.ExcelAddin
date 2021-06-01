@@ -43,7 +43,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<ProjectCollection>> GetProjects()
         {
             var projects = new List<ProjectCollection>();
-            projects.Add(new ProjectCollection() { Id = 1, ParentTitle = "cust1", Name = "project 1"});
+            projects.Add(new ProjectCollection() { Id = 1, ParentTitle = "cust1", Name = "project 1", Customer = 1});
             projects.Add(new ProjectCollection() { Id = 2, ParentTitle = "cust2", Name = "project 2"});
 
             return await Task.FromResult(projects).ConfigureAwait(false);
@@ -61,7 +61,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<ActivityCollection>> GetActivities()
         {
             var activities = new List<ActivityCollection>();
-            activities.Add(new ActivityCollection() {Id = 1, Name = "Act1" });
+            activities.Add(new ActivityCollection() {Id = 1, Name = "Act1", Project = 1, ParentTitle = "Project 1" });
             activities.Add(new ActivityCollection() {Id = 2, Name = "Act2" });
 
             return await Task.FromResult(activities).ConfigureAwait(false);

@@ -96,12 +96,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             var projects = await services.GetProjects().ConfigureAwait(false);
             Globals.ThisAddIn.Projects = projects.ToList();
+            CreateOrUpdateProjectsOnSheet(projects);
 
             var customers = await services.GetCustomers().ConfigureAwait(false);
             Globals.ThisAddIn.Customers = customers.ToList();
+            CreateOrUpdateCustomersOnSheet(customers);
 
             var activities = await services.GetActivities().ConfigureAwait(false);
             Globals.ThisAddIn.Activities = activities.ToList();
+            CreateOrUpdateActivitiesOnSheet(activities);
 
             // https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-programmatically-display-a-string-in-a-worksheet-cell?view=vs-2019
             // https://stackoverflow.com/questions/856196/vsto-write-to-a-cell-in-excel
@@ -121,7 +124,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             sheet.Change -= new Microsoft.Office.Interop.Excel.
                 DocEvents_ChangeEventHandler(changesRange_Change);
 
-            SetupHeaderRow(sheet);
+            SetupTimesheetsHeaderRow(sheet);
 
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
@@ -188,7 +191,116 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
         }
 
-        private static void SetupHeaderRow(Worksheet sheet)
+        private void CreateOrUpdateProjectsOnSheet(IList<Models.ProjectCollection> projects)
+        {
+            Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
+            var projectsWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                                   .SingleOrDefault(w => string.Equals(w.Name, "Projects", StringComparison.OrdinalIgnoreCase));
+            //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
+            if (projectsWorksheet == null)
+            {
+                projectsWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
+                projectsWorksheet.Name = "Projects";
+            }
+
+            sheet.Select();
+            SetupProjectHeaderRow(projectsWorksheet);
+
+            //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
+            for (int idxRow = 1; idxRow <= projects.Count; idxRow++)
+            {
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = projects[idxRow - 1].Id;
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = projects[idxRow - 1].Name;
+                if (projects[idxRow - 1].Customer.HasValue)
+                {
+                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, CustomerColumnIndex]).Value2 = projects[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
+                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ProjectColumnIndex]).Value2 = projects[idxRow - 1].Customer.Value;
+                }
+            }
+        }
+
+        private static void SetupProjectHeaderRow(Worksheet sheet)
+        {
+            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).Value2 = "Parent Title";
+            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).Value2 = "Customer Id";
+        }
+
+        private void CreateOrUpdateActivitiesOnSheet(IList<Models.ActivityCollection> activities)
+        {
+            Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
+            var activitiesWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                                   .SingleOrDefault(w => string.Equals(w.Name, "Activities", StringComparison.OrdinalIgnoreCase));
+            //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
+            if (activitiesWorksheet == null)
+            {
+                activitiesWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
+                activitiesWorksheet.Name = "Activities";
+            }
+            activitiesWorksheet.Visible = Excel.XlSheetVisibility.xlSheetVeryHidden;
+
+            sheet.Select();
+            SetupActivitiesHeaderRow(activitiesWorksheet);
+
+            //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
+            for (int idxRow = 1; idxRow <= activities.Count; idxRow++)
+            {
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = activities[idxRow - 1].Id;
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = activities[idxRow - 1].Name;
+                if (activities[idxRow - 1].Project.HasValue)
+                {
+                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, CustomerColumnIndex]).Value2 = activities[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
+                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ProjectColumnIndex]).Value2 = activities[idxRow - 1].Project.Value;
+                }
+            }
+        }
+
+        private static void SetupActivitiesHeaderRow(Worksheet sheet)
+        {
+            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+        }
+        private void CreateOrUpdateCustomersOnSheet(IList<Models.CustomerCollection> customers)
+        {
+            Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
+            var customersWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                                   .SingleOrDefault(w => string.Equals(w.Name, "Customers", StringComparison.OrdinalIgnoreCase));
+            //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
+            if (customersWorksheet == null)
+            {
+                customersWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
+                customersWorksheet.Name = "Customers";
+            }
+
+            sheet.Select();
+            SetupCustomerHeaderRow(customersWorksheet);
+
+            //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
+            for (int idxRow = 1; idxRow <= customers.Count; idxRow++)
+            {
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = customers[idxRow - 1].Id;
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = customers[idxRow - 1].Name;
+            }
+        }
+
+        private static void SetupCustomerHeaderRow(Worksheet sheet)
+        {
+            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+        }
+
+        private static void SetupTimesheetsHeaderRow(Worksheet sheet)
         {
             ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
             ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Date";
