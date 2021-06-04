@@ -198,9 +198,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private static void AddDataValidationToColumnByRange(int rowCount, Worksheet sheet, string validationListSheetName, int validationListColumnIndex, int validatedColumnIndex)
         {
-            string forumula = "='" + "Customers" + "'!B2:B" + (rowCount + 1).ToString();
+            //string forumula = "='" + "Customers" + "'!B2:B" + (rowCount + 1).ToString();
+            //string forumula = "='" + "Customers" + "'!B:B";
 
             //string forumula = $"='{validationListSheetName}'!{GetColumnName(validationListColumnIndex - 1)}1:{GetColumnName(validationListColumnIndex - 1)}{(rowCount + 2).ToString()}";
+            string forumula = $"='{validationListSheetName}'!{GetColumnName(validationListColumnIndex - 1)}:{GetColumnName(validationListColumnIndex - 1)}";
             Excel.Range cell = sheet.Range[$"{GetColumnName(validatedColumnIndex - 1)}2:{GetColumnName(validatedColumnIndex - 1)}10000"];
             cell.Validation.Delete();
             //cell6.Validation.Add(XlDVType.xlValidateList, XlDVAlertStyle.xlValidAlertInformation, XlFormatConditionOperator.xlBetween, flatlistuom, Type.Missing);
