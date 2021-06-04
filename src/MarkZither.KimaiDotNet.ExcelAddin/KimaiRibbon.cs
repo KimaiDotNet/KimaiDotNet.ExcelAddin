@@ -28,6 +28,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private const int DescColumnIndex = 6;
         private const int BeginTimeIndex = 7;
         private const int EndTimeIndex = 8;
+        private const string CustomersSheetName = "Customers";
 
         void changesRange_Change(Excel.Range Target)
         {
@@ -78,7 +79,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 btnSync.Enabled = true;
             }
             catch(Exception ex)
-            { 
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -125,8 +127,50 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 DocEvents_ChangeEventHandler(changesRange_Change);
 
             SetupTimesheetsHeaderRow(sheet);
+            WriteTimesheetRows(sheet, timesheets);
 
-            //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
+            //https://stackoverflow.com/questions/2414591/how-to-create-validation-from-name-range-on-another-worksheet-in-excel-using-c
+            //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-add-namedrange-controls-to-worksheets?view=vs-2019
+            
+            Microsoft.Office.Interop.Excel.Worksheet worksheet = (Microsoft.Office.Interop.Excel.Worksheet)Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets[1];
+            Microsoft.Office.Tools.Excel.Worksheet extendedWorksheet = Globals.Factory.GetVstoObject(worksheet);
+
+            //https://stackoverflow.com/questions/10373561/convert-a-number-to-a-letter-in-c-sharp-for-use-in-microsoft-excel
+            //https://stackoverflow.com/a/10373827
+            AddDataValidationToColumnByRange(customers.Count, sheet, CustomersSheetName, ExcelAddin.Constants.CustomersSheet.CustomerNameColumnIndex, CustomerColumnIndex);
+
+            var projectList = new List<string>();
+            foreach (var project in projects)
+            {
+                projectList.Add(project.Name);
+            }
+            const string delimiter = ",";
+            var projectFlatList = string.Join(",", projectList.ToArray());
+            var projectFlatList2 = string.Join(delimiter, projects.Select(i => i.Name));
+            AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex);
+
+            sheet.Change += new Microsoft.Office.Interop.Excel.
+                DocEvents_ChangeEventHandler(changesRange_Change);
+
+            var activityList = new List<string>();
+            foreach (var activity in activities)
+            {
+                activityList.Add(activity.Name);
+            }
+
+            var activityFlatList = string.Join(",", activityList.ToArray());
+
+            AddDataValidationToColumnWithFlatList(sheet, activityFlatList, ActivityColumnIndex);
+
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+            Globals.ThisAddIn.Application.Cells.Locked = false;
+            Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count + 1}").Locked = true;
+            sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+              Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+        }
+
+        private static void WriteTimesheetRows(Worksheet sheet, IList<Models.TimesheetCollection> timesheets)
+        {
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
             {
                 ((Excel.Range)sheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = timesheets[idxRow - 1].Id;
@@ -143,52 +187,26 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     var activity = Globals.ThisAddIn.GetActivityById(timesheets[idxRow - 1].Activity.Value);
                     ((Excel.Range)sheet.Cells[idxRow + 1, ActivityColumnIndex]).Value2 = activity.Name;
                 }
-                ((Excel.Range)sheet.Cells[idxRow + 1, DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
+                            ((Excel.Range)sheet.Cells[idxRow + 1, DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
                 ((Excel.Range)sheet.Cells[idxRow + 1, BeginTimeIndex]).Value2 = timesheets[idxRow - 1].Begin.ToOADate();
                 if (timesheets[idxRow - 1].End.HasValue)
                 {
                     ((Excel.Range)sheet.Cells[idxRow + 1, EndTimeIndex]).Value2 = timesheets[idxRow - 1].End.Value.ToOADate();
                 }
             }
+        }
 
-            var customerList = new List<string>();
-            foreach (var customer in customers)
-            {
-                customerList.Add(customer.Name);
-            }
+        private static void AddDataValidationToColumnByRange(int rowCount, Worksheet sheet, string validationListSheetName, int validationListColumnIndex, int validatedColumnIndex)
+        {
+            string forumula = "='" + "Customers" + "'!B2:B" + (rowCount + 1).ToString();
 
-            var customerFlatList = string.Join(",", customerList.ToArray());
-
-            AddDataValidationToColumn(sheet, customerFlatList, CustomerColumnIndex);
-
-            var projectList = new List<string>();
-            foreach (var project in projects)
-            {
-                projectList.Add(project.Name);
-            }
-            const string delimiter = ",";
-            var projectFlatList = string.Join(",", projectList.ToArray());
-            var projectFlatList2 = string.Join(delimiter, projects.Select(i => i.Name));
-            AddDataValidationToColumn(sheet, projectFlatList, ProjectColumnIndex);
-
-            sheet.Change += new Microsoft.Office.Interop.Excel.
-                DocEvents_ChangeEventHandler(changesRange_Change);
-
-            var activityList = new List<string>();
-            foreach (var activity in activities)
-            {
-                activityList.Add(activity.Name);
-            }
-
-            var activityFlatList = string.Join(",", activityList.ToArray());
-
-            AddDataValidationToColumn(sheet, activityFlatList, ActivityColumnIndex);
-
-            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
-            Globals.ThisAddIn.Application.Cells.Locked = false;
-            Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count + 1}").Locked = true;
-            sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-              Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            //string forumula = $"='{validationListSheetName}'!{GetColumnName(validationListColumnIndex - 1)}1:{GetColumnName(validationListColumnIndex - 1)}{(rowCount + 2).ToString()}";
+            Excel.Range cell = sheet.Range[$"{GetColumnName(validatedColumnIndex - 1)}2:{GetColumnName(validatedColumnIndex - 1)}10000"];
+            cell.Validation.Delete();
+            //cell6.Validation.Add(XlDVType.xlValidateList, XlDVAlertStyle.xlValidAlertInformation, XlFormatConditionOperator.xlBetween, flatlistuom, Type.Missing);
+            cell.Validation.Add(XlDVType.xlValidateList, XlDVAlertStyle.xlValidAlertInformation, XlFormatConditionOperator.xlEqual, forumula, Type.Missing);
+            cell.Validation.IgnoreBlank = true;
+            cell.Validation.InCellDropdown = true;
         }
 
         private void CreateOrUpdateProjectsOnSheet(IList<Models.ProjectCollection> projects)
@@ -273,12 +291,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
             var customersWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
-                                   .SingleOrDefault(w => string.Equals(w.Name, "Customers", StringComparison.OrdinalIgnoreCase));
+                                   .SingleOrDefault(w => string.Equals(w.Name, CustomersSheetName, StringComparison.OrdinalIgnoreCase));
             //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
             if (customersWorksheet == null)
             {
                 customersWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
-                customersWorksheet.Name = "Customers";
+                customersWorksheet.Name = CustomersSheetName;
             }
 
             sheet.Select();
@@ -431,8 +449,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return lastTimeEntry.Value.Hour * 60 + lastTimeEntry.Value.Minute;
         }
 
-        private void AddDataValidationToColumn(Worksheet sheet, string flatList, int columnIndex)
+        private void AddDataValidationToColumnWithFlatList(Worksheet sheet, string flatList, int columnIndex)
         {
+            // might not use this method as there is a limit to the number of items that can be supported
+            // however the other way has the limitaiton of needing to have a single range
+            // if for example the a project has no customer there might be 2 ranges required
+            // at which point we will have cell level validation rather than the whole column
+            // and probably namy fewer items in the list
+            //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             // https://stackoverflow.com/questions/2333202/how-do-i-get-an-excel-range-using-row-and-column-numbers-in-vsto-c
             var cell = (Range)sheet.Range[sheet.Cells[1, columnIndex], sheet.Cells[10000, columnIndex]];
 
@@ -475,6 +499,20 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://stackoverflow.com/questions/19458721/cant-type-on-a-wpf-window-in-a-vsto-addin
             AboutWindow aboutWindow = new AboutWindow();
             aboutWindow.Show();
+        }
+
+        static string GetColumnName(int index)
+        {
+            const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            var value = "";
+
+            if (index >= letters.Length)
+                value += letters[index / letters.Length - 1];
+
+            value += letters[index % letters.Length];
+
+            return value;
         }
     }
 }

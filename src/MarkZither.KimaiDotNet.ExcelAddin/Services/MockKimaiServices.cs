@@ -83,6 +83,45 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
                 Description = "Test Timesheet 2",
                 User = 1 });
+            timesheets.Add(new TimesheetCollection()
+            {
+                Id = 3,
+                Activity = 1,
+                Project = 1,
+                Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
+                End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 0),
+                Description = "Test Timesheet 3",
+                User = 1
+            });
+            timesheets.Add(new TimesheetCollection()
+            {
+                Id = 4,
+                Activity = 2,
+                Project = 2,
+                Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 0),
+                End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0),
+                Description = "Test Timesheet 4",
+                User = 1
+            }); timesheets.Add(new TimesheetCollection()
+            {
+                Id = 5,
+                Activity = 1,
+                Project = 1,
+                Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0),
+                End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 13, 0, 0),
+                Description = "Test Timesheet 5",
+                User = 1
+            });
+            timesheets.Add(new TimesheetCollection()
+            {
+                Id = 6,
+                Activity = 2,
+                Project = 2,
+                Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 14, 0, 0),
+                End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 15, 0, 0),
+                Description = "Test Timesheet 6",
+                User = 1
+            });
 
             return await Task.FromResult(timesheets).ConfigureAwait(false);
         }

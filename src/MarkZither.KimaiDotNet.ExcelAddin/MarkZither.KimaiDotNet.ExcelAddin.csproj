@@ -189,6 +189,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="KimaiRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
