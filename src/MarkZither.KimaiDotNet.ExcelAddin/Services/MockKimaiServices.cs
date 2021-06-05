@@ -43,8 +43,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<ProjectCollection>> GetProjects()
         {
             var projects = new List<ProjectCollection>();
-            projects.Add(new ProjectCollection() { Id = 1, ParentTitle = "cust1", Name = "project 1", Customer = 1});
-            projects.Add(new ProjectCollection() { Id = 2, ParentTitle = "cust2", Name = "project 2"});
+            projects.Add(new ProjectCollection() { Id = 1, ParentTitle = "cust1", Name = "project 1", Customer = 1 });
+            projects.Add(new ProjectCollection() { Id = 2, ParentTitle = "cust2", Name = "project 2", Customer = 2 });
+            projects.Add(new ProjectCollection() { Id = 3, ParentTitle = "cust1", Name = "project 3", Customer = 1 });
+            projects.Add(new ProjectCollection() { Id = 4, ParentTitle = "cust2", Name = "project 4", Customer = 2 });
 
             return await Task.FromResult(projects).ConfigureAwait(false);
         }

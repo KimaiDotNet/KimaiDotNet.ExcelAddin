@@ -8,6 +8,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 {
     public static class Constants
     {
+        public const string FlatListDelimiter = ",";
         public class Sheet1
         {
 

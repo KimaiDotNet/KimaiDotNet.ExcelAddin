@@ -1,4 +1,5 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
+using MarkZither.KimaiDotNet.Models;
 
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Tools.Ribbon;
@@ -34,6 +35,31 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             string cellAddress = Target.get_Address(
                 Microsoft.Office.Interop.Excel.XlReferenceStyle.xlA1);
+            string cellAddressR1C1 = Target.get_Address(
+                Microsoft.Office.Interop.Excel.XlReferenceStyle.xlR1C1);
+            
+            if (Target.Count == 1)
+            {
+                var column = Target.Column;
+                string selectedValue = Target.Value2 as string;
+                Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
+
+                if (column.Equals(CustomerColumnIndex))
+                {
+                    try
+                    {
+                        CustomerCollection customer = Globals.ThisAddIn.Customers.Single(x => string.Equals(x.Name, selectedValue, StringComparison.OrdinalIgnoreCase));
+                        List<ProjectCollection> projects = Globals.ThisAddIn.Projects.Where(x => x.Customer == customer.Id || !x.Customer.HasValue).ToList();
+                        var projectFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, projects.Select(i => i.Name));
+                        AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex, Target.Row);
+                        MessageBox.Show("Customer changed, lets set the valid projects");
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show($"Could not find the selected customer. {ex.Message}");
+                    }
+                }
+            }
         }
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
@@ -139,15 +165,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://stackoverflow.com/a/10373827
             AddDataValidationToColumnByRange(customers.Count, sheet, CustomersSheetName, ExcelAddin.Constants.CustomersSheet.CustomerNameColumnIndex, CustomerColumnIndex);
 
-            var projectList = new List<string>();
-            foreach (var project in projects)
-            {
-                projectList.Add(project.Name);
-            }
-            const string delimiter = ",";
-            var projectFlatList = string.Join(",", projectList.ToArray());
-            var projectFlatList2 = string.Join(delimiter, projects.Select(i => i.Name));
-            AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex);
+            
+            var projectFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, projects.Select(i => i.Name));
+            //AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex);
 
             sheet.Change += new Microsoft.Office.Interop.Excel.
                 DocEvents_ChangeEventHandler(changesRange_Change);
@@ -451,7 +471,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return lastTimeEntry.Value.Hour * 60 + lastTimeEntry.Value.Minute;
         }
 
-        private void AddDataValidationToColumnWithFlatList(Worksheet sheet, string flatList, int columnIndex)
+        private void AddDataValidationToColumnWithFlatList(Worksheet sheet, string flatList, int columnIndex, int? row = null)
         {
             // might not use this method as there is a limit to the number of items that can be supported
             // however the other way has the limitaiton of needing to have a single range
@@ -460,20 +480,36 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // and probably namy fewer items in the list
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             // https://stackoverflow.com/questions/2333202/how-do-i-get-an-excel-range-using-row-and-column-numbers-in-vsto-c
-            var cell = (Range)sheet.Range[sheet.Cells[1, columnIndex], sheet.Cells[10000, columnIndex]];
+            Range range;
+            if (!row.HasValue)
+            {
+                range = (Range)sheet.Range[sheet.Cells[1, columnIndex], sheet.Cells[10000, columnIndex]];
+            }
+            else
+            {
+                range = (Range)sheet.Cells[row.Value, columnIndex];
+            }
 
             try
             {
-                cell.Validation.Delete();
-                cell.Validation.Add(
+                // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+                sheet.Unprotect();
+                Globals.ThisAddIn.Application.Cells.Locked = false;
+
+                range.Validation.Delete();
+                range.Validation.Add(
                    XlDVType.xlValidateList,
                    XlDVAlertStyle.xlValidAlertInformation,
                    XlFormatConditionOperator.xlBetween,
                    flatList,
                    Type.Missing);
 
-                cell.Validation.IgnoreBlank = true;
-                cell.Validation.InCellDropdown = true;
+                range.Validation.IgnoreBlank = true;
+                range.Validation.InCellDropdown = true;
+
+                //Globals.ThisAddIn.Application.get_Range($"{GetColumnName(columnIndex)}1", $"A{timesheets.Count + 1}").Locked = true;
+                //sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                //  Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             }
             catch(Exception ex)
             {
