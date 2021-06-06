@@ -12,6 +12,8 @@ using System.Xml.Serialization;
 using MarkZither.KimaiDotNet.ExcelAddin.Properties;
 using MarkZither.KimaiDotNet.Models;
 using System.Diagnostics;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -22,6 +24,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
+        public UserEntity CurrentUser { get; set; }
         public IList<ProjectCollection> Projects { get; set; }
         public IList<ActivityCollection> Activities { get; set; }
         public IList<CustomerCollection> Customers { get; set; }
@@ -35,6 +38,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 return apiCredentialsTaskPane;
             }
         }
+
+        public Microsoft.Extensions.Logging.ILogger Logger { get; private set; }
 
         #endregion
 
@@ -58,9 +63,19 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return activity;
         }
 
+        public ActivityCollection GetActivityByName(string name)
+        {
+            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            if (activity == default(ActivityCollection))
+            {
+                Debug.Write($"Activity Name not found: {name}");
+            }
+            return activity;
+        }
+
         public ProjectCollection GetProjectByName(string name)
         {
-            var project = Projects.SingleOrDefault(x => x.Name.Equals(name));
+            var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
             if (project == default(ProjectCollection))
             {
                 Debug.WriteLine($"Id not found: {name}");
@@ -74,6 +89,20 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             apiCredentialsTaskPane = this.CustomTaskPanes.Add(myUserControl1, "API Credentials");
             apiCredentialsTaskPane.VisibleChanged +=
                 new EventHandler(myCustomTaskPane_VisibleChanged);
+
+            // instantiate and configure logging. Using serilog here, to log to console and a text-file.
+            var loggerFactory = new Microsoft.Extensions.Logging.LoggerFactory();
+            var loggerConfig = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("c:\\temp\\logs\\myapp.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            loggerFactory.AddSerilog(loggerConfig);
+
+            // create logger and put it to work.
+            var logProvider = loggerFactory.CreateLogger<ThisAddIn>();
+            logProvider.LogDebug("debiggung");
+            Logger = logProvider;
 
             try
             {

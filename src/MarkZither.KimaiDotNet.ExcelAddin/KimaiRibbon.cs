@@ -1,6 +1,7 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
 using MarkZither.KimaiDotNet.Models;
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Tools.Ribbon;
 
@@ -21,16 +22,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 {
     public partial class KimaiRibbon
     {
-        private const int IdColumnIndex = 1;
-        private const int DateColumnIndex = 2;
-        private const int CustomerColumnIndex = 3;
-        private const int ProjectColumnIndex = 4;
-        private const int ActivityColumnIndex = 5;
-        private const int DescColumnIndex = 6;
-        private const int BeginTimeIndex = 7;
-        private const int EndTimeIndex = 8;
-        private const string CustomersSheetName = "Customers";
-
         void changesRange_Change(Excel.Range Target)
         {
             string cellAddress = Target.get_Address(
@@ -44,19 +35,40 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 string selectedValue = Target.Value2 as string;
                 Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
 
-                if (column.Equals(CustomerColumnIndex))
+                if (column.Equals(ExcelAddin.Constants.Sheet1.CustomerColumnIndex))
                 {
                     try
                     {
                         CustomerCollection customer = Globals.ThisAddIn.Customers.Single(x => string.Equals(x.Name, selectedValue, StringComparison.OrdinalIgnoreCase));
                         List<ProjectCollection> projects = Globals.ThisAddIn.Projects.Where(x => x.Customer == customer.Id || !x.Customer.HasValue).ToList();
                         var projectFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, projects.Select(i => i.Name));
-                        AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex, Target.Row);
+                        AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ExcelAddin.Constants.Sheet1.ProjectColumnIndex, Target.Row);
                         MessageBox.Show("Customer changed, lets set the valid projects");
+                        ExcelAddin.Globals.ThisAddIn.Logger.LogDebug("Customer changed, lets set the valid projects");
                     }
                     catch(Exception ex)
                     {
                         MessageBox.Show($"Could not find the selected customer. {ex.Message}");
+                        ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not find the selected customer. {ex.Message}", ex);
+                    }
+                }
+                if (column.Equals(ExcelAddin.Constants.Sheet1.ProjectColumnIndex))
+                {
+                    try
+                    {
+                        ProjectCollection project = Globals.ThisAddIn.Projects.Single(x => string.Equals(x.Name, selectedValue, StringComparison.OrdinalIgnoreCase));
+                        List<ActivityCollection> activities = Globals.ThisAddIn.Activities.Where(x => x.Project == project.Id || !x.Project.HasValue).ToList();
+                        var activitiesFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, activities.Select(i => i.Name));
+                        AddDataValidationToColumnWithFlatList(sheet, activitiesFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex, Target.Row);
+                        MessageBox.Show("Project changed, lets set the valid activities");
+                        ExcelAddin.Globals.ThisAddIn.Logger.LogDebug("Project changed, lets set the valid activities");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Could not find the selected project. {ex.Message}");
+                        ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not find the selected project. {ex.Message}", ex);
+
                     }
                 }
             }
@@ -99,14 +111,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     services = new KimaiServices();
                 }
                 var version = await services.GetVersion().ConfigureAwait(false);
-
                 lblVersionNo.Label = version.VersionProperty;
-
+                var user = await services.GetCurrentUser();
+                Globals.ThisAddIn.CurrentUser = user;
                 btnSync.Enabled = true;
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not connect to Kimai server. {ex.Message}", ex);
+
             }
         }
 
@@ -163,8 +177,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             //https://stackoverflow.com/questions/10373561/convert-a-number-to-a-letter-in-c-sharp-for-use-in-microsoft-excel
             //https://stackoverflow.com/a/10373827
-            AddDataValidationToColumnByRange(customers.Count, sheet, CustomersSheetName, ExcelAddin.Constants.CustomersSheet.CustomerNameColumnIndex, CustomerColumnIndex);
-
+            AddDataValidationToColumnByRange(customers.Count, sheet, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex,
+                ExcelAddin.Constants.Sheet1.CustomerColumnIndex);
             
             var projectFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, projects.Select(i => i.Name));
             //AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ProjectColumnIndex);
@@ -180,11 +194,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             var activityFlatList = string.Join(",", activityList.ToArray());
 
-            AddDataValidationToColumnWithFlatList(sheet, activityFlatList, ActivityColumnIndex);
-
+            AddDataValidationToColumnWithFlatList(sheet, activityFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex);
+            
+            sheet.Unprotect();
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
-            Globals.ThisAddIn.Application.Cells.Locked = false;
-            Globals.ThisAddIn.Application.get_Range("A1", $"A{timesheets.Count + 1}").Locked = true;
+            if (Globals.ThisAddIn.Application.Cells.Locked is bool && (bool)Globals.ThisAddIn.Application.Cells.Locked)
+            {
+                Globals.ThisAddIn.Application.Cells.Locked = false;
+            }
+            Globals.ThisAddIn.Application.get_Range("A1", $"I{timesheets.Count + 1}").Locked = true;
             sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
         }
@@ -193,25 +211,26 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
             {
-                ((Excel.Range)sheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = timesheets[idxRow - 1].Id;
-                ((Excel.Range)sheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                ((Excel.Range)sheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = timesheets[idxRow - 1].Begin.Date.ToOADate();
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = timesheets[idxRow - 1].Id;
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = timesheets[idxRow - 1].Begin.Date.ToOADate();
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = timesheets[idxRow - 1].Duration;
                 if (timesheets[idxRow - 1].Project.HasValue)
                 {
                     var project = Globals.ThisAddIn.GetProjectById(timesheets[idxRow - 1].Project.Value);
-                    ((Excel.Range)sheet.Cells[idxRow + 1, CustomerColumnIndex]).Value2 = project.ParentTitle; // timesheets[idxRow - 1].cu;
-                    ((Excel.Range)sheet.Cells[idxRow + 1, ProjectColumnIndex]).Value2 = project.Name;
+                    ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = project.ParentTitle; // timesheets[idxRow - 1].cu;
+                    ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = project.Name;
                 }
                 if (timesheets[idxRow - 1].Activity.HasValue)
                 {
                     var activity = Globals.ThisAddIn.GetActivityById(timesheets[idxRow - 1].Activity.Value);
-                    ((Excel.Range)sheet.Cells[idxRow + 1, ActivityColumnIndex]).Value2 = activity.Name;
+                    ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
                 }
-                            ((Excel.Range)sheet.Cells[idxRow + 1, DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
-                ((Excel.Range)sheet.Cells[idxRow + 1, BeginTimeIndex]).Value2 = timesheets[idxRow - 1].Begin.ToOADate();
+                            ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheets[idxRow - 1].Begin.ToOADate();
                 if (timesheets[idxRow - 1].End.HasValue)
                 {
-                    ((Excel.Range)sheet.Cells[idxRow + 1, EndTimeIndex]).Value2 = timesheets[idxRow - 1].End.Value.ToOADate();
+                    ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheets[idxRow - 1].End.Value.ToOADate();
                 }
             }
         }
@@ -236,12 +255,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
             var projectsWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
-                                   .SingleOrDefault(w => string.Equals(w.Name, "Projects", StringComparison.OrdinalIgnoreCase));
+                                   .SingleOrDefault(w => string.Equals(w.Name, ExcelAddin.Constants.ProjectsSheet.ProjectsSheetName, StringComparison.OrdinalIgnoreCase));
             //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
             if (projectsWorksheet == null)
             {
                 projectsWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
-                projectsWorksheet.Name = "Projects";
+                projectsWorksheet.Name = ExcelAddin.Constants.ProjectsSheet.ProjectsSheetName;
             }
 
             sheet.Select();
@@ -250,25 +269,26 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             for (int idxRow = 1; idxRow <= projects.Count; idxRow++)
             {
-                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = projects[idxRow - 1].Id;
-                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = projects[idxRow - 1].Name;
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ProjectsSheet.IdColumnIndex]).Value2 = projects[idxRow - 1].Id;
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ProjectsSheet.IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ProjectsSheet.NameColumnIndex]).Value2 = projects[idxRow - 1].Name;
                 if (projects[idxRow - 1].Customer.HasValue)
                 {
-                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, CustomerColumnIndex]).Value2 = projects[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
-                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ProjectColumnIndex]).Value2 = projects[idxRow - 1].Customer.Value;
+                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ProjectsSheet.CustomerNameColumnIndex]).Value2 = projects[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
+                    ((Excel.Range)projectsWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ProjectsSheet.CustomerIdColumnIndex]).Value2 = projects[idxRow - 1].Customer.Value;
                 }
             }
+            projectsWorksheet.Visible = Excel.XlSheetVisibility.xlSheetVeryHidden;
         }
 
         private static void SetupProjectHeaderRow(Worksheet sheet)
         {
-            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).Value2 = "Parent Title";
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
-            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).Value2 = "Customer Id";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.NameColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.NameColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.CustomerNameColumnIndex]).Value2 = "Parent Title";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.CustomerNameColumnIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ProjectsSheet.CustomerIdColumnIndex]).Value2 = "Customer Id";
         }
 
         private void CreateOrUpdateActivitiesOnSheet(IList<Models.ActivityCollection> activities)
@@ -281,7 +301,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             if (activitiesWorksheet == null)
             {
                 activitiesWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
-                activitiesWorksheet.Name = "Activities";
+                activitiesWorksheet.Name = ExcelAddin.Constants.ActivitiesSheet.ActivitiesSheetName;
             }
             activitiesWorksheet.Visible = Excel.XlSheetVisibility.xlSheetVeryHidden;
 
@@ -291,34 +311,34 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             for (int idxRow = 1; idxRow <= activities.Count; idxRow++)
             {
-                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = activities[idxRow - 1].Id;
-                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = activities[idxRow - 1].Name;
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ActivitiesSheet.IdColumnIndex]).Value2 = activities[idxRow - 1].Id;
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ActivitiesSheet.IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ActivitiesSheet.NameColumnIndex]).Value2 = activities[idxRow - 1].Name;
                 if (activities[idxRow - 1].Project.HasValue)
                 {
-                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, CustomerColumnIndex]).Value2 = activities[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
-                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ProjectColumnIndex]).Value2 = activities[idxRow - 1].Project.Value;
+                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ActivitiesSheet.ProjectNameColumnIndex]).Value2 = activities[idxRow - 1].ParentTitle; // timesheets[idxRow - 1].cu;
+                    ((Excel.Range)activitiesWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.ActivitiesSheet.ProjectIdColumnIndex]).Value2 = activities[idxRow - 1].Project.Value;
                 }
             }
         }
 
         private static void SetupActivitiesHeaderRow(Worksheet sheet)
         {
-            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ActivitiesSheet.IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ActivitiesSheet.NameColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.ActivitiesSheet.NameColumnIndex]).EntireColumn.ColumnWidth = 14;
         }
         private void CreateOrUpdateCustomersOnSheet(IList<Models.CustomerCollection> customers)
         {
             Worksheet sheet = Globals.ThisAddIn.Application.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
             var customersWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
-                                   .SingleOrDefault(w => string.Equals(w.Name, CustomersSheetName, StringComparison.OrdinalIgnoreCase));
+                                   .SingleOrDefault(w => string.Equals(w.Name, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, StringComparison.OrdinalIgnoreCase));
             //Excel.Worksheet projectsWorksheet = Globals.ThisAddIn.Application.ThisWorkbook.Worksheets.Item["Foo"];
             if (customersWorksheet == null)
             {
                 customersWorksheet = (Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, sheet);
-                customersWorksheet.Name = CustomersSheetName;
+                customersWorksheet.Name = ExcelAddin.Constants.CustomersSheet.CustomersSheetName;
             }
 
             sheet.Select();
@@ -327,43 +347,46 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://brandewinder.com/2011/01/23/Excel-In-Cell-DropDown-with-CSharp/
             for (int idxRow = 1; idxRow <= customers.Count; idxRow++)
             {
-                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, IdColumnIndex]).Value2 = customers[idxRow - 1].Id;
-                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, DateColumnIndex]).Value2 = customers[idxRow - 1].Name;
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Value2 = customers[idxRow - 1].Id;
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+                ((Excel.Range)customersWorksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).Value2 = customers[idxRow - 1].Name;
             }
+            customersWorksheet.Visible = Excel.XlSheetVisibility.xlSheetVeryHidden;
         }
 
         private static void SetupCustomerHeaderRow(Worksheet sheet)
         {
-            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Name";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).Value2 = "Name";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).EntireColumn.ColumnWidth = 14;
         }
 
         private static void SetupTimesheetsHeaderRow(Worksheet sheet)
         {
-            ((Excel.Range)sheet.Cells[1, IdColumnIndex]).Value2 = "Id";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).Value2 = "Date";
-            ((Excel.Range)sheet.Cells[1, DateColumnIndex]).EntireColumn.ColumnWidth = 14;
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).Value2 = "Customer";
-            ((Excel.Range)sheet.Cells[1, CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
-            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).Value2 = "Project";
-            ((Excel.Range)sheet.Cells[1, ProjectColumnIndex]).EntireColumn.ColumnWidth = 30;
-            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).Value2 = "Activity";
-            ((Excel.Range)sheet.Cells[1, ActivityColumnIndex]).EntireColumn.ColumnWidth = 30;
-            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).Value2 = "Description";
-            ((Excel.Range)sheet.Cells[1, DescColumnIndex]).EntireColumn.ColumnWidth = 80;
-            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).Value2 = "Begin Time";
-            ((Excel.Range)sheet.Cells[1, BeginTimeIndex]).EntireColumn.ColumnWidth = 25;
-            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).Value2 = "End Time";
-            ((Excel.Range)sheet.Cells[1, EndTimeIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = "Id";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = "Date";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DateColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = "Duration (mins)";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = "Customer";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = "Project";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).EntireColumn.ColumnWidth = 30;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = "Activity";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).EntireColumn.ColumnWidth = 30;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = "Description";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).EntireColumn.ColumnWidth = 80;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = "Begin Time";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).EntireColumn.ColumnWidth = 25;
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = "End Time";
+            ((Excel.Range)sheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).EntireColumn.ColumnWidth = 25;
 
             // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
-            var cell = (Range)sheet.Range[sheet.Cells[2, DateColumnIndex], sheet.Cells[10000, DateColumnIndex]];
+            var cell = (Range)sheet.Range[sheet.Cells[2, ExcelAddin.Constants.Sheet1.DateColumnIndex], sheet.Cells[10000, ExcelAddin.Constants.Sheet1.DateColumnIndex]];
             cell.NumberFormat = "dd-MMM-yyyy"; // e.g. dd-MMM-yyyy
-            var cellBegin = (Range)sheet.Range[sheet.Cells[2, BeginTimeIndex], sheet.Cells[10000, BeginTimeIndex]];
+            var cellBegin = (Range)sheet.Range[sheet.Cells[2, ExcelAddin.Constants.Sheet1.BeginTimeIndex], sheet.Cells[10000, ExcelAddin.Constants.Sheet1.BeginTimeIndex]];
             cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
-            var cellEnd = (Range)sheet.Range[sheet.Cells[2, EndTimeIndex], sheet.Cells[10000, EndTimeIndex]];
+            var cellEnd = (Range)sheet.Range[sheet.Cells[2, ExcelAddin.Constants.Sheet1.EndTimeIndex], sheet.Cells[10000, ExcelAddin.Constants.Sheet1.EndTimeIndex]];
             cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
         }
 
@@ -374,7 +397,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 //find a row with no id to post
                 for (int i = timesheets.Count; i < 10000; i++)
                 {
-                    dynamic id = ((Excel.Range)sheet.Cells[i, IdColumnIndex]).Value2;
+                    dynamic id = ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
+                    dynamic oADate = ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2; 
                     if (id is int || id is double)
                     {
 
@@ -383,24 +407,29 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     {
 
                     }
-                    if (id is null)
+                    if (id is null && (oADate is int || oADate is double))
                     {
-                        dynamic oADate = ((Excel.Range)sheet.Cells[i, DateColumnIndex]).Value2;
+                        int duration = (int)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2;
+                        string projectName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2;
+                        int projectId = Globals.ThisAddIn.GetProjectByName(projectName).Id.Value;
+                        string activityName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2;
+                        int activityId = Globals.ThisAddIn.GetActivityByName(activityName).Id.Value;
+                        string description = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2;
 
                         if (oADate is Double)//this is really probably an OADate 
                         // https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tooadate?view=net-5.0
                         {
                             DateTime date = DateTime.FromOADate(oADate).Date; //make sure any time is ignored, it shouldn't be there
                             int addMinutes = GetNextAvailableTimeInMinutes(date);
-                            int duration = 60;
+                            
                             var timesheet = await service.PostTimesheet(new Models.TimesheetEditForm()
                             {
-                                Project = 1,
-                                Activity = 1,
+                                Project = projectId,
+                                Activity = activityId,
                                 Begin = date.AddMinutes(addMinutes),
                                 End = date.AddMinutes(addMinutes).AddMinutes(duration),
-                                User = 5,
-                                Description = $"mark {DateTime.Now.Ticks}"
+                                User = Globals.ThisAddIn.CurrentUser.Id.Value,
+                                Description = description
                             }).ConfigureAwait(false);
                             Globals.ThisAddIn.Timesheets.Add(new Models.TimesheetCollection()
                             {
@@ -420,25 +449,25 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                             sheet.Change -= new Microsoft.Office.Interop.Excel.
                             DocEvents_ChangeEventHandler(changesRange_Change);
 
-                            ((Excel.Range)sheet.Cells[i, IdColumnIndex]).Value2 = timesheet.Id;
+                            ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = timesheet.Id;
                             //((Excel.Range)sheet.Cells[timesheets.Count + 2, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                            ((Excel.Range)sheet.Cells[i, DateColumnIndex]).Value2 = timesheet.Begin.Date.ToOADate();
+                            ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = timesheet.Begin.Date.ToOADate();
                             if (timesheet.Project.HasValue)
                             {
                                 var project = Globals.ThisAddIn.GetProjectById(timesheet.Project.Value);
-                                ((Excel.Range)sheet.Cells[i, CustomerColumnIndex]).Value2 = project.ParentTitle; // timesheets[idxRow - 1].cu;
-                                ((Excel.Range)sheet.Cells[i, ProjectColumnIndex]).Value2 = project.Name;
+                                ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = project.ParentTitle; // timesheets[idxRow - 1].cu;
+                                ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = project.Name;
                             }
                             if (timesheet.Activity.HasValue)
                             {
                                 var activity = Globals.ThisAddIn.GetActivityById(timesheet.Activity.Value);
-                                ((Excel.Range)sheet.Cells[i, ActivityColumnIndex]).Value2 = activity.Name;
+                                ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
                             }
-                            ((Excel.Range)sheet.Cells[i, DescColumnIndex]).Value2 = timesheet.Description;
-                            ((Excel.Range)sheet.Cells[i, BeginTimeIndex]).Value2 = timesheet.Begin.ToOADate();
-                            if (timesheets[i].End.HasValue)
+                            ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheet.Description;
+                            ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheet.Begin.ToOADate();
+                            if (timesheet.End.HasValue)
                             {
-                                ((Excel.Range)sheet.Cells[i, EndTimeIndex]).Value2 = timesheet.End.Value.ToOADate();
+                                ((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheet.End.Value.ToOADate();
                             }
 
                             sheet.Change += new Microsoft.Office.Interop.Excel.
@@ -460,6 +489,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             catch (Exception ex)
             {
                 string errors = ex.Message;
+                MessageBox.Show(ex.Message);
+                ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to sync new rows to kimai", ex);
             }
         }
 
@@ -507,13 +538,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 range.Validation.IgnoreBlank = true;
                 range.Validation.InCellDropdown = true;
 
-                //Globals.ThisAddIn.Application.get_Range($"{GetColumnName(columnIndex)}1", $"A{timesheets.Count + 1}").Locked = true;
-                //sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                //  Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                range.Locked = false;
+                sheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                  Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             }
             catch(Exception ex)
             {
                 MessageBox.Show($"Failed to set validation on column index ${columnIndex}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to set validation on column index ${columnIndex}", ex);
             }
         }
 
@@ -525,11 +557,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
         {
             MessageBox.Show("Coming Soon!");
+            ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Calendar coming soon");
         }
 
         private void btnSyncPremuim_Click(object sender, RibbonControlEventArgs e)
         {
             MessageBox.Show("This is a premium feature please consider sponsoring the project.");
+            ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Premium sync");
         }
 
         private void btnInfo_Click(object sender, RibbonControlEventArgs e)

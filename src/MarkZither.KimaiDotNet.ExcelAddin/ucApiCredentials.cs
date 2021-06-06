@@ -1,5 +1,7 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
 
+using Microsoft.Extensions.Logging;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,8 +49,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     services = new KimaiServices();
                 }
                 var version = await services.GetVersion();
+                var user = await services.GetCurrentUser();
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Connected to Kimai", version);
                 Globals.Ribbons.GetRibbon<KimaiRibbon>().lblVersionNo.Label = version.VersionProperty;
                 Globals.Ribbons.GetRibbon<KimaiRibbon>().btnSync.Enabled = true;
+                Globals.ThisAddIn.CurrentUser = user;
             }
         }
 

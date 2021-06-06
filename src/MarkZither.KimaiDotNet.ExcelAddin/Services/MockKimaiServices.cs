@@ -76,6 +76,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 1,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 1",
                 User = 1 });
             timesheets.Add(new TimesheetCollection() {Id = 2,
@@ -83,6 +84,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 2,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 2",
                 User = 1 });
             timesheets.Add(new TimesheetCollection()
@@ -92,6 +94,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 1,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 3",
                 User = 1
             });
@@ -102,6 +105,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 2,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 4",
                 User = 1
             }); timesheets.Add(new TimesheetCollection()
@@ -111,6 +115,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 1,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 13, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 5",
                 User = 1
             });
@@ -121,6 +126,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 Project = 2,
                 Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 14, 0, 0),
                 End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 15, 0, 0),
+                Duration = 60,
                 Description = "Test Timesheet 6",
                 User = 1
             });
@@ -155,6 +161,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             Description = timesheetEditForm.Description};
 
             return Task.FromResult(timesheet);
+        }
+
+        public Task<UserEntity> GetCurrentUser()
+        {
+            var user = new UserEntity()
+            {
+                Id = 5
+            };
+
+            return Task.FromResult(user);
         }
     }
 }

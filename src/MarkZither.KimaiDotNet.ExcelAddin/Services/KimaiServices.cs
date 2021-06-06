@@ -91,5 +91,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
             return timesheet;
         }
+        public async Task<UserEntity> GetCurrentUser()
+        {
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            var user = await docs.GetCurrentUserUsingGetAsync();
+
+            return user;
+        }
     }
 }
