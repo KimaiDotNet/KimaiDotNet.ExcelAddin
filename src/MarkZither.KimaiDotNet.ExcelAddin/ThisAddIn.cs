@@ -49,6 +49,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             if(project == default(ProjectCollection))
             {
                 Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Id not found: {id}");
             }
             return project;
         }
@@ -59,6 +60,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Activity Id not found: {id}");
             }
             return activity;
         }
@@ -69,6 +71,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Activity Name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Activity Name not found: {name}");
             }
             return activity;
         }
@@ -78,7 +81,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
             if (project == default(ProjectCollection))
             {
-                Debug.WriteLine($"Id not found: {name}");
+                Debug.WriteLine($"name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
             }
             return project;
         }

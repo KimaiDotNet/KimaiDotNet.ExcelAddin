@@ -1,6 +1,7 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Office.Interop.Excel;
 
 using System;
 using System.Collections.Generic;
@@ -39,8 +40,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Globals.ThisAddIn.ApiUsername = txtApiUsername.Text;
                 Globals.ThisAddIn.ApiPassword = txtApiPassword.Text;
 
+                var mockWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                       .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
                 IKimaiServices services;
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
+                    || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices();
                 }
@@ -65,8 +70,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 var userName = txtApiUsername.Text;
                 var password = txtApiPassword.Text;
 
+                var mockWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                       .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
                 IKimaiServices services;
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
+                    || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices(userName, password, APIUrl);
                 }
@@ -131,7 +140,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private void txtAPIUrl_Validated(object sender, EventArgs e)
         {
-            TextBox textBox = sender as TextBox;
+            System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
             errorProvider.SetError(textBox, "");
         }
     }

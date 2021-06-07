@@ -99,10 +99,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private async void btnConnect_Click(object sender, RibbonControlEventArgs e)
         {
+            var mockWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                       .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
+
             IKimaiServices services;
             try
             {
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
+                    || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices();
                 }
@@ -126,8 +131,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private async void btnSync_Click(object sender, RibbonControlEventArgs e)
         {
+            var mockWorksheet =
+                Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+                       .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
             IKimaiServices services;
-            if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
+                || mockWorksheet is Worksheet)
             {
                 services = new MockKimaiServices();
             }
@@ -173,7 +182,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-add-namedrange-controls-to-worksheets?view=vs-2019
             
             Microsoft.Office.Interop.Excel.Worksheet worksheet = (Microsoft.Office.Interop.Excel.Worksheet)Globals.ThisAddIn.Application.ActiveWorkbook.Worksheets[1];
-            Microsoft.Office.Tools.Excel.Worksheet extendedWorksheet = Globals.Factory.GetVstoObject(worksheet);
 
             //https://stackoverflow.com/questions/10373561/convert-a-number-to-a-letter-in-c-sharp-for-use-in-microsoft-excel
             //https://stackoverflow.com/a/10373827
