@@ -14,6 +14,7 @@ using MarkZither.KimaiDotNet.Models;
 using System.Diagnostics;
 using Serilog;
 using Microsoft.Extensions.Logging;
+using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -65,9 +66,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return activity;
         }
 
-        public ActivityCollection GetActivityByName(string name)
+        public ActivityCollection GetActivityByName(string name, int projectId)
         {
-            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal) && x.Project == projectId);
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Activity Name not found: {name}");

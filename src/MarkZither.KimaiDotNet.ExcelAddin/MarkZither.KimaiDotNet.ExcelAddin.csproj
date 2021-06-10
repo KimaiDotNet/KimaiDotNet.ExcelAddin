@@ -211,6 +211,7 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sheets\Sheet1.cs" />
     <Compile Include="ucAbout.xaml.cs">
       <DependentUpon>ucAbout.xaml</DependentUpon>
     </Compile>

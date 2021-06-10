@@ -1,4 +1,5 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
+using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 using MarkZither.KimaiDotNet.Models;
 
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             string cellAddressR1C1 = Target.get_Address(
                 Microsoft.Office.Interop.Excel.XlReferenceStyle.xlR1C1);
             
-            if (Target.Count == 1)
+            if (Target.Worksheet.Name.Equals(Constants.Sheet1.TimesheetsSheetName, StringComparison.OrdinalIgnoreCase)
+                && Target.Count == 1)
             {
                 var column = Target.Column;
                 string selectedValue = Target.Value2 as string;
@@ -43,7 +45,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                         List<ProjectCollection> projects = Globals.ThisAddIn.Projects.Where(x => x.Customer == customer.Id || !x.Customer.HasValue).ToList();
                         var projectFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, projects.Select(i => i.Name));
                         AddDataValidationToColumnWithFlatList(sheet, projectFlatList, ExcelAddin.Constants.Sheet1.ProjectColumnIndex, Target.Row);
-                        MessageBox.Show("Customer changed, lets set the valid projects");
                         ExcelAddin.Globals.ThisAddIn.Logger.LogDebug("Customer changed, lets set the valid projects");
                     }
                     catch(Exception ex)
@@ -60,9 +61,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                         List<ActivityCollection> activities = Globals.ThisAddIn.Activities.Where(x => x.Project == project.Id || !x.Project.HasValue).ToList();
                         var activitiesFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, activities.Select(i => i.Name));
                         AddDataValidationToColumnWithFlatList(sheet, activitiesFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex, Target.Row);
-                        MessageBox.Show("Project changed, lets set the valid activities");
                         ExcelAddin.Globals.ThisAddIn.Logger.LogDebug("Project changed, lets set the valid activities");
-
                     }
                     catch (Exception ex)
                     {
@@ -131,6 +130,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private async void btnSync_Click(object sender, RibbonControlEventArgs e)
         {
+            var sheet1 = Sheet1.Instance.Worksheet;
             var mockWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
@@ -222,7 +222,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = timesheets[idxRow - 1].Id;
                 ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
                 ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = timesheets[idxRow - 1].Begin.Date.ToOADate();
-                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = timesheets[idxRow - 1].Duration;
+                ((Excel.Range)sheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = timesheets[idxRow - 1].Duration / 60;
                 if (timesheets[idxRow - 1].Project.HasValue)
                 {
                     var project = Globals.ThisAddIn.GetProjectById(timesheets[idxRow - 1].Project.Value);
@@ -421,7 +421,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                         string projectName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2;
                         int projectId = Globals.ThisAddIn.GetProjectByName(projectName).Id.Value;
                         string activityName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2;
-                        int activityId = Globals.ThisAddIn.GetActivityByName(activityName).Id.Value;
+                        int activityId = Globals.ThisAddIn.GetActivityByName(activityName, projectId).Id.Value;
                         string description = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2;
 
                         if (oADate is Double)//this is really probably an OADate 
@@ -434,8 +434,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                             {
                                 Project = projectId,
                                 Activity = activityId,
-                                Begin = date.AddMinutes(addMinutes),
-                                End = date.AddMinutes(addMinutes).AddMinutes(duration),
+                                Begin = date.AddMinutes(addMinutes).ToUniversalTime(),
+                                End = date.AddMinutes(addMinutes).AddMinutes(duration).ToUniversalTime(),
                                 User = Globals.ThisAddIn.CurrentUser.Id.Value,
                                 Description = description
                             }).ConfigureAwait(false);
