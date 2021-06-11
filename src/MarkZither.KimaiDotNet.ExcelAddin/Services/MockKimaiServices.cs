@@ -64,7 +64,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         {
             var activities = new List<ActivityCollection>();
             activities.Add(new ActivityCollection() {Id = 1, Name = "Act1", Project = 1, ParentTitle = "Project 1" });
-            activities.Add(new ActivityCollection() {Id = 2, Name = "Act2" });
+            activities.Add(new ActivityCollection() {Id = 2, Name = "Act2", Project = 2, ParentTitle = "Project 2" });
 
             return await Task.FromResult(activities).ConfigureAwait(false);
         }

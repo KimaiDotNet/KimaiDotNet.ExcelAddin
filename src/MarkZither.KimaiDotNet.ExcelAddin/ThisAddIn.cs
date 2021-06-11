@@ -66,9 +66,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return activity;
         }
 
-        public ActivityCollection GetActivityByName(string name, int projectId)
+        public ActivityCollection GetActivityByName(string name, int? projectId)
         {
-            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal) && x.Project == projectId);
+            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal) 
+            && x.Project.Value == projectId);
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Activity Name not found: {name}");
@@ -77,15 +78,27 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             return activity;
         }
 
-        public ProjectCollection GetProjectByName(string name)
+        public ProjectCollection GetProjectByName(string name, int? customerId)
         {
-            var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
+                && customerId.Value == x.Customer);
             if (project == default(ProjectCollection))
             {
                 Debug.WriteLine($"name not found: {name}");
                 ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
             }
             return project;
+        }
+
+        public CustomerCollection GetCustomerByName(string name)
+        {
+            var customer = Customers.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            if (customer == default(CustomerCollection))
+            {
+                Debug.WriteLine($"name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Customer Name not found: {name}");
+            }
+            return customer;
         }
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)

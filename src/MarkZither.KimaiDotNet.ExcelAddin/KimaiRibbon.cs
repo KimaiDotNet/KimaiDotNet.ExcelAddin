@@ -418,8 +418,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     if (id is null && (oADate is int || oADate is double))
                     {
                         int duration = (int)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2;
+                        string customerName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2;
+                        int customerId = Globals.ThisAddIn.GetCustomerByName(customerName).Id.Value;
                         string projectName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2;
-                        int projectId = Globals.ThisAddIn.GetProjectByName(projectName).Id.Value;
+                        int projectId = Globals.ThisAddIn.GetProjectByName(projectName, customerId).Id.Value;
                         string activityName = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2;
                         int activityId = Globals.ThisAddIn.GetActivityByName(activityName, projectId).Id.Value;
                         string description = (string)((Excel.Range)sheet.Cells[i, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2;
