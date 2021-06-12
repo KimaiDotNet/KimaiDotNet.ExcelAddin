@@ -190,6 +190,7 @@
   -->
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="KimaiRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -211,6 +212,9 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sheets\CustomerWorksheet.cs" />
+    <Compile Include="Sheets\ActivityWorksheet.cs" />
+    <Compile Include="Sheets\ProjectWorksheet.cs" />
     <Compile Include="Sheets\Sheet1.cs" />
     <Compile Include="ucAbout.xaml.cs">
       <DependentUpon>ucAbout.xaml</DependentUpon>

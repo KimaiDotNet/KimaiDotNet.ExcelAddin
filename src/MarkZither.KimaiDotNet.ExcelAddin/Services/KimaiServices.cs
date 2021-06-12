@@ -40,7 +40,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<ProjectCollection>> GetProjects()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var projects = await docs.ListProjectUsingGetAsync(null, null, "3");
+            var projects = await docs.ListProjectUsingGetAsync(null, null, "3").ConfigureAwait(false);
 
             return projects;
         }
@@ -48,7 +48,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<CustomerCollection>> GetCustomers()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var customers = await docs.ListCustomersUsingGetAsync("3");
+            var customers = await docs.ListCustomersUsingGetAsync("3").ConfigureAwait(false);
 
             return customers;
         }
@@ -56,14 +56,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<ActivityCollection>> GetActivities()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var activities = await docs.ListActivitiesUsingGetAsync(null, null, "3");
+            var activities = await docs.ListActivitiesUsingGetAsync(null, null, "3").ConfigureAwait(false);
 
             return activities;
         }
         public async Task<IList<TimesheetCollection>> GetTimesheets()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(null, null, null, null, null, null, null, null, "150", null, "begin", "ASC", DateTime.Now.AddDays(-21).ToString("yyyy-MM-ddT00:00:00")).ConfigureAwait(false);
+            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(null, null, null, null, null, null, null, null, "150", null, "begin", "ASC", begin: DateTime.Now.AddDays(-21).ToString("yyyy-MM-ddT00:00:00")).ConfigureAwait(false);
 
             return timesheets;
         }
@@ -71,7 +71,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<HttpOperationResponse> GetPing()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var ping = await docs.PingWithHttpMessagesAsync();
+            var ping = await docs.PingWithHttpMessagesAsync().ConfigureAwait(false);
 
             return ping;
         }
@@ -79,7 +79,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<Models.Version> GetVersion()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var version = await docs.VersionMethodAsync();
+            var version = await docs.VersionMethodAsync().ConfigureAwait(false);
 
             return version;
         }
@@ -87,14 +87,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<TimesheetEntity> PostTimesheet(TimesheetEditForm timesheetEditForm)
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var timesheet = await docs.CreateTimesheetRecordUsingPostAsync(timesheetEditForm);
+            var timesheet = await docs.CreateTimesheetRecordUsingPostAsync(timesheetEditForm).ConfigureAwait(false);
 
             return timesheet;
         }
         public async Task<UserEntity> GetCurrentUser()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var user = await docs.GetCurrentUserUsingGetAsync();
+            var user = await docs.GetCurrentUserUsingGetAsync().ConfigureAwait(false);
 
             return user;
         }

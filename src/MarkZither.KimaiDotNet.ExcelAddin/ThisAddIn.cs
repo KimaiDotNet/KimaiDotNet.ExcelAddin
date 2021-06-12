@@ -113,7 +113,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             var loggerConfig = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
+#pragma warning disable S1075 // URIs should not be hardcoded
                 .WriteTo.File("c:\\temp\\logs\\myapp.txt", rollingInterval: RollingInterval.Day)
+#pragma warning restore S1075 // URIs should not be hardcoded
                 .CreateLogger();
             loggerFactory.AddSerilog(loggerConfig);
 
@@ -122,15 +124,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             logProvider.LogDebug("debiggung");
             Logger = logProvider;
 
-            try
-            {
-                Globals.ThisAddIn.ApiUrl = Settings.Default.ApiUrl;
-                Globals.ThisAddIn.ApiUsername = Settings.Default.ApiUsername;
-            }
-            catch(Exception ex)
-            {
-                //there has to be a cleaner way
-            }
+            Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
+            Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)

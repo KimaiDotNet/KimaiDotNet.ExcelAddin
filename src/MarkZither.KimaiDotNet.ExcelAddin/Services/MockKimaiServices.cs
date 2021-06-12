@@ -68,7 +68,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
             return await Task.FromResult(activities).ConfigureAwait(false);
         }
+#pragma warning disable MA0051 // Method is too long
         public async Task<IList<TimesheetCollection>> GetTimesheets()
+#pragma warning restore MA0051 // Method is too long
         {
             var timesheets = new List<TimesheetCollection>();
             timesheets.Add(new TimesheetCollection() {Id = 1,
@@ -143,15 +145,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
         public Task<Models.Version> GetVersion()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
             var version = new Models.Version() {VersionProperty = "0.0.0.1" };
-
             return Task.FromResult(version);
         }
 
         public Task<TimesheetEntity> PostTimesheet(TimesheetEditForm timesheetEditForm)
         {
+#pragma warning disable SCS0005 // Weak random number generator.
             int newId = rnd.Next(10, 10000);
+#pragma warning restore SCS0005 // Weak random number generator.
             var timesheet = new TimesheetEntity() { Id = newId,
                 Activity = timesheetEditForm.Activity,
                 Project = timesheetEditForm.Project,

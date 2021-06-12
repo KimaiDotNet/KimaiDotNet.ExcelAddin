@@ -59,7 +59,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.txtApiPassword.Name = "txtApiPassword";
             this.txtApiPassword.Size = new System.Drawing.Size(153, 20);
             this.txtApiPassword.TabIndex = 1;
-            this.txtApiPassword.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // lblUsername
             // 

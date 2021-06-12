@@ -26,12 +26,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             txtApiUsername.Text = Settings.Default.ApiUsername;
             lblConnectionStatus.Text = "";
         }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private async void btnSave_Click(object sender, EventArgs e)
         {
             if(this.ValidateChildren())
@@ -123,19 +117,18 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             {
                 txtAPIUrl.BackColor = Color.PaleVioletRed;
                 this.errorProvider.SetError(this.txtAPIUrl, "Invalid value!");
-                //MessageBox.Show("API Url must be a valid Url");
                 e.Cancel = true;
             }
         }
 
         private void ucApiCredentials_Validating(object sender, CancelEventArgs e)
         {
-            //e.Cancel = true;
+            // Method intentionally left empty.
         }
 
         private void ucApiCredentials_Validated(object sender, EventArgs e)
         {
-            //this.errorProvider.Clear();
+            this.errorProvider.Clear();
         }
 
         private void txtAPIUrl_Validated(object sender, EventArgs e)
