@@ -4,6 +4,7 @@ using Microsoft.Rest;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -39,15 +40,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         }
         public async Task<IList<ProjectCollection>> GetProjects()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var projects = await docs.ListProjectUsingGetAsync(null, null, "3").ConfigureAwait(false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
+            var projects = await docs.ListProjectUsingGetAsync(customer: null, customers: null, "3").ConfigureAwait(false);
 
             return projects;
         }
 
         public async Task<IList<CustomerCollection>> GetCustomers()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var customers = await docs.ListCustomersUsingGetAsync("3").ConfigureAwait(false);
 
             return customers;
@@ -55,22 +56,25 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
         public async Task<IList<ActivityCollection>> GetActivities()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var activities = await docs.ListActivitiesUsingGetAsync(null, null, "3").ConfigureAwait(false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
+            var activities = await docs.ListActivitiesUsingGetAsync(project: null, projects: null, "3").ConfigureAwait(false);
 
             return activities;
         }
         public async Task<IList<TimesheetCollection>> GetTimesheets()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
-            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(null, null, null, null, null, null, null, null, "150", null, "begin", "ASC", begin: DateTime.Now.AddDays(-21).ToString("yyyy-MM-ddT00:00:00")).ConfigureAwait(false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
+            CultureInfo culture =
+               CultureInfo.CreateSpecificCulture("de-DE");
+            var formattedDateTime = DateTime.Now.AddDays(-21).ToString("yyyy-MM-ddT00:00:00", culture);
+            var timesheets = await docs.ListTimesheetsRecordsUsingGetAsync(user: null, customer: null, customers: null, project: null, projects: null, activity: null, activities: null, page: null, "150", tags: null, "begin", "ASC", begin: formattedDateTime).ConfigureAwait(false);
 
             return timesheets;
         }
 
         public async Task<HttpOperationResponse> GetPing()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var ping = await docs.PingWithHttpMessagesAsync().ConfigureAwait(false);
 
             return ping;
@@ -78,7 +82,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
         public async Task<Models.Version> GetVersion()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var version = await docs.VersionMethodAsync().ConfigureAwait(false);
 
             return version;
@@ -86,14 +90,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 
         public async Task<TimesheetEntity> PostTimesheet(TimesheetEditForm timesheetEditForm)
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var timesheet = await docs.CreateTimesheetRecordUsingPostAsync(timesheetEditForm).ConfigureAwait(false);
 
             return timesheet;
         }
         public async Task<UserEntity> GetCurrentUser()
         {
-            Kimai2APIDocs docs = new Kimai2APIDocs(Client, false);
+            Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var user = await docs.GetCurrentUserUsingGetAsync().ConfigureAwait(false);
 
             return user;

@@ -47,7 +47,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public ProjectCollection GetProjectById(int id)
         {
             var project = Projects.SingleOrDefault(x => x.Id.Equals(id));
-            if(project == default(ProjectCollection))
+            if (project == default(ProjectCollection))
             {
                 Debug.Write($"Id not found: {id}");
                 ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Id not found: {id}");
@@ -68,7 +68,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         public ActivityCollection GetActivityByName(string name, int? projectId)
         {
-            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal) 
+            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
             && x.Project.Value == projectId);
             if (activity == default(ActivityCollection))
             {

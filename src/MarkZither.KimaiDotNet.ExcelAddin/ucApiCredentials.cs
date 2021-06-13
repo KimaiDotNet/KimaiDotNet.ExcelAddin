@@ -28,7 +28,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         }
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            if(this.ValidateChildren())
+            if (this.ValidateChildren())
             {
                 Globals.ThisAddIn.ApiUrl = txtAPIUrl.Text;
                 Globals.ThisAddIn.ApiUsername = txtApiUsername.Text;

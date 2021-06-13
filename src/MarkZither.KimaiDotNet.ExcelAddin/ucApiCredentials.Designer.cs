@@ -51,14 +51,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.txtApiUsername.Location = new System.Drawing.Point(19, 98);
             this.txtApiUsername.Name = "txtApiUsername";
             this.txtApiUsername.Size = new System.Drawing.Size(153, 20);
-            this.txtApiUsername.TabIndex = 0;
+            this.txtApiUsername.TabIndex = 6;
             // 
             // txtApiPassword
             // 
             this.txtApiPassword.Location = new System.Drawing.Point(19, 148);
             this.txtApiPassword.Name = "txtApiPassword";
             this.txtApiPassword.Size = new System.Drawing.Size(153, 20);
-            this.txtApiPassword.TabIndex = 1;
+            this.txtApiPassword.TabIndex = 7;
             // 
             // lblUsername
             // 
@@ -83,7 +83,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSave.Location = new System.Drawing.Point(19, 261);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 9;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -116,7 +116,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnTestConnection.Location = new System.Drawing.Point(19, 174);
             this.btnTestConnection.Name = "btnTestConnection";
             this.btnTestConnection.Size = new System.Drawing.Size(100, 23);
-            this.btnTestConnection.TabIndex = 7;
+            this.btnTestConnection.TabIndex = 8;
             this.btnTestConnection.Text = "Test Connection";
             this.btnTestConnection.UseVisualStyleBackColor = true;
             this.btnTestConnection.Click += new System.EventHandler(this.btnTestConnection_Click);

@@ -27,7 +27,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             var projectWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, ExcelAddin.Constants.ProjectsSheet.ProjectsSheetName, StringComparison.OrdinalIgnoreCase));
-            if(projectWorksheet is Worksheet)
+            if (projectWorksheet is Worksheet)
             {
                 Worksheet = projectWorksheet;
             }
@@ -35,7 +35,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             {
                 projectWorksheet = (Microsoft.Office.Interop.Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, Globals.ThisAddIn.Application.ActiveSheet as Worksheet);
                 projectWorksheet.Name = ExcelAddin.Constants.ProjectsSheet.ProjectsSheetName;
-                //projectWorksheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
+                projectWorksheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
                 Worksheet = projectWorksheet;
                 // switch straight back to the current active sheet
                 currentSheet.Select();

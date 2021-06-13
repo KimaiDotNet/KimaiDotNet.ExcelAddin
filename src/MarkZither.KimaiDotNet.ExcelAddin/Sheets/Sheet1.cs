@@ -31,7 +31,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             var sheet1Worksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, ExcelAddin.Constants.Sheet1.TimesheetsSheetName, StringComparison.OrdinalIgnoreCase));
-            if(sheet1Worksheet is Worksheet)
+            if (sheet1Worksheet is Worksheet)
             {
                 Worksheet = sheet1Worksheet;
             }
@@ -140,55 +140,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                                 Begin = date.AddMinutes(addMinutes).ToUniversalTime(),
                                 End = date.AddMinutes(addMinutes).AddMinutes(duration).ToUniversalTime(),
                                 User = Globals.ThisAddIn.CurrentUser.Id.Value,
-                                Description = description
+                                Description = description,
                             }).ConfigureAwait(false);
-                            Globals.ThisAddIn.Timesheets.Add(new Models.TimesheetCollection()
-                            {
-                                Id = timesheet.Id,
-                                Begin = timesheet.Begin,
-                                End = timesheet.End,
-                                Activity = timesheet.Activity,
-                                Project = timesheet.Project,
-                                Duration = duration,
-                                User = timesheet.User,
-                                Description = timesheet.Description,
-                                Tags = timesheet.Tags
-                            });
-                            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
-                            Worksheet.Unprotect();
-                            Globals.ThisAddIn.Application.Cells.Locked = false;
-                            Worksheet.Change -= new Microsoft.Office.Interop.Excel.
-                            DocEvents_ChangeEventHandler(changesRange_Change);
-
-                            ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = timesheet.Id;
-                            //((Excel.Range)sheet.Cells[timesheets.Count + 2, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
-                            ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = timesheet.Begin.Date.ToOADate();
-                            if (timesheet.Project.HasValue)
-                            {
-                                var project = Globals.ThisAddIn.GetProjectById(timesheet.Project.Value);
-                                ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = project.ParentTitle;
-                                ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = project.Name;
-                            }
-                            if (timesheet.Activity.HasValue)
-                            {
-                                var activity = Globals.ThisAddIn.GetActivityById(timesheet.Activity.Value);
-                                ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
-                            }
-                            ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheet.Description;
-                            ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheet.Begin.ToOADate();
-                            if (timesheet.End.HasValue)
-                            {
-                                ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheet.End.Value.ToOADate();
-                            }
-
-                            Worksheet.Change += new Microsoft.Office.Interop.Excel.
-                            DocEvents_ChangeEventHandler(changesRange_Change);
-
-                            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
-                            Globals.ThisAddIn.Application.Cells.Locked = false;
-                            Globals.ThisAddIn.Application.get_Range("A1", $"A{i}").Locked = true;
-                            Worksheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                              Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                            Globals.ThisAddIn.Timesheets.Add(new Models.TimesheetCollection() { Id = timesheet.Id, Begin = timesheet.Begin, End = timesheet.End, Activity = timesheet.Activity, Project = timesheet.Project, Duration = duration, User = timesheet.User, Description = timesheet.Description, Tags = timesheet.Tags, });
+                            UpdateNewTimesheetRecordAfterServerSync(i, timesheet);
                         }
                         else
                         {
@@ -203,6 +158,49 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to sync new rows to kimai", ex);
             }
         }
+
+        private void UpdateNewTimesheetRecordAfterServerSync(int rowNo, TimesheetEntity timesheet)
+        {
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+            Worksheet.Unprotect();
+            Globals.ThisAddIn.Application.Cells.Locked = false;
+            Worksheet.Change -= new Microsoft.Office.Interop.Excel.
+            DocEvents_ChangeEventHandler(changesRange_Change);
+
+            ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2 = timesheet.Id;
+
+#pragma warning disable S125 // Sections of code should not be commented out
+            //((Excel.Range)sheet.Cells[timesheets.Count + 2, IdColumnIndex]).Interior.Color = Excel.XlRgbColor.rgbAliceBlue;
+#pragma warning restore S125 // Sections of code should not be commented out
+            ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = timesheet.Begin.Date.ToOADate();
+            if (timesheet.Project.HasValue)
+            {
+                var project = Globals.ThisAddIn.GetProjectById(timesheet.Project.Value);
+                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = project.ParentTitle;
+                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = project.Name;
+            }
+            if (timesheet.Activity.HasValue)
+            {
+                var activity = Globals.ThisAddIn.GetActivityById(timesheet.Activity.Value);
+                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
+            }
+                                    ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheet.Description;
+            ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheet.Begin.ToOADate();
+            if (timesheet.End.HasValue)
+            {
+                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheet.End.Value.ToOADate();
+            }
+
+            Worksheet.Change += new Microsoft.Office.Interop.Excel.
+            DocEvents_ChangeEventHandler(changesRange_Change);
+
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
+            Globals.ThisAddIn.Application.Cells.Locked = false;
+            Globals.ThisAddIn.Application.get_Range("A1", $"A{rowNo}").Locked = true;
+            Worksheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+              Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+        }
+
         private int GetNextAvailableTimeInMinutes(DateTime date)
         {
             var lastTimeEntry = Globals.ThisAddIn.Timesheets.OrderByDescending(x => x.End).FirstOrDefault(x => x.Begin.Date.Equals(date.Date) && x.End != null)?.End.Value;
@@ -249,26 +247,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                     {
                         MessageBox.Show($"Could not find the selected project. {ex.Message}");
                         ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not find the selected project. {ex.Message}", ex);
-
                     }
                 }
             }
         }
         public async Task SyncTimesheetsAsync()
         {
-            var mockWorksheet =
-                            Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
+            var mockWorksheet = Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                                    .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
-            IKimaiServices services;
-            if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
-                || mockWorksheet is Worksheet)
-            {
-                services = new MockKimaiServices();
-            }
-            else
-            {
-                services = new KimaiServices();
-            }
+            IKimaiServices services = !(string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase) || mockWorksheet is Worksheet) ? (IKimaiServices)new KimaiServices() : new MockKimaiServices();
 
             var projects = await services.GetProjects().ConfigureAwait(false);
             Globals.ThisAddIn.Projects = projects.ToList();
@@ -307,22 +294,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-add-namedrange-controls-to-worksheets?view=vs-2019
             //https://stackoverflow.com/questions/10373561/convert-a-number-to-a-letter-in-c-sharp-for-use-in-microsoft-excel
             //https://stackoverflow.com/a/10373827
-            AddDataValidationToColumnByRange(ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex,
-                ExcelAddin.Constants.Sheet1.CustomerColumnIndex);
+            AddDataValidationToColumnByRange(ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex, ExcelAddin.Constants.Sheet1.CustomerColumnIndex);
 
-            sheet.Change += new Microsoft.Office.Interop.Excel.
-                DocEvents_ChangeEventHandler(changesRange_Change);
+            sheet.Change += new Microsoft.Office.Interop.Excel.DocEvents_ChangeEventHandler(changesRange_Change);
 
-            var activityList = new List<string>();
-            foreach (var activity in activities)
-            {
-                activityList.Add(activity.Name);
-            }
-
-            var activityFlatList = string.Join(",", activityList.ToArray());
-
-            AddDataValidationToColumnWithFlatList(activityFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex);
-
+            var activitiesFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, activities.Select(i => i.Name));
+            AddDataValidationToColumnWithFlatList(activitiesFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex);
             sheet.Unprotect();
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
             if (Globals.ThisAddIn.Application.Cells.Locked is bool && (bool)Globals.ThisAddIn.Application.Cells.Locked)
@@ -342,7 +319,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             cell.Validation.IgnoreBlank = true;
             cell.Validation.InCellDropdown = true;
         }
-
         private void AddDataValidationToColumnWithFlatList(string flatList, int columnIndex, int? row = null)
         {
             // might not use this method as there is a limit to the number of items that can be supported

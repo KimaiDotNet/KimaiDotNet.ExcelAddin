@@ -25,16 +25,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
     {
         private string GetVersionNumber()
         {
-            string version = string.Empty;
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
-            }
-            else
-            {
-                version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-            return version;
+            return ApplicationDeployment.IsNetworkDeployed
+                ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString()
+                : Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
         #region events
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
@@ -69,11 +62,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Globals.ThisAddIn.CurrentUser = user;
                 btnSync.Enabled = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not connect to Kimai server. {ex.Message}", ex);
-
             }
         }
         private async void btnSync_Click(object sender, RibbonControlEventArgs e)

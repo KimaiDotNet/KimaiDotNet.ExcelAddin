@@ -15,7 +15,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             var value = "";
 
             if (columnId >= letters.Length)
-                value += letters[columnId / letters.Length - 1];
+                value += letters[(columnId / letters.Length) - 1];
 
             value += letters[columnId % letters.Length];
 

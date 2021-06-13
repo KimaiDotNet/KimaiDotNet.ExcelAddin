@@ -27,7 +27,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             var customerWorksheet =
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, StringComparison.OrdinalIgnoreCase));
-            if(customerWorksheet is Worksheet)
+            if (customerWorksheet is Worksheet)
             {
                 Worksheet = customerWorksheet;
             }
@@ -35,7 +35,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             {
                 customerWorksheet = (Microsoft.Office.Interop.Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, Globals.ThisAddIn.Application.ActiveSheet as Worksheet);
                 customerWorksheet.Name = ExcelAddin.Constants.CustomersSheet.CustomersSheetName;
-                //customerWorksheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
+                customerWorksheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
                 Worksheet = customerWorksheet;
                 // switch straight back to the current active sheet
                 currentSheet.Select();
