@@ -21,6 +21,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
+    [VstoUnhandledException]
     public partial class KimaiRibbon
     {
         private string GetVersionNumber()
@@ -91,6 +92,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             //https://stackoverflow.com/questions/19458721/cant-type-on-a-wpf-window-in-a-vsto-addin
             AboutWindow aboutWindow = new AboutWindow();
             aboutWindow.Show();
+            if (true)
+            {
+                throw new InvalidCastException("test exception");
+            }
         }
         #endregion
     }

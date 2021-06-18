@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
+    [VstoUnhandledException]
     /// <summary>
     /// Interaction logic for ucAbout.xaml
     /// </summary>
