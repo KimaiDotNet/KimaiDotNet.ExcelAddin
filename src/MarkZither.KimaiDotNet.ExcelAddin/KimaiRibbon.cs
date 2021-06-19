@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -98,5 +99,23 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
         }
         #endregion
+
+        private void btnBug_Click(object sender, RibbonControlEventArgs e)
+        {
+#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
+#pragma warning disable S1075 // URIs should not be hardcoded
+            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/issues");
+#pragma warning restore S1075 // URIs should not be hardcoded
+#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
+        }
+
+        private void btnHelp_Click(object sender, RibbonControlEventArgs e)
+        {
+#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
+#pragma warning disable S1075 // URIs should not be hardcoded
+            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/discussions");
+#pragma warning restore S1075 // URIs should not be hardcoded
+#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
+        }
     }
 }

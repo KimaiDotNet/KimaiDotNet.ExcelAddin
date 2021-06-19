@@ -56,6 +56,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.lblServerVersion = this.Factory.CreateRibbonLabel();
             this.lblVersionNo = this.Factory.CreateRibbonLabel();
+            this.btnBug = this.Factory.CreateRibbonButton();
+            this.btnHelp = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.grpSettings.SuspendLayout();
             this.grpTimesheets.SuspendLayout();
@@ -158,6 +160,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpSupport.Items.Add(this.btnBuy);
             this.grpSupport.Items.Add(this.btnSponsor);
             this.grpSupport.Items.Add(this.btnInfo);
+            this.grpSupport.Items.Add(this.btnBug);
+            this.grpSupport.Items.Add(this.btnHelp);
             this.grpSupport.Label = "Support";
             this.grpSupport.Name = "grpSupport";
             // 
@@ -165,12 +169,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.btnBuy.Label = "Buy";
             this.btnBuy.Name = "btnBuy";
+            this.btnBuy.OfficeImageId = "DataTypeCurrency";
+            this.btnBuy.ShowImage = true;
             this.btnBuy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
             // btnSponsor
             // 
             this.btnSponsor.Label = "Sponsor";
             this.btnSponsor.Name = "btnSponsor";
+            this.btnSponsor.OfficeImageId = "DataTypeCurrency";
+            this.btnSponsor.ShowImage = true;
             this.btnSponsor.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
             // btnInfo
@@ -215,6 +223,24 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.lblVersionNo.Label = "Not Connected";
             this.lblVersionNo.Name = "lblVersionNo";
+            // 
+            // btnBug
+            // 
+            this.btnBug.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnBug.Label = "Report a bug";
+            this.btnBug.Name = "btnBug";
+            this.btnBug.OfficeImageId = "CodeEditor";
+            this.btnBug.ShowImage = true;
+            this.btnBug.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnBug_Click);
+            // 
+            // btnHelp
+            // 
+            this.btnHelp.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnHelp.Label = "View the forum";
+            this.btnHelp.Name = "btnHelp";
+            this.btnHelp.OfficeImageId = "AccessOnlineLists";
+            this.btnHelp.ShowImage = true;
+            this.btnHelp.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnHelp_Click);
             // 
             // KimaiRibbon
             // 
@@ -261,6 +287,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblServerVersion;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInfo;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnBug;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnHelp;
     }
 
     partial class ThisRibbonCollection
