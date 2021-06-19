@@ -185,10 +185,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
             }
                                     ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheet.Description;
-            ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheet.Begin.ToOADate();
+            ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheet.Begin.ToLocalTime().ToOADate();
             if (timesheet.End.HasValue)
             {
-                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheet.End.Value.ToOADate();
+                ((Range)Worksheet.Cells[rowNo, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = timesheet.End.Value.ToLocalTime().ToOADate();
             }
 
             Worksheet.Change += new Microsoft.Office.Interop.Excel.

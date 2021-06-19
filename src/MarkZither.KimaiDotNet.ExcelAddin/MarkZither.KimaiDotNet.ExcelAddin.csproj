@@ -44,6 +44,7 @@
     <FriendlyName>MarkZither.KimaiDotNet.ExcelAddin</FriendlyName>
     <OfficeApplicationDescription />
     <LoadBehavior>3</LoadBehavior>
+    <PostSharpDisabledMessages>DIA005</PostSharpDisabledMessages>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -192,6 +193,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="GlobalAspects.cs" />
     <Compile Include="KimaiRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -243,6 +245,9 @@
     <EmbeddedResource Include="ucApiCredentials.resx">
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="postsharp.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <None Include="MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -305,6 +310,12 @@
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="PostSharp">
+      <Version>6.9.6</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp.Patterns.Diagnostics">
+      <Version>6.9.6</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp.Patterns.Diagnostics.Microsoft">
       <Version>6.9.6</Version>
     </PackageReference>
     <PackageReference Include="Roslynator.Analyzers">

@@ -18,6 +18,8 @@ using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 using System.Threading;
 using System.Windows.Threading;
 using PostSharp;
+using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -133,6 +135,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             var logProvider = loggerFactory.CreateLogger<ThisAddIn>();
             logProvider.LogDebug("debiggung");
             Logger = logProvider;
+
+            // Configure PostSharp Logging to use Serilog
+            LoggingServices.DefaultBackend = new MicrosoftLoggingBackend(loggerFactory);
 
             Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
             Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;

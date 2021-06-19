@@ -16,7 +16,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
     {
         public override void OnException(MethodExecutionArgs args)
         {
-            Console.WriteLine(args.Exception.Message);
             ExcelAddin.Globals.ThisAddIn.Logger.LogCritical(args.Exception, "Premium sync");
             args.FlowBehavior = FlowBehavior.Return;
         }
