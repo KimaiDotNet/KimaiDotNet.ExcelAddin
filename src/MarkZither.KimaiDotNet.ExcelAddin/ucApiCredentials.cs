@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Office.Interop.Excel;
+using Microsoft.Rest;
 
 using System;
 using System.Collections.Generic;
@@ -47,12 +48,39 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 {
                     services = new KimaiServices();
                 }
-                var version = await services.GetVersion();
-                var user = await services.GetCurrentUser();
-                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Connected to Kimai", version);
-                Globals.Ribbons.GetRibbon<KimaiRibbon>().lblVersionNo.Label = version.VersionProperty;
-                Globals.Ribbons.GetRibbon<KimaiRibbon>().btnSync.Enabled = true;
-                Globals.ThisAddIn.CurrentUser = user;
+                try
+                {
+                    var version = await services.GetVersion();
+                    var user = await services.GetCurrentUser();
+                    ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Connected to Kimai", version);
+                    Globals.Ribbons.GetRibbon<KimaiRibbon>().lblVersionNo.Label = version.VersionProperty;
+                    Globals.Ribbons.GetRibbon<KimaiRibbon>().btnSync.Enabled = true;
+                    Globals.ThisAddIn.CurrentUser = user;
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Green);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Success");
+                }
+                catch (HttpOperationException hoex) when (hoex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: Username or Password Incorrect {Environment.NewLine} {hoex.Message}");
+                }
+                catch (HttpOperationException hoex)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: {hoex.Message}");
+                }
+                catch (HttpRequestException hrex)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: Server name incorrect {Environment.NewLine} {hrex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    // i'm using a little helper method here...
+                    // https://stackoverflow.com/questions/31007145/asynchronous-ui-updates-in-winforms
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: {ex.Message}");
+                }
             }
         }
 
@@ -81,7 +109,22 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 {
                     _ = await services.GetPing().ConfigureAwait(false);
                     Do(lblConnectionStatus, rb => rb.ForeColor = Color.Green);
-                    Do(lblConnectionStatus, rb => rb.Text = $"Success");
+                    Do(lblConnectionStatus, rb => rb.Text = $"Success: API ping call ");
+                }
+                catch (HttpOperationException hoex) when (hoex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: Username or Password Incorrect {Environment.NewLine} {hoex.Message}");
+                }
+                catch (HttpOperationException hoex)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: {hoex.Message}");
+                }
+                catch (HttpRequestException hrex)
+                {
+                    Do(lblConnectionStatus, rb => rb.ForeColor = Color.Red);
+                    Do(lblConnectionStatus, rb => rb.Text = $"Failed: Server name incorrect {Environment.NewLine} {hrex.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -135,6 +178,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
             errorProvider.SetError(textBox, "");
+        }
+
+        private void ucApiCredentials_SizeChanged(object sender, EventArgs e)
+        {
+            lblConnectionStatus.Size = new Size(((ucApiCredentials)sender).Size.Width, lblConnectionStatus.Size.Height);
+            panel1.Size = new Size(((ucApiCredentials)sender).Size.Width, panel1.Size.Height);
         }
     }
 }

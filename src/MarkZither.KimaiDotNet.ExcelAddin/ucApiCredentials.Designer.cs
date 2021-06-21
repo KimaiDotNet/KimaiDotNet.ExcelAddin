@@ -123,6 +123,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             // lblConnectionStatus
             // 
+            this.lblConnectionStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblConnectionStatus.AutoSize = true;
             this.lblConnectionStatus.Location = new System.Drawing.Point(3, 9);
             this.lblConnectionStatus.Name = "lblConnectionStatus";
@@ -132,6 +135,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Controls.Add(this.lblConnectionStatus);
             this.panel1.Location = new System.Drawing.Point(19, 203);
             this.panel1.Name = "panel1";
@@ -157,6 +165,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.Controls.Add(this.txtApiUsername);
             this.Name = "ucApiCredentials";
             this.Size = new System.Drawing.Size(194, 311);
+            this.SizeChanged += new System.EventHandler(this.ucApiCredentials_SizeChanged);
             this.Validating += new System.ComponentModel.CancelEventHandler(this.ucApiCredentials_Validating);
             this.Validated += new System.EventHandler(this.ucApiCredentials_Validated);
             this.panel1.ResumeLayout(false);
