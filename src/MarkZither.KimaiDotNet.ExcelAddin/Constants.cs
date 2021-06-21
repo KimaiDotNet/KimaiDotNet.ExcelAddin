@@ -10,6 +10,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
     {
         public const string FlatListDelimiter = ",";
         public const string Log = "TjKCwsfYmc3K0rDflmF4z5uCwwGxqPfJ73WJFKqPPFmIORwjcnVFlaeLcjm2qSZRZcWFP3cG7L18gTJSkAeYLQ==";
+        public static class KimaiSheet
+        {
+            public const string KimaiSheetName = "Kimai";
+        }
         public static class Sheet1
         {
             public const string TimesheetsSheetName = "Sheet1";

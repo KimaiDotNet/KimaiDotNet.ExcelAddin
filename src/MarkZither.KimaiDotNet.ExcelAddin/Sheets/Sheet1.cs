@@ -193,7 +193,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
 
             Worksheet.Change += new Microsoft.Office.Interop.Excel.
             DocEvents_ChangeEventHandler(changesRange_Change);
-
+            
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
             Globals.ThisAddIn.Application.Cells.Locked = false;
             Globals.ThisAddIn.Application.get_Range("A1", $"A{rowNo}").Locked = true;
@@ -289,6 +289,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
 
             Sheets.Sheet1.Instance.SetupTimesheetsHeaderRow();
             Sheets.Sheet1.Instance.WriteTimesheetRows(timesheets);
+            Sheets.KimaiWorksheet.Instance.SetSyncDate();
 
             //https://stackoverflow.com/questions/2414591/how-to-create-validation-from-name-range-on-another-worksheet-in-excel-using-c
             //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-add-namedrange-controls-to-worksheets?view=vs-2019
@@ -364,6 +365,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 MessageBox.Show($"Failed to set validation on column index ${columnIndex}");
                 ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to set validation on column index ${columnIndex}", ex);
             }
+        }
+        public void AddSheetChangeEventHandler()
+        {
+            Worksheet.Change -= new Microsoft.Office.Interop.Excel.
+                DocEvents_ChangeEventHandler(changesRange_Change);
+            Worksheet.Change += new Microsoft.Office.Interop.Excel.
+                DocEvents_ChangeEventHandler(changesRange_Change);
         }
     }
 }

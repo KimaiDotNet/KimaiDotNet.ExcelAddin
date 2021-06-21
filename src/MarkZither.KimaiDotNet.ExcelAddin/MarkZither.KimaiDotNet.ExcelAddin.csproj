@@ -29,11 +29,12 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>True</IsWebBootstrapper>
+    <PostSharpDisabledMessages>DIA005</PostSharpDisabledMessages>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <PublishUrl>c:\publish\KimaiExcel\</PublishUrl>
     <InstallUrl>http://blog.mark-burton.com/assets/exceladdin/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>0.0.0.5</ApplicationVersion>
+    <ApplicationVersion>0.0.0.6</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -44,7 +45,6 @@
     <FriendlyName>MarkZither.KimaiDotNet.ExcelAddin</FriendlyName>
     <OfficeApplicationDescription />
     <LoadBehavior>3</LoadBehavior>
-    <PostSharpDisabledMessages>DIA005</PostSharpDisabledMessages>
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -218,6 +218,7 @@
     <Compile Include="Sheets\CustomerWorksheet.cs" />
     <Compile Include="Sheets\ActivityWorksheet.cs" />
     <Compile Include="Sheets\ProjectWorksheet.cs" />
+    <Compile Include="Sheets\KimaiWorksheet.cs" />
     <Compile Include="Sheets\Sheet1.cs" />
     <Compile Include="ucAbout.xaml.cs">
       <DependentUpon>ucAbout.xaml</DependentUpon>

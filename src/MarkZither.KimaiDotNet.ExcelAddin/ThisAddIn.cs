@@ -75,7 +75,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public ActivityCollection GetActivityByName(string name, int? projectId)
         {
             var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
-            && x.Project.Value == projectId);
+            && (!projectId.HasValue || x.Project.Value == projectId));
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Activity Name not found: {name}");
@@ -87,7 +87,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public ProjectCollection GetProjectByName(string name, int? customerId)
         {
             var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
-                && customerId.Value == x.Customer);
+                && (!customerId.HasValue || customerId.Value == x.Customer));
             if (project == default(ProjectCollection))
             {
                 Debug.WriteLine($"name not found: {name}");
@@ -141,10 +141,24 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
             Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;
-            if (true)
+
+            this.Application.WorkbookActivate += Application_WorkbookActivate;
+            this.Application.WorkbookOpen += Application_WorkbookOpen;
+        }
+
+        private void Application_WorkbookOpen(Excel.Workbook Wb)
+        {
+            Logger.LogInformation("In Workbook Open", Wb);
+            if (Sheets.KimaiWorksheet.Instance.isInitialized())
             {
-                throw new InvalidCastException("test exception");
+                Logger.LogInformation("Opened a workbook with a Kimai hidden sheet", Wb);
+                Sheets.Sheet1.Instance.AddSheetChangeEventHandler();
             }
+        }
+
+        private void Application_WorkbookActivate(Excel.Workbook Wb)
+        {
+            Logger.LogInformation("In Workbook Activate", Wb);
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
