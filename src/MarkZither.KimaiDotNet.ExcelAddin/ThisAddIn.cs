@@ -75,7 +75,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public ActivityCollection GetActivityByName(string name, int? projectId)
         {
             var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
-            && (!projectId.HasValue || x.Project.Value == projectId));
+            && (x.Project.Value == projectId));
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Activity Name not found: {name}");
@@ -87,7 +87,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public ProjectCollection GetProjectByName(string name, int? customerId)
         {
             var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
-                && (!customerId.HasValue || customerId.Value == x.Customer));
+                && (customerId.Value == x.Customer));
             if (project == default(ProjectCollection))
             {
                 Debug.WriteLine($"name not found: {name}");

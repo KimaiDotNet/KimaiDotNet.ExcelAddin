@@ -43,7 +43,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var projects = await docs.ListProjectUsingGetAsync(customer: null, customers: null, "3").ConfigureAwait(false);
 
-            return projects;
+            return projects.Where(x => x.Customer.HasValue).ToList();
         }
 
         public async Task<IList<CustomerCollection>> GetCustomers()
@@ -59,7 +59,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var activities = await docs.ListActivitiesUsingGetAsync(project: null, projects: null, "3").ConfigureAwait(false);
 
-            return activities;
+            return activities.Where(x => x.Project.HasValue).ToList();
         }
         public async Task<IList<TimesheetCollection>> GetTimesheets()
         {
