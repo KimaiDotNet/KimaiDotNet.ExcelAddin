@@ -54,7 +54,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 new ProjectCollection() { Id = 4, ParentTitle = "cust2", Name = "project 4", Customer = 2 },
             };
 
-            return await Task.FromResult(projects.Where(x => x.Customer.HasValue).ToList()).ConfigureAwait(false);
+            return await Task.FromResult(projects.ToList()).ConfigureAwait(false);
         }
         public async Task<IList<CustomerCollection>> GetCustomers()
         {
@@ -74,7 +74,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                 new ActivityCollection() { Id = 2, Name = "Act2", Project = 2, ParentTitle = "Project 2" },
                 new ActivityCollection() { Id = 3, Name = "Act3NoProject"},
             };
-            return await Task.FromResult(activities.Where(x => x.Project.HasValue).ToList()).ConfigureAwait(false);
+            return await Task.FromResult(activities.ToList()).ConfigureAwait(false);
         }
 #pragma warning disable MA0051 // Method is too long
         public async Task<IList<TimesheetCollection>> GetTimesheets()
