@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using PostSharp;
 using PostSharp.Patterns.Diagnostics;
 using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
+using System.Windows.Forms;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -86,14 +87,30 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         public ProjectCollection GetProjectByName(string name, int? customerId)
         {
-            var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
-                && ((x.Customer.HasValue && customerId.Value == x.Customer) || !x.Customer.HasValue));
-            if (project == default(ProjectCollection))
+            try
             {
-                Debug.WriteLine($"name not found: {name}");
-                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
+                var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
+                    && ((x.Customer.HasValue && customerId.Value == x.Customer) || !x.Customer.HasValue));
+                if (project == default(ProjectCollection))
+                {
+                    Debug.WriteLine($"name not found: {name}");
+                    ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
+                }
+                return project;
             }
-            return project;
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Single project not found: {ex}");
+                MessageBox.Show("You appear to have duplicate projects for this customer");
+                var project = Projects.First(x => x.Name.Equals(name, StringComparison.Ordinal)
+                    && ((x.Customer.HasValue && customerId.Value == x.Customer) || !x.Customer.HasValue));
+                if (project == default(ProjectCollection))
+                {
+                    Debug.WriteLine($"name not found: {name}");
+                    ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
+                }
+                return project;
+            }
         }
         public CustomerCollection GetCustomerByName(string name)
         {

@@ -237,8 +237,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 {
                     try
                     {
-                        ProjectCollection project = Globals.ThisAddIn.Projects.Single(x => string.Equals(x.Name, selectedValue, StringComparison.OrdinalIgnoreCase));
+                        string customerName = (string)((Range)Worksheet.Cells[Target.Row, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2;
+                        CustomerCollection customer = Globals.ThisAddIn.GetCustomerByName(customerName);
+                        ProjectCollection project = Globals.ThisAddIn.GetProjectByName(selectedValue, customer.Id);
+#pragma warning disable S1135 // Track uses of "TODO" tags
+#pragma warning disable MA0026 // Fix TODO comment
+                              // TODO: replace this with a call to a method in ThisAddIn
                         List<ActivityCollection> activities = Globals.ThisAddIn.Activities.Where(x => x.Project == project.Id || !x.Project.HasValue).ToList();
+#pragma warning restore MA0026 // Fix TODO comment
+#pragma warning restore S1135 // Track uses of "TODO" tags
                         var activitiesFlatList = string.Join(ExcelAddin.Constants.FlatListDelimiter, activities.Select(i => i.Name));
                         AddDataValidationToColumnWithFlatList(activitiesFlatList, ExcelAddin.Constants.Sheet1.ActivityColumnIndex, Target.Row);
                         ExcelAddin.Globals.ThisAddIn.Logger.LogDebug("Project changed, lets set the valid activities");

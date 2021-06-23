@@ -34,7 +34,7 @@
     <PublishUrl>c:\publish\KimaiExcel\</PublishUrl>
     <InstallUrl>http://blog.mark-burton.com/assets/exceladdin/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>0.0.0.7</ApplicationVersion>
+    <ApplicationVersion>0.0.0.9</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
