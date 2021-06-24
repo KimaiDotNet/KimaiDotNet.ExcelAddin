@@ -46,18 +46,24 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpAdmin = this.Factory.CreateRibbonGroup();
             this.btnSyncCustomers = this.Factory.CreateRibbonButton();
             this.btnSyncProjects = this.Factory.CreateRibbonButton();
+            this.grpSupport = this.Factory.CreateRibbonGroup();
+            this.btnBuy = this.Factory.CreateRibbonButton();
+            this.btnSponsor = this.Factory.CreateRibbonButton();
+            this.btnInfo = this.Factory.CreateRibbonButton();
+            this.btnBug = this.Factory.CreateRibbonButton();
+            this.btnHelp = this.Factory.CreateRibbonButton();
             this.grpVersion = this.Factory.CreateRibbonGroup();
             this.lblVersion = this.Factory.CreateRibbonLabel();
+            this.lblAddinVersionNo = this.Factory.CreateRibbonLabel();
+            this.separator1 = this.Factory.CreateRibbonSeparator();
+            this.lblServerVersion = this.Factory.CreateRibbonLabel();
             this.lblVersionNo = this.Factory.CreateRibbonLabel();
-            this.grpSupport = this.Factory.CreateRibbonGroup();
-            this.btnSponsor = this.Factory.CreateRibbonButton();
-            this.btnBuy = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.grpSettings.SuspendLayout();
             this.grpTimesheets.SuspendLayout();
             this.grpAdmin.SuspendLayout();
-            this.grpVersion.SuspendLayout();
             this.grpSupport.SuspendLayout();
+            this.grpVersion.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
@@ -92,9 +98,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             // btnConnect
             // 
-            this.btnConnect.Image = global::MarkZither.KimaiDotNet.ExcelAddin.Properties.Resources.noun_connect_3698648;
             this.btnConnect.Label = "Connect";
             this.btnConnect.Name = "btnConnect";
+            this.btnConnect.OfficeImageId = "ConnectToServer";
             this.btnConnect.ShowImage = true;
             this.btnConnect.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConnect_Click);
             // 
@@ -114,6 +120,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // btnSync
             // 
             this.btnSync.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSync.Enabled = false;
             this.btnSync.Label = "Sync Data";
             this.btnSync.Name = "btnSync";
             this.btnSync.OfficeImageId = "ReplicationSynchronizeNow";
@@ -125,6 +132,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnCalendar.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnCalendar.Label = "Import Calendar";
             this.btnCalendar.Name = "btnCalendar";
+            this.btnCalendar.OfficeImageId = "CalendarImport";
             this.btnCalendar.ShowImage = true;
             this.btnCalendar.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCalendar_Click);
             // 
@@ -139,6 +147,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.btnSyncCustomers.Label = "Sync Customers";
             this.btnSyncCustomers.Name = "btnSyncCustomers";
+            this.btnSyncCustomers.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
             // btnSyncProjects
             // 
@@ -146,39 +155,92 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSyncProjects.Name = "btnSyncProjects";
             this.btnSyncProjects.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
             // 
+            // grpSupport
+            // 
+            this.grpSupport.Items.Add(this.btnBuy);
+            this.grpSupport.Items.Add(this.btnSponsor);
+            this.grpSupport.Items.Add(this.btnInfo);
+            this.grpSupport.Items.Add(this.btnBug);
+            this.grpSupport.Items.Add(this.btnHelp);
+            this.grpSupport.Label = "Support";
+            this.grpSupport.Name = "grpSupport";
+            // 
+            // btnBuy
+            // 
+            this.btnBuy.Label = "Buy";
+            this.btnBuy.Name = "btnBuy";
+            this.btnBuy.OfficeImageId = "DataTypeCurrency";
+            this.btnBuy.ShowImage = true;
+            this.btnBuy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
+            // 
+            // btnSponsor
+            // 
+            this.btnSponsor.Label = "Sponsor";
+            this.btnSponsor.Name = "btnSponsor";
+            this.btnSponsor.OfficeImageId = "DataTypeCurrency";
+            this.btnSponsor.ShowImage = true;
+            this.btnSponsor.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncPremuim_Click);
+            // 
+            // btnInfo
+            // 
+            this.btnInfo.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnInfo.Label = "Information";
+            this.btnInfo.Name = "btnInfo";
+            this.btnInfo.OfficeImageId = "About";
+            this.btnInfo.ShowImage = true;
+            this.btnInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInfo_Click);
+            // 
+            // btnBug
+            // 
+            this.btnBug.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnBug.Label = "Report a bug";
+            this.btnBug.Name = "btnBug";
+            this.btnBug.OfficeImageId = "CodeEditor";
+            this.btnBug.ShowImage = true;
+            this.btnBug.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnBug_Click);
+            // 
+            // btnHelp
+            // 
+            this.btnHelp.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnHelp.Label = "View the forum";
+            this.btnHelp.Name = "btnHelp";
+            this.btnHelp.OfficeImageId = "AccessOnlineLists";
+            this.btnHelp.ShowImage = true;
+            this.btnHelp.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnHelp_Click);
+            // 
             // grpVersion
             // 
             this.grpVersion.Items.Add(this.lblVersion);
+            this.grpVersion.Items.Add(this.lblAddinVersionNo);
+            this.grpVersion.Items.Add(this.separator1);
+            this.grpVersion.Items.Add(this.lblServerVersion);
             this.grpVersion.Items.Add(this.lblVersionNo);
             this.grpVersion.Label = "Version";
             this.grpVersion.Name = "grpVersion";
             // 
             // lblVersion
             // 
-            this.lblVersion.Label = "Version Details";
+            this.lblVersion.Label = "Addin Version";
             this.lblVersion.Name = "lblVersion";
+            // 
+            // lblAddinVersionNo
+            // 
+            this.lblAddinVersionNo.Label = "0.0.0.0";
+            this.lblAddinVersionNo.Name = "lblAddinVersionNo";
+            // 
+            // separator1
+            // 
+            this.separator1.Name = "separator1";
+            // 
+            // lblServerVersion
+            // 
+            this.lblServerVersion.Label = "Server Version";
+            this.lblServerVersion.Name = "lblServerVersion";
             // 
             // lblVersionNo
             // 
             this.lblVersionNo.Label = "Not Connected";
             this.lblVersionNo.Name = "lblVersionNo";
-            // 
-            // grpSupport
-            // 
-            this.grpSupport.Items.Add(this.btnSponsor);
-            this.grpSupport.Items.Add(this.btnBuy);
-            this.grpSupport.Label = "Support";
-            this.grpSupport.Name = "grpSupport";
-            // 
-            // btnSponsor
-            // 
-            this.btnSponsor.Label = "Sponsor";
-            this.btnSponsor.Name = "btnSponsor";
-            // 
-            // btnBuy
-            // 
-            this.btnBuy.Label = "Buy";
-            this.btnBuy.Name = "btnBuy";
             // 
             // KimaiRibbon
             // 
@@ -194,10 +256,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpTimesheets.PerformLayout();
             this.grpAdmin.ResumeLayout(false);
             this.grpAdmin.PerformLayout();
-            this.grpVersion.ResumeLayout(false);
-            this.grpVersion.PerformLayout();
             this.grpSupport.ResumeLayout(false);
             this.grpSupport.PerformLayout();
+            this.grpVersion.ResumeLayout(false);
+            this.grpVersion.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -221,6 +283,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpSupport;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSponsor;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnBuy;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblAddinVersionNo;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblServerVersion;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInfo;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnBug;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnHelp;
     }
 
     partial class ThisRibbonCollection

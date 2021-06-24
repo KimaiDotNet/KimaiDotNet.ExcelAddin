@@ -12,9 +12,19 @@ using System.Xml.Serialization;
 using MarkZither.KimaiDotNet.ExcelAddin.Properties;
 using MarkZither.KimaiDotNet.Models;
 using System.Diagnostics;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
+using System.Threading;
+using System.Windows.Threading;
+using PostSharp;
+using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
+using System.Windows.Forms;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
+    [VstoUnhandledException]
     public partial class ThisAddIn
     {
         //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-create-and-modify-custom-document-properties?redirectedfrom=MSDN&view=vs-2019
@@ -22,6 +32,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
+        public UserEntity CurrentUser { get; set; }
         public IList<ProjectCollection> Projects { get; set; }
         public IList<ActivityCollection> Activities { get; set; }
         public IList<CustomerCollection> Customers { get; set; }
@@ -36,14 +47,17 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
         }
 
+        public Microsoft.Extensions.Logging.ILogger Logger { get; private set; }
+
         #endregion
 
         public ProjectCollection GetProjectById(int id)
         {
             var project = Projects.SingleOrDefault(x => x.Id.Equals(id));
-            if(project == default(ProjectCollection))
+            if (project == default(ProjectCollection))
             {
                 Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Id not found: {id}");
             }
             return project;
         }
@@ -54,36 +68,114 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             if (activity == default(ActivityCollection))
             {
                 Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Activity Id not found: {id}");
             }
             return activity;
         }
 
-        public ProjectCollection GetProjectByName(string name)
+        public ActivityCollection GetActivityByName(string name, int? projectId)
         {
-            var project = Projects.SingleOrDefault(x => x.Name.Equals(name));
-            if (project == default(ProjectCollection))
+            var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
+            && ((x.Project.HasValue && x.Project.Value == projectId) || !x.Project.HasValue));
+            if (activity == default(ActivityCollection))
             {
-                Debug.WriteLine($"Id not found: {name}");
+                Debug.Write($"Activity Name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Activity Name not found: {name}");
             }
-            return project;
+            return activity;
+        }
+
+        public ProjectCollection GetProjectByName(string name, int? customerId)
+        {
+            try
+            {
+                var project = Projects.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
+                    && ((x.Customer.HasValue && customerId.Value == x.Customer) || !x.Customer.HasValue));
+                if (project == default(ProjectCollection))
+                {
+                    Debug.WriteLine($"name not found: {name}");
+                    ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
+                }
+                return project;
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Single project not found: {ex}");
+                MessageBox.Show("You appear to have duplicate projects for this customer");
+                var project = Projects.First(x => x.Name.Equals(name, StringComparison.Ordinal)
+                    && ((x.Customer.HasValue && customerId.Value == x.Customer) || !x.Customer.HasValue));
+                if (project == default(ProjectCollection))
+                {
+                    Debug.WriteLine($"name not found: {name}");
+                    ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Project Name not found: {name}");
+                }
+                return project;
+            }
+        }
+        public CustomerCollection GetCustomerByName(string name)
+        {
+            var customer = Customers.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            if (customer == default(CustomerCollection))
+            {
+                Debug.WriteLine($"name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Customer Name not found: {name}");
+            }
+            return customer;
         }
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            // attempt to make a global exception handler to avoid crashes
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/c37599d9-21e8-4c32-b00e-926f97c8f639/global-exception-handler-for-vs-2008-excel-addin?forum=vsto
+            // https://stackoverflow.com/questions/12115030/catch-c-sharp-wpf-unhandled-exception-in-word-add-in-before-microsoft-displays-e
+            // https://exceptionalcode.wordpress.com/2010/02/17/centralizing-vsto-add-in-exception-management-with-postsharp/
+            // https://www.add-in-express.com/forum/read.php?FID=5&TID=12667
+            RegisterToExceptionEvents();
+
             var myUserControl1 = new ucApiCredentials();
             apiCredentialsTaskPane = this.CustomTaskPanes.Add(myUserControl1, "API Credentials");
             apiCredentialsTaskPane.VisibleChanged +=
                 new EventHandler(myCustomTaskPane_VisibleChanged);
 
-            try
+            // instantiate and configure logging. Using serilog here, to log to console and a text-file.
+            var loggerFactory = new Microsoft.Extensions.Logging.LoggerFactory();
+            var loggerConfig = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+#pragma warning disable S1075 // URIs should not be hardcoded
+                .WriteTo.File("c:\\temp\\logs\\myapp.txt", rollingInterval: RollingInterval.Day)
+#pragma warning restore S1075 // URIs should not be hardcoded
+                .CreateLogger();
+            loggerFactory.AddSerilog(loggerConfig);
+
+            // create logger and put it to work.
+            var logProvider = loggerFactory.CreateLogger<ThisAddIn>();
+            logProvider.LogDebug("debiggung");
+            Logger = logProvider;
+
+            // Configure PostSharp Logging to use Serilog
+            LoggingServices.DefaultBackend = new MicrosoftLoggingBackend(loggerFactory);
+
+            Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
+            Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;
+
+            this.Application.WorkbookActivate += Application_WorkbookActivate;
+            this.Application.WorkbookOpen += Application_WorkbookOpen;
+        }
+
+        private void Application_WorkbookOpen(Excel.Workbook Wb)
+        {
+            Logger.LogInformation("In Workbook Open", Wb);
+            if (Sheets.KimaiWorksheet.Instance.isInitialized())
             {
-                Globals.ThisAddIn.ApiUrl = Settings.Default.ApiUrl;
-                Globals.ThisAddIn.ApiUsername = Settings.Default.ApiUsername;
+                Logger.LogInformation("Opened a workbook with a Kimai hidden sheet", Wb);
+                Sheets.Sheet1.Instance.AddSheetChangeEventHandler();
             }
-            catch(Exception ex)
-            {
-                //there has to be a cleaner way
-            }
+        }
+
+        private void Application_WorkbookActivate(Excel.Workbook Wb)
+        {
+            Logger.LogInformation("In Workbook Activate", Wb);
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -100,6 +192,46 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 apiCredentialsTaskPane.Visible;
         }
 
+        private void RegisterToExceptionEvents()
+        {
+            System.Windows.Forms.Application.ThreadException += ApplicationThreadException;
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+
+            Dispatcher.CurrentDispatcher.UnhandledExceptionFilter +=
+  new DispatcherUnhandledExceptionFilterEventHandler(Dispatcher_UnhandledExceptionFilter);
+        }
+
+        private void Dispatcher_UnhandledExceptionFilter(object sender, DispatcherUnhandledExceptionFilterEventArgs e)
+        {
+            HandleUnhandledException(e.Exception);
+        }
+
+        private bool _handlingUnhandledException;
+        private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            HandleUnhandledException((Exception)e.ExceptionObject);//there is small possibility that this wont be exception but only when interacting with code that can throw object that does not inherit from Exception
+        }
+
+        private void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            HandleUnhandledException(e.Exception);
+        }
+
+        private void HandleUnhandledException(Exception exception)
+        {
+            if (_handlingUnhandledException)
+                return;
+            try
+            {
+                _handlingUnhandledException = true;
+                Logger.LogCritical(exception, "Unhandled exception occurred, plug-in will close.");
+            }
+            finally
+            {
+                _handlingUnhandledException = false;
+            }
+        }
         #region VSTO generated code
 
         /// <summary>

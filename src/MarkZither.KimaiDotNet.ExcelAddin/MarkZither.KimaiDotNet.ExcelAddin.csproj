@@ -29,14 +29,15 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>True</IsWebBootstrapper>
+    <PostSharpDisabledMessages>DIA005</PostSharpDisabledMessages>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <PublishUrl>c:\publish\KimaiExcel\</PublishUrl>
     <InstallUrl>http://blog.mark-burton.com/assets/exceladdin/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.3</ApplicationVersion>
+    <ApplicationVersion>0.1.0.1</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateInterval>7</UpdateInterval>
+    <UpdateInterval>0</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
     <ProductName>MarkZither.KimaiDotNet.ExcelAddin</ProductName>
     <PublisherName />
@@ -93,6 +94,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <!--
     This section defines properties that are set when the "Release" configuration is selected.
@@ -123,20 +125,25 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -184,6 +191,9 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="GlobalAspects.cs" />
     <Compile Include="KimaiRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -202,12 +212,24 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sheets\CustomerWorksheet.cs" />
+    <Compile Include="Sheets\ActivityWorksheet.cs" />
+    <Compile Include="Sheets\ProjectWorksheet.cs" />
+    <Compile Include="Sheets\KimaiWorksheet.cs" />
+    <Compile Include="Sheets\Sheet1.cs" />
+    <Compile Include="ucAbout.xaml.cs">
+      <DependentUpon>ucAbout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ucApiCredentials.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ucApiCredentials.Designer.cs">
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </Compile>
+    <Compile Include="VstoUnhandledExceptionAttribute.cs" />
     <EmbeddedResource Include="KimaiRibbon.resx">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
     </EmbeddedResource>
@@ -224,6 +246,9 @@
     <EmbeddedResource Include="ucApiCredentials.resx">
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="postsharp.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <None Include="MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -237,6 +262,7 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="README.md" />
     <None Include="Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -266,11 +292,32 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>5.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+      <Version>5.0.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Rest.ClientRuntime">
       <Version>2.3.23</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp">
+      <Version>6.9.6</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp.Patterns.Diagnostics">
+      <Version>6.9.6</Version>
+    </PackageReference>
+    <PackageReference Include="PostSharp.Patterns.Diagnostics.Microsoft">
+      <Version>6.9.6</Version>
     </PackageReference>
     <PackageReference Include="Roslynator.Analyzers">
       <Version>3.1.0</Version>
@@ -287,6 +334,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Serilog.Extensions.Logging">
+      <Version>3.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Console">
+      <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.File">
+      <Version>4.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.InfluxDB.Syslog">
+      <Version>2.0.1</Version>
+    </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp">
       <Version>8.23.0.32424</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -298,6 +357,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\noun_connect_3698648.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ucAbout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\kimai_set_api_password.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -313,7 +387,13 @@
     <ManifestCertificateThumbprint>46029462B12D61AA136F94DC835DD9DB6CEFBFA9</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestTimestampUrl>http://time.certum.pl</ManifestTimestampUrl>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -325,7 +405,7 @@
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
         <Host Name="Excel" GeneratedCodeNamespace="MarkZither.KimaiDotNet.ExcelAddin" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" PublishedHash="15C8C61514B023654FCDDE690DCA5207FC9F165F" />
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="15C8C61514B023654FCDDE690DCA5207FC9F165F" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
