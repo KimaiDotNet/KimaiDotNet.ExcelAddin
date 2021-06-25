@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Deployment.Application;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -79,9 +80,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         {
             // Method intentionally left empty.
         }
+#pragma warning disable MA0051 // Method is too long
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
+#pragma warning restore MA0051 // Method is too long
         {
+#pragma warning disable S125 // Sections of code should not be commented out
             // https://owa.youdomain.com/EWS/Exchange.asmx";
+#pragma warning restore S125 // Sections of code should not be commented out
             string ewsUrl = ConfigurationManager.AppSettings.Get("EWS_URL");
             string mbx = ConfigurationManager.AppSettings.Get("EWS_MBX");
             string password = ConfigurationManager.AppSettings.Get("EWS_PASSWORD");
@@ -90,45 +95,35 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Credentials = new System.Net.NetworkCredential(mbx, password),
                 Url = new Uri(ewsUrl)
             };
+#pragma warning disable S4423 // Weak SSL/TLS protocols should not be used
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls; //DevSkim: ignore DS440020,DS440000,DS144436
-            // Bind the Inbox folder to the service object.
-            Microsoft.Exchange.WebServices.Data.Folder inbox =
-                Microsoft.Exchange.WebServices.Data.Folder.Bind(ewsservice,
-                Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox);
-
-            Microsoft.Exchange.WebServices.Data.ItemView view = new Microsoft.Exchange.WebServices.Data.ItemView(10);
+#pragma warning restore S4423 // Weak SSL/TLS protocols should not be used
             Microsoft.Exchange.WebServices.Data.ItemView iv = new Microsoft.Exchange.WebServices.Data.ItemView(10);
-
             Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Item> findResults =
                 ewsservice.FindItems(new Microsoft.Exchange.WebServices.Data.FolderId(
                     Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox),"System.Message.DateReceived:01/01/2021..01/03/2021", iv);
-
-            //Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Item> findResults = 
-              //  ewsservice.FindItems("System.Message.DateReceived:01/01/2021..01/03/2021", iv);
-
+#pragma warning disable S125 // Sections of code should not be commented out
+            // Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Item> findResults = 
+            // ewsservice.FindItems("System.Message.DateReceived:01/01/2021..01/03/2021", iv);
+#pragma warning restore S125 // Sections of code should not be commented out
             foreach (Microsoft.Exchange.WebServices.Data.Item item in findResults)
             {
                 string x = "";
+                Console.WriteLine(x);
             }
 
             //https://blog.matrixpost.net/create-a-c-console-app-net-framework-to-export-mail-attachments-from-an-exchange-mailbox/
-            Microsoft.Exchange.WebServices.Data.ExchangeService service = 
-                new Microsoft.Exchange.WebServices.Data.ExchangeService(
-                    Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2013_SP1);
-            service.Credentials = new Microsoft.Exchange.WebServices.Data.WebCredentials(mbx
-                , password);
+            Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2013_SP1)
+                {
+                    Credentials = new Microsoft.Exchange.WebServices.Data.WebCredentials(mbx, password),
+                    Url = new Uri(ewsUrl)
+                };
+#pragma warning disable S125 // Sections of code should not be commented out
             //service.UseDefaultCredentials = true;
-            //service.
-            service.Url = new Uri(ewsUrl);
-            Microsoft.Exchange.WebServices.Data.EmailMessage email = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
-            email.ToRecipients.Add("somebody@test.com");
-            email.Subject = "HelloWorld";
-            email.Body = new Microsoft.Exchange.WebServices.Data.MessageBody("This is the first email I've sent by using the EWS Managed API.");
+#pragma warning restore S125 // Sections of code should not be commented out
 
             try
             {
-                //email.Send();
-
                 // Initialize values for the start and end times, and the number of appointments to retrieve.
                 DateTime startDate = DateTime.Now;
                 DateTime endDate = startDate.AddDays(30);
@@ -141,14 +136,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 cView.PropertySet = new Microsoft.Exchange.WebServices.Data.PropertySet(Microsoft.Exchange.WebServices.Data.AppointmentSchema.Subject, Microsoft.Exchange.WebServices.Data.AppointmentSchema.Start, Microsoft.Exchange.WebServices.Data.AppointmentSchema.End);
                 // Retrieve a collection of appointments by using the calendar view.
                 Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Appointment> appointments = calendar.FindAppointments(cView);
-                Console.WriteLine("\nThe first " + NUM_APPTS + " appointments on your calendar from " + startDate.Date.ToShortDateString() +
-                                  " to " + endDate.Date.ToShortDateString() + " are: \n");
+                Console.WriteLine("\nThe first " + NUM_APPTS + " appointments on your calendar from " + startDate.Date.ToShortDateString() + " to " + endDate.Date.ToShortDateString() + " are: \n");
 
                 foreach (Microsoft.Exchange.WebServices.Data.Appointment a in appointments)
                 {
-                    Console.Write("Subject: " + a.Subject.ToString() + " ");
-                    Console.Write("Start: " + a.Start.ToString() + " ");
-                    Console.Write("End: " + a.End.ToString());
+                    CultureInfo enGB = new CultureInfo("en-GB");
+                    Console.Write("Subject: " + a.Subject + " ");
+                    Console.Write($"Start: {a.Start.ToString("x", enGB)} ");
+                    Console.Write("End: " + a.End.ToString("x", enGB));
                     Console.WriteLine();
                 }
             }
@@ -168,7 +163,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // Validate the contents of the redirection URL. In this simple validation
             // callback, the redirection URL is considered valid if it is using HTTPS
             // to encrypt the authentication credentials. 
-            if (redirectionUri.Scheme == "https")
+            if (string.Equals(redirectionUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
             {
                 result = true;
             }
