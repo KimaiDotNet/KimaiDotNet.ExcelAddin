@@ -216,11 +216,17 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sheets\CustomerWorksheet.cs" />
     <Compile Include="Sheets\ActivityWorksheet.cs" />
     <Compile Include="Sheets\ProjectWorksheet.cs" />
     <Compile Include="Sheets\KimaiWorksheet.cs" />
     <Compile Include="Sheets\Sheet1.cs" />
+    <Compile Include="ucSettings.xaml.cs">
+      <DependentUpon>ucSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ucAbout.xaml.cs">
       <DependentUpon>ucAbout.xaml</DependentUpon>
     </Compile>
@@ -287,6 +293,12 @@
       <Version>1.5.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Flurl">
+      <Version>3.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Gu.Wpf.Adorners">
+      <Version>2.1.1</Version>
     </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
       <Version>1.0.662</Version>
@@ -367,15 +379,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ucSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ucAbout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\kimai_set_api_password.png">
+    <Resource Include="Resources\kimai_set_api_password.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

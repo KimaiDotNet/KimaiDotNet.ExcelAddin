@@ -32,6 +32,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
+        public string OWAUrl { get; set; }
+        public string OWAUsername { get; set; }
+        public string OWAPassword { get; set; }
         public UserEntity CurrentUser { get; set; }
         public IList<ProjectCollection> Projects { get; set; }
         public IList<ActivityCollection> Activities { get; set; }
@@ -183,6 +186,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-write-user-settings-at-run-time-with-csharp?view=netframeworkdesktop-4.8
             Settings.Default.ApiUrl = Globals.ThisAddIn.ApiUrl;
             Settings.Default.ApiUsername = Globals.ThisAddIn.ApiUsername;
+            Settings.Default.OWAUrl = Globals.ThisAddIn.OWAUrl;
+            Settings.Default.OWAUsername = Globals.ThisAddIn.OWAUsername;
             Settings.Default.Save();
         }
 

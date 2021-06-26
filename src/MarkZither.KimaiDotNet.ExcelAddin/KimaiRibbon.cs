@@ -1,4 +1,6 @@
-﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
+﻿using Flurl;
+
+using MarkZither.KimaiDotNet.ExcelAddin.Services;
 using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 using MarkZither.KimaiDotNet.Models;
 
@@ -79,6 +81,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void btnSettings_Click(object sender, RibbonControlEventArgs e)
         {
             // Method intentionally left empty.
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog();
+            Globals.ThisAddIn.OWAUrl = settingsWindow.txtOWAUrl.Text;
+            Globals.ThisAddIn.OWAUsername = settingsWindow.txtOWAUsername.Text;
+            Globals.ThisAddIn.OWAPassword = settingsWindow.txtOWAPassword.Password;
         }
 #pragma warning disable MA0051 // Method is too long
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
@@ -87,9 +94,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 #pragma warning disable S125 // Sections of code should not be commented out
             // https://owa.youdomain.com/EWS/Exchange.asmx";
 #pragma warning restore S125 // Sections of code should not be commented out
-            string ewsUrl = ConfigurationManager.AppSettings.Get("EWS_URL");
-            string mbx = ConfigurationManager.AppSettings.Get("EWS_MBX");
-            string password = ConfigurationManager.AppSettings.Get("EWS_PASSWORD");
+            string ewsUrl = Globals.ThisAddIn.OWAUrl.AppendPathSegment("EWS/Exchange.asmx");
+            string mbx = Globals.ThisAddIn.OWAUsername;
+            string password = Globals.ThisAddIn.OWAPassword;
             var ewsservice = new Microsoft.Exchange.WebServices.Data.ExchangeService
             {
                 Credentials = new System.Net.NetworkCredential(mbx, password),
@@ -142,8 +149,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 {
                     CultureInfo enGB = new CultureInfo("en-GB");
                     Console.Write("Subject: " + a.Subject + " ");
-                    Console.Write($"Start: {a.Start.ToString("x", enGB)} ");
-                    Console.Write("End: " + a.End.ToString("x", enGB));
+                    Console.Write($"Start: {a.Start.ToString("r", enGB)} ");
+                    Console.Write("End: " + a.End.ToString("r", enGB));
                     Console.WriteLine();
                 }
             }
