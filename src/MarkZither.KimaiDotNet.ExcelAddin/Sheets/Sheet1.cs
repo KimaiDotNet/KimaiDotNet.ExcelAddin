@@ -99,7 +99,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                     var activity = Globals.ThisAddIn.GetActivityById(timesheets[idxRow - 1].Activity.Value);
                     ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
                 }
-                            ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheets[idxRow - 1].Begin.ToOADate();
                 if (timesheets[idxRow - 1].End.HasValue)
                 {

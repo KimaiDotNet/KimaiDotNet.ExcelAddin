@@ -20,7 +20,7 @@
         <Border Grid.Column ="1" Background="#1f3d7a"/>
         <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#152951"/>
         <StackPanel Grid.Column="1" Margin="40,0,0,0" VerticalAlignment="Center">
-            <TextBlock Foreground="White" FontSize="25" Text="Today - 64° F"/>
+            <TextBlock Foreground="White" FontSize="25" Text="Enter your OWA credentials"/>
             <TextBox x:Name="txtOWAUrl" adorners:Watermark.Text="https://owa.yourDomain.com" />
             <TextBox x:Name="txtOWAUsername" Text="" />
             <PasswordBox x:Name="txtOWAPassword" />

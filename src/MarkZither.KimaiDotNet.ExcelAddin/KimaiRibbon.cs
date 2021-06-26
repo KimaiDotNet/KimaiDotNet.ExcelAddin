@@ -144,7 +144,17 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 // Retrieve a collection of appointments by using the calendar view.
                 Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Appointment> appointments = calendar.FindAppointments(cView);
                 Console.WriteLine("\nThe first " + NUM_APPTS + " appointments on your calendar from " + startDate.Date.ToShortDateString() + " to " + endDate.Date.ToShortDateString() + " are: \n");
-
+                int emptyRow = 0;
+                //find a row with no id to post
+                for (int i = 1; i < 10000; i++)
+                {
+                    dynamic id = ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
+                    if(id is null)
+                    {
+                        emptyRow = i;
+                        break;
+                    }
+                }
                 foreach (Microsoft.Exchange.WebServices.Data.Appointment a in appointments)
                 {
                     CultureInfo enGB = new CultureInfo("en-GB");
@@ -152,6 +162,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     Console.Write($"Start: {a.Start.ToString("r", enGB)} ");
                     Console.Write("End: " + a.End.ToString("r", enGB));
                     Console.WriteLine();
+                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = a.Subject;
+                    emptyRow++;
                 }
             }
             catch(Exception ex)
