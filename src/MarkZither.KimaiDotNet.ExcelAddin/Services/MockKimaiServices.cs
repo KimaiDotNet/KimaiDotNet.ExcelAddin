@@ -882,9 +882,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             return Task.FromResult(ping);
         }
 
-        public Task<Models.Version> GetVersion()
+        public Task<KimaiDotNet.Models.Version> GetVersion()
         {
-            var version = new Models.Version() { VersionProperty = "0.0.0.1" };
+            var version = new KimaiDotNet.Models.Version() { VersionProperty = "0.0.0.1" };
             return Task.FromResult(version);
         }
 

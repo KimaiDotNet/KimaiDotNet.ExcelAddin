@@ -1,5 +1,6 @@
 ﻿using Flurl;
 
+using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
 using MarkZither.KimaiDotNet.ExcelAddin.Services;
 using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 using MarkZither.KimaiDotNet.Models;
@@ -14,6 +15,7 @@ using System.Configuration;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,6 +23,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -165,8 +169,30 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = a.Subject;
                     emptyRow++;
                 }
+
+                // Bind to a user configuration object. This results in a call to EWS.
+                Microsoft.Exchange.WebServices.Data.UserConfiguration usrConfig = Microsoft.Exchange.WebServices.Data.UserConfiguration.Bind(service,
+                                                                     "CategoryList",
+                                                                     Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Calendar,
+                                                                     Microsoft.Exchange.WebServices.Data.UserConfigurationProperties.All);
+                // Display the returned property values.
+                Console.WriteLine("User Config Identifier: " + usrConfig.ItemId.UniqueId);
+                Console.WriteLine("XmlData: " + Encoding.UTF8.GetString(usrConfig.XmlData));
+                string xml = Encoding.UTF8.GetString(usrConfig.XmlData);
+                XmlSerializer serializer = new XmlSerializer(typeof(Categories));
+                using (StringReader reader = new StringReader(xml))
+                {
+                    var categories = (Categories)serializer.Deserialize(reader);
+                    int catRow = 1;
+                    foreach (var category in categories.Category)
+                    {
+                        Console.WriteLine(category.Name);
+                        ((Range)Sheets.CalendarCategoryWorksheet.Instance.Worksheet.Cells[catRow, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = category.Name;
+                        catRow++;
+                    }
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

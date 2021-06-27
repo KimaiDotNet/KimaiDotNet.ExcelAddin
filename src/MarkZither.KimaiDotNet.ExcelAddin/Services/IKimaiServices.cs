@@ -14,7 +14,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         Task<IList<ActivityCollection>> GetActivities();
         Task<IList<TimesheetCollection>> GetTimesheets();
         Task<HttpOperationResponse> GetPing();
-        Task<Models.Version> GetVersion();
+        Task<Version> GetVersion();
         Task<TimesheetEntity> PostTimesheet(TimesheetEditForm timesheetEditForm);
         Task<UserEntity> GetCurrentUser();
     }

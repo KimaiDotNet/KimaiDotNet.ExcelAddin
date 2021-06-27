@@ -24,6 +24,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public SettingsWindow()
         {
             InitializeComponent();
+            if(!string.IsNullOrEmpty(Settings.Default.OWAUrl))
+            {
+                txtOWAUrl.Text = Settings.Default.OWAUrl;
+            }
         }
     }
 }

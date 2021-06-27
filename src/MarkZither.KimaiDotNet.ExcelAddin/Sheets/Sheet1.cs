@@ -80,7 +80,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
         }
 
-        public void WriteTimesheetRows(IList<Models.TimesheetCollection> timesheets)
+        public void WriteTimesheetRows(IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
         {
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
             {
@@ -107,7 +107,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 }
             }
         }
-        public async Task SyncNewRowsToKimai(IKimaiServices service, IList<Models.TimesheetCollection> timesheets)
+        public async Task SyncNewRowsToKimai(IKimaiServices service, IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                             DateTime date = DateTime.FromOADate(oADate).Date; //make sure any time is ignored, it shouldn't be there
                             int addMinutes = GetNextAvailableTimeInMinutes(date);
 
-                            var timesheet = await service.PostTimesheet(new Models.TimesheetEditForm()
+                            var timesheet = await service.PostTimesheet(new KimaiDotNet.Models.TimesheetEditForm()
                             {
                                 Project = projectId,
                                 Activity = activityId,
@@ -142,7 +142,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                                 User = Globals.ThisAddIn.CurrentUser.Id.Value,
                                 Description = description,
                             }).ConfigureAwait(false);
-                            Globals.ThisAddIn.Timesheets.Add(new Models.TimesheetCollection() { Id = timesheet.Id, Begin = timesheet.Begin, End = timesheet.End, Activity = timesheet.Activity, Project = timesheet.Project, Duration = duration, User = timesheet.User, Description = timesheet.Description, Tags = timesheet.Tags, });
+                            Globals.ThisAddIn.Timesheets.Add(new KimaiDotNet.Models.TimesheetCollection() { Id = timesheet.Id, Begin = timesheet.Begin, End = timesheet.End, Activity = timesheet.Activity, Project = timesheet.Project, Duration = duration, User = timesheet.User, Description = timesheet.Description, Tags = timesheet.Tags, });
                             UpdateNewTimesheetRecordAfterServerSync(i, timesheet);
                         }
                         else

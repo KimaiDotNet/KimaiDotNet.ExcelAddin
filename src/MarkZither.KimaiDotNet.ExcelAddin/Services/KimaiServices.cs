@@ -80,7 +80,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             return ping;
         }
 
-        public async Task<Models.Version> GetVersion()
+        public async Task<KimaiDotNet.Models.Version> GetVersion()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var version = await docs.VersionMethodAsync().ConfigureAwait(false);

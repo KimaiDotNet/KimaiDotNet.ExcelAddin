@@ -27,6 +27,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             public const int BeginTimeIndex = 8;
             public const int EndTimeIndex = 9;
         }
+        public static class CalendarCategoryWorksheet
+        {
+            public const string CalendarCategorySheetName = "CalendarCategories";
+            public const int IdColumnIndex = 1;
+            public const int NameColumnIndex = 2;
+        }
         public static class CustomersSheet
         {
             public const string CustomersSheetName = "Customers";

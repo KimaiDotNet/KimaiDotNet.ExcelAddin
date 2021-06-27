@@ -50,7 +50,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             }
         }
 
-        public void CreateOrUpdateCustomersOnSheet(IList<Models.CustomerCollection> customers)
+        public void CreateOrUpdateCustomersOnSheet(IList<KimaiDotNet.Models.CustomerCollection> customers)
         {
             SetupCustomerHeaderRow();
 

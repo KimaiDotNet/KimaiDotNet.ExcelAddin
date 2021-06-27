@@ -201,6 +201,8 @@
     <Compile Include="KimaiRibbon.Designer.cs">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Calendar\Categories.cs" />
+    <Compile Include="Models\Calendar\Category.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -219,6 +221,7 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sheets\CalendarCategoryWorksheet.cs" />
     <Compile Include="Sheets\CustomerWorksheet.cs" />
     <Compile Include="Sheets\ActivityWorksheet.cs" />
     <Compile Include="Sheets\ProjectWorksheet.cs" />
