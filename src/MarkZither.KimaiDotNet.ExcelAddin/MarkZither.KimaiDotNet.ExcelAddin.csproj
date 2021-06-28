@@ -239,6 +239,7 @@
     <Compile Include="ucApiCredentials.Designer.cs">
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Calendar\CategoryViewModel.cs" />
     <Compile Include="VstoUnhandledExceptionAttribute.cs" />
     <EmbeddedResource Include="KimaiRibbon.resx">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
@@ -337,6 +338,9 @@
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Diagnostics.Microsoft">
       <Version>6.9.6</Version>
+    </PackageReference>
+    <PackageReference Include="Refractored.MvvmHelpers">
+      <Version>1.6.2</Version>
     </PackageReference>
     <PackageReference Include="Roslynator.Analyzers">
       <Version>3.1.0</Version>

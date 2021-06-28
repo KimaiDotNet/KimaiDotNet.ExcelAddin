@@ -23,6 +23,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string OWAAdress { get; set; }
         public SettingsWindow()
         {
+            DataContext = new ViewModels.Calendar.CategoryViewModel();
             InitializeComponent();
             if(!string.IsNullOrEmpty(Settings.Default.OWAUrl))
             {
