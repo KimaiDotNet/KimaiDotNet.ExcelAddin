@@ -153,7 +153,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 for (int i = 1; i < 10000; i++)
                 {
                     dynamic id = ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
-                    if(id is null)
+                    if (id is null)
                     {
                         emptyRow = i;
                         break;
@@ -170,26 +170,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     emptyRow++;
                 }
 
-                // Bind to a user configuration object. This results in a call to EWS.
-                Microsoft.Exchange.WebServices.Data.UserConfiguration usrConfig = Microsoft.Exchange.WebServices.Data.UserConfiguration.Bind(service,
-                                                                     "CategoryList",
-                                                                     Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Calendar,
-                                                                     Microsoft.Exchange.WebServices.Data.UserConfigurationProperties.All);
-                // Display the returned property values.
-                Console.WriteLine("User Config Identifier: " + usrConfig.ItemId.UniqueId);
-                Console.WriteLine("XmlData: " + Encoding.UTF8.GetString(usrConfig.XmlData));
-                string xml = Encoding.UTF8.GetString(usrConfig.XmlData);
-                XmlSerializer serializer = new XmlSerializer(typeof(Categories));
-                using (StringReader reader = new StringReader(xml))
+                ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, password);
+                var categories = calendarService.GetCategories();
+
+                int catRow = 1;
+                foreach (var category in categories.Category)
                 {
-                    var categories = (Categories)serializer.Deserialize(reader);
-                    int catRow = 1;
-                    foreach (var category in categories.Category)
-                    {
-                        Console.WriteLine(category.Name);
-                        ((Range)Sheets.CalendarCategoryWorksheet.Instance.Worksheet.Cells[catRow, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = category.Name;
-                        catRow++;
-                    }
+                    Console.WriteLine(category.Name);
+                    ((Range)Sheets.CalendarCategoryWorksheet.Instance.Worksheet.Cells[catRow, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = category.Name;
+                    catRow++;
                 }
             }
             catch (Exception ex)

@@ -206,6 +206,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\EwsCalendarService.cs" />
+    <Compile Include="Services\EwsCalendarServiceBase.cs" />
+    <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Services\IKimaiServices.cs" />
     <Compile Include="Services\MockKimaiServices.cs" />
     <Compile Include="Services\KimaiServices.cs" />
@@ -428,6 +431,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestTimestampUrl>http://time.certum.pl</ManifestTimestampUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

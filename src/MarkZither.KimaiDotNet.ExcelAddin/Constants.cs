@@ -32,6 +32,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             public const string CalendarCategorySheetName = "CalendarCategories";
             public const int IdColumnIndex = 1;
             public const int NameColumnIndex = 2;
+            public const int CustomerColumnIndex = 3;
+            public const int ProjectColumnIndex = 4;
+            public const int ActivityColumnIndex = 5;
         }
         public static class CustomersSheet
         {

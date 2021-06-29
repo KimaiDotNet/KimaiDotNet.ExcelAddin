@@ -34,11 +34,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             else
             {
                 calendarCategoryWorksheet = (Microsoft.Office.Interop.Excel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(Missing.Value, Globals.ThisAddIn.Application.ActiveSheet as Worksheet);
-                calendarCategoryWorksheet.Name = ExcelAddin.Constants.CustomersSheet.CustomersSheetName;
+                calendarCategoryWorksheet.Name = ExcelAddin.Constants.CalendarCategoryWorksheet.CalendarCategorySheetName;
 #if !DEBUG
                 calendarCategoryWorksheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
 #endif
                 Worksheet = calendarCategoryWorksheet;
+                SetupCalendarCategoryHeaderRow();
                 // switch straight back to the current active sheet
                 currentSheet.Select();
             }
@@ -58,17 +59,20 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
 
             for (int idxRow = 1; idxRow <= 5; idxRow++)
             {
-                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Value2 = "customers[idxRow - 1].Id";
-                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Interior.Color = XlRgbColor.rgbAliceBlue;
-                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).Value2 = "customers[idxRow - 1].Name";
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = "customers[idxRow - 1].Id";
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Interior.Color = XlRgbColor.rgbAliceBlue;
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = "customers[idxRow - 1].Name";
             }
         }
 
         public void SetupCalendarCategoryHeaderRow()
         {
-            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CustomersSheet.IdColumnIndex]).Value2 = "Id";
-            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).Value2 = "Name";
-            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CustomersSheet.NameColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = "Id";
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = "Name";
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).EntireColumn.ColumnWidth = 14;
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex]).Value2 = "Customer";
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.ProjectColumnIndex]).Value2 = "Project";
+            ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.ActivityColumnIndex]).Value2 = "Activity";
         }
     }
 }
