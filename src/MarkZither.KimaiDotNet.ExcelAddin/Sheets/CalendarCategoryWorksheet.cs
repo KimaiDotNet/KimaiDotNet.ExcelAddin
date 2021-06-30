@@ -1,4 +1,6 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
+
+using Microsoft.Office.Interop.Excel;
 
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
 {
@@ -53,15 +56,29 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             }
         }
 
-        public void CreateOrUpdateCalendarCategoriesOnSheet(Microsoft.Exchange.WebServices.Data.UserConfiguration userConfiguration)
+        public void CreateOrUpdateCalendarCategoriesOnSheet(Categories categories)
         {
+            Worksheet.Change -= new Microsoft.Office.Interop.Excel.
+                DocEvents_ChangeEventHandler(changesRange_Change);
             SetupCalendarCategoryHeaderRow();
 
             for (int idxRow = 1; idxRow <= 5; idxRow++)
             {
-                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = "customers[idxRow - 1].Id";
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = categories.Category[idxRow - 1].Guid;
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Interior.Color = XlRgbColor.rgbAliceBlue;
-                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = "customers[idxRow - 1].Name";
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = categories.Category[idxRow - 1].Name;
+            }
+            ((Range)Worksheet.Cells[2, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex]).AddDataValidationToColumn(Worksheet, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex);
+            Worksheet.Change += new Microsoft.Office.Interop.Excel.DocEvents_ChangeEventHandler(changesRange_Change);
+
+        }
+
+        private void changesRange_Change(Range Target)
+        {
+            if (Target.Worksheet.Name.Equals(Constants.CalendarCategoryWorksheet.CalendarCategorySheetName, StringComparison.OrdinalIgnoreCase)
+                && Target.Count == 1)
+            {
+                MessageBox.Show("Doing our change event on categories");
             }
         }
 

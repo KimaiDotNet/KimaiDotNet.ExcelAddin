@@ -1,8 +1,8 @@
 ﻿namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 {
-    public class EwsCalendarServiceBase
+    public class CalendarServiceBase
     {
-        public EwsCalendarServiceBase(string url, string username, string password)
+        public CalendarServiceBase(string url, string username, string password)
         {
             RootUrl = url;
             Username = username;

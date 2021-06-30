@@ -91,63 +91,15 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Globals.ThisAddIn.OWAUsername = settingsWindow.txtOWAUsername.Text;
             Globals.ThisAddIn.OWAPassword = settingsWindow.txtOWAPassword.Password;
         }
-#pragma warning disable MA0051 // Method is too long
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
-#pragma warning restore MA0051 // Method is too long
         {
-#pragma warning disable S125 // Sections of code should not be commented out
-            // https://owa.youdomain.com/EWS/Exchange.asmx";
-#pragma warning restore S125 // Sections of code should not be commented out
-            string ewsUrl = Globals.ThisAddIn.OWAUrl.AppendPathSegment("EWS/Exchange.asmx");
+            // the format of the EWS URL should be https://owa.youdomain.com/EWS/Exchange.asmx"
             string mbx = Globals.ThisAddIn.OWAUsername;
             string password = Globals.ThisAddIn.OWAPassword;
-            var ewsservice = new Microsoft.Exchange.WebServices.Data.ExchangeService
-            {
-                Credentials = new System.Net.NetworkCredential(mbx, password),
-                Url = new Uri(ewsUrl)
-            };
-#pragma warning disable S4423 // Weak SSL/TLS protocols should not be used
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls; //DevSkim: ignore DS440020,DS440000,DS144436
-#pragma warning restore S4423 // Weak SSL/TLS protocols should not be used
-            Microsoft.Exchange.WebServices.Data.ItemView iv = new Microsoft.Exchange.WebServices.Data.ItemView(10);
-            Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Item> findResults =
-                ewsservice.FindItems(new Microsoft.Exchange.WebServices.Data.FolderId(
-                    Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox),"System.Message.DateReceived:01/01/2021..01/03/2021", iv);
-#pragma warning disable S125 // Sections of code should not be commented out
-            // Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Item> findResults = 
-            // ewsservice.FindItems("System.Message.DateReceived:01/01/2021..01/03/2021", iv);
-#pragma warning restore S125 // Sections of code should not be commented out
-            foreach (Microsoft.Exchange.WebServices.Data.Item item in findResults)
-            {
-                string x = "";
-                Console.WriteLine(x);
-            }
-
-            //https://blog.matrixpost.net/create-a-c-console-app-net-framework-to-export-mail-attachments-from-an-exchange-mailbox/
-            Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2013_SP1)
-                {
-                    Credentials = new Microsoft.Exchange.WebServices.Data.WebCredentials(mbx, password),
-                    Url = new Uri(ewsUrl)
-                };
-#pragma warning disable S125 // Sections of code should not be commented out
-            //service.UseDefaultCredentials = true;
-#pragma warning restore S125 // Sections of code should not be commented out
-
+            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, password);
             try
             {
-                // Initialize values for the start and end times, and the number of appointments to retrieve.
-                DateTime startDate = DateTime.Now;
-                DateTime endDate = startDate.AddDays(30);
-                const int NUM_APPTS = 5;
-                // Initialize the calendar folder object with only the folder ID. 
-                Microsoft.Exchange.WebServices.Data.CalendarFolder calendar = Microsoft.Exchange.WebServices.Data.CalendarFolder.Bind(service, Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Calendar, new Microsoft.Exchange.WebServices.Data.PropertySet());
-                // Set the start and end time and number of appointments to retrieve.
-                Microsoft.Exchange.WebServices.Data.CalendarView cView = new Microsoft.Exchange.WebServices.Data.CalendarView(startDate, endDate, NUM_APPTS);
-                // Limit the properties returned to the appointment's subject, start time, and end time.
-                cView.PropertySet = new Microsoft.Exchange.WebServices.Data.PropertySet(Microsoft.Exchange.WebServices.Data.AppointmentSchema.Subject, Microsoft.Exchange.WebServices.Data.AppointmentSchema.Start, Microsoft.Exchange.WebServices.Data.AppointmentSchema.End);
-                // Retrieve a collection of appointments by using the calendar view.
-                Microsoft.Exchange.WebServices.Data.FindItemsResults<Microsoft.Exchange.WebServices.Data.Appointment> appointments = calendar.FindAppointments(cView);
-                Console.WriteLine("\nThe first " + NUM_APPTS + " appointments on your calendar from " + startDate.Date.ToShortDateString() + " to " + endDate.Date.ToShortDateString() + " are: \n");
+                var appointments = calendarService.GetAppointments();
                 int emptyRow = 0;
                 //find a row with no id to post
                 for (int i = 1; i < 10000; i++)
@@ -161,31 +113,21 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 }
                 foreach (Microsoft.Exchange.WebServices.Data.Appointment a in appointments)
                 {
-                    CultureInfo enGB = new CultureInfo("en-GB");
-                    Console.Write("Subject: " + a.Subject + " ");
-                    Console.Write($"Start: {a.Start.ToString("r", enGB)} ");
-                    Console.Write("End: " + a.End.ToString("r", enGB));
-                    Console.WriteLine();
                     ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = a.Subject;
+                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = a.Start.Date.ToOADate();
+                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = (a.End.TimeOfDay - a.Start.TimeOfDay).TotalMinutes;
+                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentCategoryIndex]).Value2 = String.Join(",", a.Categories);
+                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentIdIndex]).Value2 = a.Id.UniqueId;
                     emptyRow++;
                 }
 
-                ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, password);
                 var categories = calendarService.GetCategories();
-
-                int catRow = 1;
-                foreach (var category in categories.Category)
-                {
-                    Console.WriteLine(category.Name);
-                    ((Range)Sheets.CalendarCategoryWorksheet.Instance.Worksheet.Cells[catRow, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = category.Name;
-                    catRow++;
-                }
+                Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            MessageBox.Show("Coming Soon!");
             ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Calendar coming soon");
         }
 

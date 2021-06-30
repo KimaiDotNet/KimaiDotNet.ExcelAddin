@@ -207,7 +207,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\EwsCalendarService.cs" />
-    <Compile Include="Services\EwsCalendarServiceBase.cs" />
+    <Compile Include="Services\CalendarServiceBase.cs" />
     <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Services\IKimaiServices.cs" />
     <Compile Include="Services\MockKimaiServices.cs" />

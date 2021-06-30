@@ -29,6 +29,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             {
                 txtOWAUrl.Text = Settings.Default.OWAUrl;
             }
+            if (!string.IsNullOrEmpty(Settings.Default.OWAUsername))
+            {
+                txtOWAUsername.Text = Settings.Default.OWAUsername;
+            }
         }
     }
 }
