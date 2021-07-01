@@ -802,6 +802,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public async Task<IList<TimesheetCollection>> GetTimesheets()
 #pragma warning restore MA0051 // Method is too long
         {
+            DateTime today = DateTime.Now.Date;
+            DateTime yesterday = today.AddDays(-1);
+            DateTime tomorrow = today.AddDays(1);
             var timesheets = new List<TimesheetCollection>
             {
                 new TimesheetCollection()
@@ -809,8 +812,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 1,
                     Activity = 1,
                     Project = 1,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 8, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day -1, 9, 0, 0),
+                    Begin = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 8, 0, 0),
+                    End = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 9, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 1",
                     User = 1,
@@ -820,8 +823,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 2,
                     Activity = 2,
                     Project = 2,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 9, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 10, 0, 0),
+                    Begin = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 9, 0, 0),
+                    End = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 10, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 2",
                     User = 1,
@@ -831,8 +834,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 3,
                     Activity = 1,
                     Project = 1,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 10, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 11, 0, 0),
+                    Begin = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 10, 0, 0),
+                    End = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 11, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 3",
                     User = 1,
@@ -842,8 +845,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 4,
                     Activity = 2,
                     Project = 2,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                    Begin = new DateTime(today.Year, today.Month, today.Day, 8, 0, 0),
+                    End = new DateTime(today.Year, today.Month, today.Day, 9, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 4",
                     User = 1,
@@ -853,8 +856,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 5,
                     Activity = 1,
                     Project = 1,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
+                    Begin = new DateTime(today.Year, today.Month, today.Day, 9, 0, 0),
+                    End = new DateTime(today.Year, today.Month, today.Day, 10, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 5",
                     User = 1,
@@ -864,10 +867,20 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                     Id = 6,
                     Activity = 2,
                     Project = 2,
-                    Begin = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0),
-                    End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 0),
+                    Begin = new DateTime(today.Year, today.Month, today.Day, 10, 0, 0),
+                    End = new DateTime(today.Year, today.Month, today.Day, 11, 0, 0),
                     Duration = 3600,
                     Description = "Test Timesheet 6",
+                    User = 1,
+                },new TimesheetCollection()
+                {
+                    Id = 6,
+                    Activity = 2,
+                    Project = 2,
+                    Begin = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, 8, 0, 0),
+                    End = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, 9, 0, 0),
+                    Duration = 3600,
+                    Description = "Test Timesheet 7",
                     User = 1,
                 },
             };
