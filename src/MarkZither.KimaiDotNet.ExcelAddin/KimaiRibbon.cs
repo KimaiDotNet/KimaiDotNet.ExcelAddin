@@ -122,6 +122,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 }
 
                 var categories = calendarService.GetCategories();
+                Globals.ThisAddIn.Categories = categories.Category;
                 Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
             }
             catch (Exception ex)

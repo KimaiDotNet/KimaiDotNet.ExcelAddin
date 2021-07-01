@@ -51,5 +51,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar
 
         [XmlAttribute(AttributeName = "renameOnFirstUse")]
         public int RenameOnFirstUse { get; set; }
+
+        public int CustomerId { get; set; }
+        public int ProjectId { get; set; }
+        public int ActivityId { get; set; }
     }
 }

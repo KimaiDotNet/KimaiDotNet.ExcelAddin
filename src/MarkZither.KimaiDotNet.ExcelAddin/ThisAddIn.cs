@@ -21,6 +21,7 @@ using PostSharp;
 using PostSharp.Patterns.Diagnostics;
 using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
 using System.Windows.Forms;
+using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -40,6 +41,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public IList<ActivityCollection> Activities { get; set; }
         public IList<CustomerCollection> Customers { get; set; }
         public IList<TimesheetCollection> Timesheets { get; set; }
+        public IList<Category> Categories { get; set; }
         //https://docs.microsoft.com/en-us/visualstudio/vsto/walkthrough-synchronizing-a-custom-task-pane-with-a-ribbon-button?view=vs-2019
         private Microsoft.Office.Tools.CustomTaskPane apiCredentialsTaskPane;
         public Microsoft.Office.Tools.CustomTaskPane TaskPane
