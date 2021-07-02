@@ -79,7 +79,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             if (Target.Worksheet.Name.Equals(Constants.CalendarCategoryWorksheet.CalendarCategorySheetName, StringComparison.OrdinalIgnoreCase)
                 && Target.Count == 1)
             {
-                MessageBox.Show("Doing our change event on categories");
                 var column = Target.Column;
                 string selectedValue = Target.Value2 as string;
 
@@ -121,6 +120,19 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                         MessageBox.Show($"Could not find the selected project. {ex.Message}");
                         ExcelAddin.Globals.ThisAddIn.Logger.LogWarning($"Could not find the selected project. {ex.Message}", ex);
                     }
+                }
+                if (column.Equals(ExcelAddin.Constants.CalendarCategoryWorksheet.ActivityColumnIndex))
+                {
+                    // now we have a full customer, project and activity update the category mapping
+                    var id = (string)((Range)Worksheet.Cells[Target.Row, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2;
+                    var cust = (string)((Range)Worksheet.Cells[Target.Row, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex]).Value2;
+                    var custId = Globals.ThisAddIn.GetCustomerByName(cust); 
+                    var projName = (string)((Range)Worksheet.Cells[Target.Row, ExcelAddin.Constants.CalendarCategoryWorksheet.ProjectColumnIndex]).Value2;
+                    var project = Globals.ThisAddIn.GetProjectByName(projName, custId.Id);
+                    var cat = Globals.ThisAddIn.Categories.Single(x => string.Equals(x.Guid, id, StringComparison.OrdinalIgnoreCase));
+                    cat.ActivityId = Globals.ThisAddIn.GetActivityByName((string)Target.Value2, project.Id).Id.Value;
+                    cat.ProjectId = project.Id.Value;
+                    cat.CustomerId = custId.Id.Value;
                 }
             }
         }
