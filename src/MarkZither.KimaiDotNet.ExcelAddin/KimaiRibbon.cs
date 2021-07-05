@@ -100,27 +100,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             try
             {
                 var appointments = calendarService.GetAppointments();
-                int emptyRow = 0;
-                //find a row with no id to post
-                for (int i = 1; i < 10000; i++)
-                {
-                    dynamic id = ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
-                    if (id is null)
-                    {
-                        emptyRow = i;
-                        break;
-                    }
-                }
-                foreach (Microsoft.Exchange.WebServices.Data.Appointment a in appointments)
-                {
-                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = a.Subject;
-                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = a.Start.Date.ToOADate();
-                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = (a.End.TimeOfDay - a.Start.TimeOfDay).TotalMinutes;
-                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentCategoryIndex]).Value2 = String.Join(",", a.Categories);
-                    ((Range)Sheets.Sheet1.Instance.Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentIdIndex]).Value2 = a.Id.UniqueId;
-                    emptyRow++;
-                }
-
+                Sheets.Sheet1.Instance.WriteCalendarRows(appointments);
                 var categories = calendarService.GetCategories();
                 Globals.ThisAddIn.Categories = categories.Category;
                 Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);

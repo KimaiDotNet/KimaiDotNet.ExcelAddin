@@ -182,8 +182,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to set validation on column index ${columnIndex}", ex);
             }
         }
-
-
         public void SetupCalendarCategoryHeaderRow()
         {
             ((Range)Worksheet.Cells[1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = "Id";

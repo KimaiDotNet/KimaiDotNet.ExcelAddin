@@ -77,7 +77,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
             return activity;
         }
-
+        public CustomerCollection GetCustomerById(int id)
+        {
+            var customer = Customers.SingleOrDefault(x => x.Id.Equals(id));
+            if (customer == default(CustomerCollection))
+            {
+                Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Customer Id not found: {id}");
+            }
+            return customer;
+        }
         public ActivityCollection GetActivityByName(string name, int? projectId)
         {
             var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
@@ -127,7 +136,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
             return customer;
         }
-
+        internal Category GetCategoryByName(string name)
+        {
+            var category = Categories.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            if (category == default(Category))
+            {
+                Debug.WriteLine($"name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Category Name not found: {name}");
+            }
+            return category;
+        }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             // attempt to make a global exception handler to avoid crashes
@@ -167,7 +185,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.Application.WorkbookActivate += Application_WorkbookActivate;
             this.Application.WorkbookOpen += Application_WorkbookOpen;
         }
-
         private void Application_WorkbookOpen(Excel.Workbook Wb)
         {
             Logger.LogInformation("In Workbook Open", Wb);
