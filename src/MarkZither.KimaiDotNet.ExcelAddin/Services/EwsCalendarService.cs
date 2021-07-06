@@ -52,8 +52,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
                                                                      "CategoryList",
                                                                      WellKnownFolderName.Calendar,
                                                                      UserConfigurationProperties.All);
-
-            string xml = Encoding.UTF8.GetString(usrConfig.XmlData);
+            byte[] xmlData = usrConfig.XmlData;
+            //found some nasty leading chars in XmlData which was breaking deserialization
+            //it looked something like ï»À<?xml version... o worse an unprintable char
+            if (usrConfig.XmlData[0].Equals(239) && usrConfig.XmlData[1].Equals(187) && usrConfig.XmlData[2].Equals(191))
+            {
+                xmlData = usrConfig.XmlData.Skip(3).ToArray();
+            }
+            string xml = Encoding.UTF8.GetString(xmlData);
             XmlSerializer serializer = new XmlSerializer(typeof(Categories));
             using (StringReader reader = new StringReader(xml))
             {

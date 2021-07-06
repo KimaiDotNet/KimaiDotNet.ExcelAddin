@@ -64,7 +64,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 DocEvents_ChangeEventHandler(changesRange_Change);
             SetupCalendarCategoryHeaderRow();
 
-            for (int idxRow = 1; idxRow <= 5; idxRow++)
+            for (int idxRow = 1; idxRow <= categories.Category.Count; idxRow++)
             {
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Value2 = categories.Category[idxRow - 1].Guid;
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Interior.Color = XlRgbColor.rgbAliceBlue;
