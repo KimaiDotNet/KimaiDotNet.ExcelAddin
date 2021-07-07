@@ -43,6 +43,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             lblAddinVersionNo.Label = GetVersionNumber();
+            lblStartDate.Label = DateTime.Now.AddDays(-7).Date.ToShortDateString();
+            lblEndDate.Label = DateTime.Now.AddDays(7).Date.ToShortDateString();
         }
         private void tglApiCreds_Click(object sender, RibbonControlEventArgs e)
         {
@@ -99,7 +101,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, password);
             try
             {
-                var appointments = calendarService.GetAppointments();
+                var appointments = calendarService.GetAppointments(DateTime.Now.AddDays(-7), DateTime.Now.AddDays(7));
                 Sheets.Sheet1.Instance.WriteCalendarRows(appointments);
                 var categories = calendarService.GetCategories();
                 Globals.ThisAddIn.Categories = categories.Category;
@@ -160,6 +162,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             Process.Start(@"https://github.com/MarkZither/KimaiDotNet/discussions");
 #pragma warning restore S1075 // URIs should not be hardcoded
 #pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
+        }
+
+        private void btnSetCalendarImportDates_Click(object sender, RibbonControlEventArgs e)
+        {
+            MessageBox.Show("Coming in the next version");
         }
     }
 }

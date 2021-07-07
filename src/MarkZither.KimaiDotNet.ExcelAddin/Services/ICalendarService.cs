@@ -12,7 +12,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
 {
     public interface ICalendarService
     {
-        IList<Appointment> GetAppointments();
+        IList<Appointment> GetAppointments(DateTime startDate, DateTime endDate);
         Categories GetCategories();
     }
 }

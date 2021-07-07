@@ -23,13 +23,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         {
         }
 
-        public IList<Appointment> GetAppointments()
+        public IList<Appointment> GetAppointments(DateTime startDate, DateTime endDate)
         {
             ExchangeService ewsservice = GetEwsService();
             // Initialize values for the start and end times, and the number of appointments to retrieve.
-            DateTime startDate = DateTime.Now;
-            DateTime endDate = startDate.AddDays(30);
-            const int NUM_APPTS = 25;
+            const int NUM_APPTS = 50;
             // Initialize the calendar folder object with only the folder ID. 
             CalendarFolder calendar = CalendarFolder.Bind(ewsservice, WellKnownFolderName.Calendar, new PropertySet());
             // Set the start and end time and number of appointments to retrieve.
@@ -44,7 +42,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         public Categories GetCategories()
         {
             ExchangeService ewsservice = GetEwsService();
-            FindRecurringCalendarItems(ewsservice, DateTime.Now.AddMonths(-6).AddDays(14), DateTime.Now.AddDays(7));
 #pragma warning disable S4423 // Weak SSL/TLS protocols should not be used
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls; //DevSkim: ignore DS440020,DS440000,DS144436
 #pragma warning restore S4423 // Weak SSL/TLS protocols should not be used
