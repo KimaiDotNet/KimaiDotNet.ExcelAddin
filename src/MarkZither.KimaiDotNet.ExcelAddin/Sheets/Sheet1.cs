@@ -72,14 +72,18 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             ((Range)Worksheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = "End Time";
             ((Range)Worksheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).EntireColumn.ColumnWidth = 25;
 
+            var yearCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlYearCode];
+            var monthCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlMonthCode];
+            var dayCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlDayCode];
             // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
             var cell = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.DateColumnIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.DateColumnIndex]];
-            cell.NumberFormat = "dd-MMM-yyyy"; // e.g. dd-MMM-yyyy
+            cell.NumberFormat = $"{dayCode}{dayCode}-{monthCode}{monthCode}{monthCode}-{yearCode}{yearCode}{yearCode}{yearCode}"; // e.g. dd-MMM-yyyy
             var cellBegin = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.BeginTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.BeginTimeIndex]];
             cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
             var cellEnd = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.EndTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.EndTimeIndex]];
             cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
         }
+
         public void WriteTimesheetRows(IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
         {
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
