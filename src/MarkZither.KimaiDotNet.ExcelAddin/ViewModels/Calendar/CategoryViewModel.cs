@@ -15,6 +15,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
         // https://stackoverflow.com/questions/16172462/close-window-from-viewmodel
         // http://jkshay.com/closing-a-wpf-window-using-mvvm-and-minimal-code-behind/
         public ICommand SaveCommand { get; }
+        public Action CloseAction { get; set; }
         public Action Changed { get; set; }
         private bool ValidateUserName(string currentUserName, string newUserName)
         {
@@ -45,6 +46,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
         async Task SaveOWACredntialsAsync()
         {
             _ = await Task.Run(() => { return ""; }).ConfigureAwait(false);
+            CloseAction(); // Invoke the Action previously defined by the View
             // do stuff async
         }
     }

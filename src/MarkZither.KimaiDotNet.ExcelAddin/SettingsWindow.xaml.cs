@@ -23,7 +23,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string OWAAdress { get; set; }
         public SettingsWindow()
         {
-            DataContext = new ViewModels.Calendar.CategoryViewModel();
+            ViewModels.Calendar.CategoryViewModel vm = new ViewModels.Calendar.CategoryViewModel();
+            if (vm.CloseAction == null)
+            {
+                vm.CloseAction = new Action(() => Do(this, sw => sw.Close()));
+            }
+            DataContext = vm;
+
             InitializeComponent();
             if(!string.IsNullOrEmpty(Settings.Default.OWAUrl))
             {
@@ -33,6 +39,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             {
                 txtOWAUsername.Text = Settings.Default.OWAUsername;
             }
+        }
+        public static void Do<TControl>(TControl control, Action<TControl> action) where TControl : Control
+        {
+            control.Dispatcher.BeginInvoke(action, control);
         }
     }
 }
