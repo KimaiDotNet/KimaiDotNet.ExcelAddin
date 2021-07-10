@@ -75,13 +75,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             var yearCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlYearCode];
             var monthCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlMonthCode];
             var dayCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlDayCode];
+            var hourCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlHourCode];
+            var minuteCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlMinuteCode];
+            var secondCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlSecondCode];
             // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
             var cell = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.DateColumnIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.DateColumnIndex]];
             cell.NumberFormat = $"{dayCode}{dayCode}-{monthCode}{monthCode}{monthCode}-{yearCode}{yearCode}{yearCode}{yearCode}"; // e.g. dd-MMM-yyyy
             var cellBegin = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.BeginTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.BeginTimeIndex]];
-            cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            cellBegin.NumberFormat = $"{hourCode}{hourCode}:{minuteCode}{minuteCode}:{secondCode}{secondCode}"; // e.g. hh-mm-ss
             var cellEnd = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.EndTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.EndTimeIndex]];
-            cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            cellEnd.NumberFormat = $"{hourCode}{hourCode}:{minuteCode}{minuteCode}:{secondCode}{secondCode}"; // e.g. hh-mm-ss
         }
 
         public void WriteTimesheetRows(IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
