@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -89,23 +90,23 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // Method intentionally left empty.
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog();
-            Globals.ThisAddIn.OWAUrl = settingsWindow.txtOWAUrl.Text;
-            Globals.ThisAddIn.OWAUsername = settingsWindow.txtOWAUsername.Text;
-            Globals.ThisAddIn.OWAPassword = settingsWindow.txtOWAPassword.Password;
         }
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
         {
             // the format of the EWS URL should be https://owa.youdomain.com/EWS/Exchange.asmx"
             string mbx = Globals.ThisAddIn.OWAUsername;
-            string password = Globals.ThisAddIn.OWAPassword;
-            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, password);
+            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, Globals.ThisAddIn.OWAPassword);
             try
             {
+                if (Globals.ThisAddIn.Categories is null)
+                {
+                    var categories = calendarService.GetCategories();
+                    Globals.ThisAddIn.Categories = categories.Category;
+                    Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
+                }
                 var appointments = calendarService.GetAppointments(DateTime.Now.AddDays(-7), DateTime.Now.AddDays(7));
                 Sheets.Sheet1.Instance.WriteCalendarRows(appointments);
-                var categories = calendarService.GetCategories();
-                Globals.ThisAddIn.Categories = categories.Category;
-                Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
+
             }
             catch (Exception ex)
             {

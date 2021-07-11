@@ -3,11 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:kdi="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin.Infrastructure"
              xmlns:local="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin"
              xmlns:adorners="clr-namespace:Gu.Wpf.Adorners;assembly=Gu.Wpf.Adorners"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             RenderTransformOrigin="0.5,0.5">
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="5*"/>
@@ -16,15 +21,129 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <i:Interaction.Behaviors>
+            <ei:DataStateBehavior Binding="{Binding IsValid}"
+                                  Value="True"
+                                  TrueState="ValidState"
+                                  FalseState="InvalidState" />
+        </i:Interaction.Behaviors>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ValidationSummaryStates">
+                <VisualState x:Name="ValidState">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                       Storyboard.TargetName="ValidSummaryContainer">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                       Storyboard.TargetName="BackgroundOverlayBorder">
+                            <EasingDoubleKeyFrame KeyTime="0:0:1"
+                                                  Value="0.5" />
+                            <EasingDoubleKeyFrame KeyTime="0:0:2"
+                                                  Value="0" />
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="InvalidState">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                       Storyboard.TargetName="ErrorsSummaryContainer">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames
+                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)"
+                            Storyboard.TargetName="border">
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.066"
+                                                  Value="-10" />
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.134"
+                                                  Value="10" />
+                            <EasingDoubleKeyFrame KeyTime="0:0:0.2"
+                                                  Value="0" />
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Border x:Name="BackgroundOverlayBorder"
+                Background="#FF06C409"
+                Opacity="0" />
+
+        <Border x:Name="border"
+                Width="600"
+                MinHeight="600"
+                Background="White"
+                CornerRadius="5"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Padding="20"
+                RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
+                </TransformGroup>
+            </Border.RenderTransform>
+            <Border.Effect>
+                <DropShadowEffect Color="#FF252525"
+                                  Opacity="0.7" />
+            </Border.Effect>
+        </Border>
         <Border Background="#2f5cb6"/>
         <Border Grid.Column ="1" Background="#1f3d7a"/>
         <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#152951"/>
-        <StackPanel Grid.Column="1" Margin="40,0,0,0" VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" Margin="40,0,40,0" VerticalAlignment="Center">
             <TextBlock Foreground="White" FontSize="25" Text="Enter your OWA credentials"/>
-            <TextBox x:Name="txtOWAUrl" adorners:Watermark.Text="https://owa.yourDomain.com" />
+            <TextBox x:Name="txtOWAUrl" adorners:Watermark.Text="https://owa.yourDomain.com" Text="{Binding OWAUrl}" />
             <TextBox x:Name="txtOWAUsername" Text="{Binding UserName}" />
-            <PasswordBox x:Name="txtOWAPassword" />
+            <PasswordBox x:Name="txtOWAPassword" kdi:PasswordBoxAssistant.BindPassword="True"
+                     kdi:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
             <Button x:Name="btnSave" Command="{Binding SaveCommand}" Content="Save" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid x:Name="ErrorsSummaryContainer"
+                          Grid.Column="0"
+                          Visibility="Hidden"
+                          Margin="0,10,10,0">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Plase correct the following errors before proceeding:"
+                                   Foreground="Red"
+                                   FontWeight="Bold" />
+                    <TextBlock Grid.Row="1"
+                                   Text="{Binding ValidationErrorsString}"
+                                   Foreground="Red"
+                                   Margin="0,5,0,0" />
+                </Grid>
+                <Grid x:Name="ValidSummaryContainer"
+                          Grid.Column="0"
+                          Visibility="Collapsed"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Left"
+                          Margin="0,10,5,0">
+                    <TextBlock Text="Congratulations! You successfully completed the form!"
+                                   Foreground="Green"
+                                   FontSize="14" />
+                </Grid>
+            </Grid>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"
             HorizontalAlignment="Center" VerticalAlignment="Center">

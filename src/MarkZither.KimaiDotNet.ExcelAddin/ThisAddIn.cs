@@ -22,6 +22,7 @@ using PostSharp.Patterns.Diagnostics;
 using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
 using System.Windows.Forms;
 using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
+using System.Security;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {

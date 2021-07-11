@@ -26,7 +26,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             ViewModels.Calendar.CategoryViewModel vm = new ViewModels.Calendar.CategoryViewModel();
             if (vm.CloseAction == null)
             {
-                vm.CloseAction = new Action(() => Do(this, sw => sw.Close()));
+                vm.CloseAction = new Action(() => this.Dispatcher.BeginInvoke(new Action(() => this.Close())));
             }
             DataContext = vm;
 
@@ -39,10 +39,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             {
                 txtOWAUsername.Text = Settings.Default.OWAUsername;
             }
-        }
-        public static void Do<TControl>(TControl control, Action<TControl> action) where TControl : Control
-        {
-            control.Dispatcher.BeginInvoke(action, control);
         }
     }
 }

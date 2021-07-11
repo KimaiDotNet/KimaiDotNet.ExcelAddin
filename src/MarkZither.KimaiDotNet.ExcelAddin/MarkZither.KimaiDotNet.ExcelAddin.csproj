@@ -203,6 +203,7 @@
     </Compile>
     <Compile Include="Models\Calendar\Categories.cs" />
     <Compile Include="Models\Calendar\Category.cs" />
+    <Compile Include="PasswordBoxAssistant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -243,6 +244,7 @@
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Calendar\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\ValidatableViewModelBase.cs" />
     <Compile Include="VstoUnhandledExceptionAttribute.cs" />
     <EmbeddedResource Include="KimaiRibbon.resx">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
@@ -329,6 +331,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Rest.ClientRuntime">
       <Version>2.3.23</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.31</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmValidation">
+      <Version>3.1.2</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>

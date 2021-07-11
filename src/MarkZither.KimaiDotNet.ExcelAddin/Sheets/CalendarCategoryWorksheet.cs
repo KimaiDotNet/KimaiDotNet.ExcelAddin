@@ -70,8 +70,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.IdColumnIndex]).Interior.Color = XlRgbColor.rgbAliceBlue;
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.CalendarCategoryWorksheet.NameColumnIndex]).Value2 = categories.Category[idxRow - 1].Name;
             }
-            ((Range)Worksheet.Cells[2, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex]).AddDataValidationToColumn(Worksheet, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex);
-            Worksheet.Change += new Microsoft.Office.Interop.Excel.DocEvents_ChangeEventHandler(changesRange_Change);
+            if (Globals.ThisAddIn.Customers != null)
+            {
+                ((Range)Worksheet.Cells[2, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex]).AddDataValidationToColumn(Worksheet, ExcelAddin.Constants.CustomersSheet.CustomersSheetName, ExcelAddin.Constants.CustomersSheet.NameColumnIndex, ExcelAddin.Constants.CalendarCategoryWorksheet.CustomerColumnIndex);
+                Worksheet.Change += new Microsoft.Office.Interop.Excel.DocEvents_ChangeEventHandler(changesRange_Change);
+            }
         }
 
         private void changesRange_Change(Range Target)
