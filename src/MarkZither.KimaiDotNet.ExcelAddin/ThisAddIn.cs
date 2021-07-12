@@ -182,6 +182,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
             Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;
+            Globals.ThisAddIn.OWAUrl = Settings.Default?.OWAUrl;
+            Globals.ThisAddIn.OWAUsername = Settings.Default?.OWAUsername;
 
             this.Application.WorkbookActivate += Application_WorkbookActivate;
             this.Application.WorkbookOpen += Application_WorkbookOpen;

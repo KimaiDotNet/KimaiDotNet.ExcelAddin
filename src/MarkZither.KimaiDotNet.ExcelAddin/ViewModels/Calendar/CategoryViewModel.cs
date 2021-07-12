@@ -24,17 +24,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
         public Action Changed { get; set; }
         private bool? isValid;
         private string validationErrorsString;
-        private bool ValidateUserName(string currentUserName, string newUserName)
-        {
-            if (newUserName?.Length == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
 
         string userName;
         public string UserName
@@ -42,7 +31,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
             get { return userName; }
             set
             {
-                SetProperty(ref userName, value, onChanged: Changed, validateValue: ValidateUserName);
+                SetProperty(ref userName, value, onChanged: Changed);
                 Validator.ValidateAsync(nameof(UserName));
             }
         }
@@ -113,7 +102,11 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
             private set
             {
                 validationErrorsString = value;
-                SetProperty(ref validationErrorsString, value);
+                bool success = SetProperty(ref validationErrorsString, value);
+                if (!success)
+                {
+                    OnPropertyChanged();
+                }
             }
         }
 

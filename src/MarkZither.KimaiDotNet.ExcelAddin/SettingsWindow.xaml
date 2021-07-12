@@ -8,11 +8,12 @@
              xmlns:kdi="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin.Infrastructure"
              xmlns:local="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin"
              xmlns:adorners="clr-namespace:Gu.Wpf.Adorners;assembly=Gu.Wpf.Adorners"
+             xmlns:ViewModel="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar"
+             d:DataContext="{d:DesignInstance ViewModel:CategoryViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              RenderTransformOrigin="0.5,0.5">
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="5*"/>
