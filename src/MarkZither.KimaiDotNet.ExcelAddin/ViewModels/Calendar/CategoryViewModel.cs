@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using MvvmHelpers.Commands;
@@ -59,6 +60,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
         }
         public CategoryViewModel()
         {
+            StartDate = Globals.ThisAddIn.CalSyncStartDate;
+            EndDate = Globals.ThisAddIn.CalSyncEndDate;
             OWAUrl = Globals.ThisAddIn.OWAUrl;
             UserName = Globals.ThisAddIn.OWAUsername;
             Password = Globals.ThisAddIn.OWAPassword;
@@ -138,6 +141,28 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
         {
             IsValid = validationResult.IsValid;
             ValidationErrorsString = validationResult.ToString();
+        }
+
+        private DateTime? startDate;
+        public DateTime? StartDate { 
+            get => startDate; 
+            set => SetProperty(ref startDate, value, onChanged: SetCalendarImportStartDate); 
+        }
+        private DateTime? endDate;
+        public DateTime? EndDate
+        {
+            get => endDate;
+            set => SetProperty(ref endDate, value, onChanged: SetCalendarImportEndDate);
+        }
+        void SetCalendarImportStartDate()
+        {
+            Globals.ThisAddIn.CalSyncStartDate = StartDate.Value;
+            Globals.Ribbons.KimaiRibbon.lblStartDate.Label = StartDate.Value.ToShortDateString();
+        }
+        void SetCalendarImportEndDate()
+        {
+            Globals.ThisAddIn.CalSyncEndDate = EndDate.Value;
+            Globals.Ribbons.KimaiRibbon.lblEndDate.Label = EndDate.Value.ToShortDateString();
         }
     }
 }

@@ -44,8 +44,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             lblAddinVersionNo.Label = GetVersionNumber();
-            lblStartDate.Label = DateTime.Now.AddDays(-7).Date.ToShortDateString();
-            lblEndDate.Label = DateTime.Now.AddDays(7).Date.ToShortDateString();
+            Globals.ThisAddIn.CalSyncStartDate = DateTime.Now.AddDays(-7);
+            Globals.ThisAddIn.CalSyncEndDate = DateTime.Now.AddDays(7);
+            lblStartDate.Label = Globals.ThisAddIn.CalSyncStartDate.Date.ToShortDateString();
+            lblEndDate.Label = Globals.ThisAddIn.CalSyncEndDate.Date.ToShortDateString();
         }
         private void tglApiCreds_Click(object sender, RibbonControlEventArgs e)
         {

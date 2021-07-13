@@ -1,5 +1,6 @@
 ﻿<Window x:Class="MarkZither.KimaiDotNet.ExcelAddin.SettingsWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -148,9 +149,26 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"
             HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Foreground="White" FontSize="25" Text="High: 66°" Margin="0,0,20,0"/>
-            <TextBlock Foreground="White" FontSize="25" Text="Low: 43°" Margin="0,0,20,0"/>
-            <TextBlock Foreground="White" FontSize="25" Text="Feels like: 63°"/>
+            <DatePicker x:Name="datStartDate"
+                        SelectedDate="{Binding
+                        Path=StartDate,
+                        Mode=TwoWay,
+                        TargetNullValue={x:Static System:DateTime.Now}}"/>
+            <Calendar x:Name="calStartDate" 
+                      SelectedDate="{Binding
+                        Path=StartDate,
+                        Mode=TwoWay,
+                        TargetNullValue={x:Static System:DateTime.Now}}"/>
+            <DatePicker x:Name="datEndDate"
+                        SelectedDate="{Binding
+                        Path=EndDate,
+                        Mode=TwoWay,
+                        TargetNullValue={x:Static System:DateTime.Now}}"/>
+            <Calendar x:Name="calEndDate" 
+                      SelectedDate="{Binding
+                        Path=EndDate,
+                        Mode=TwoWay,
+                        TargetNullValue={x:Static System:DateTime.Now}}"/>
         </StackPanel>
         <Image Margin="20" Source="Resources/kimai_set_api_password.png"/>
     </Grid>

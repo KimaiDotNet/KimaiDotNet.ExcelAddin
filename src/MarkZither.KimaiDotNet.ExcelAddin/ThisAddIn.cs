@@ -37,6 +37,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string OWAUrl { get; set; }
         public string OWAUsername { get; set; }
         public string OWAPassword { get; set; }
+        public DateTime CalSyncStartDate { get; set; }
+        public DateTime CalSyncEndDate { get; set; }
         public UserEntity CurrentUser { get; set; }
         public IList<ProjectCollection> Projects { get; set; }
         public IList<ActivityCollection> Activities { get; set; }
