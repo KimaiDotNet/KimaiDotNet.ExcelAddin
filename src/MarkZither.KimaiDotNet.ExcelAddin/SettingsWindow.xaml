@@ -10,7 +10,7 @@
              xmlns:local="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin"
              xmlns:adorners="clr-namespace:Gu.Wpf.Adorners;assembly=Gu.Wpf.Adorners"
              xmlns:ViewModel="clr-namespace:MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar"
-             d:DataContext="{d:DesignInstance ViewModel:CategoryViewModel}"
+             d:DataContext="{d:DesignInstance ViewModel:SettingsViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              RenderTransformOrigin="0.5,0.5">
@@ -110,7 +110,7 @@
             <TextBox x:Name="txtOWAUsername" Text="{Binding UserName}" />
             <PasswordBox x:Name="txtOWAPassword" kdi:PasswordBoxAssistant.BindPassword="True"
                      kdi:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
-            <Button x:Name="btnSave" Command="{Binding SaveCommand}" Content="Save" />
+            <Button x:Name="btnSave" Command="{Binding SaveCommand}" Content="Save and Load Categories" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

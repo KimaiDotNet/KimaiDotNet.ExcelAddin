@@ -16,7 +16,7 @@ using MarkZither.KimaiDotNet.ExcelAddin.Services;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
 {
-    public class CategoryViewModel : ValidatableViewModelBase
+    public class SettingsViewModel : ValidatableViewModelBase
     {
         // https://stackoverflow.com/questions/16172462/close-window-from-viewmodel
         // http://jkshay.com/closing-a-wpf-window-using-mvvm-and-minimal-code-behind/
@@ -58,7 +58,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
                 Validator.ValidateAsync(nameof(OWAUrl));
             }
         }
-        public CategoryViewModel()
+        public SettingsViewModel()
         {
             StartDate = Globals.ThisAddIn.CalSyncStartDate;
             EndDate = Globals.ThisAddIn.CalSyncEndDate;

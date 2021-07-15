@@ -23,7 +23,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string OWAAdress { get; set; }
         public SettingsWindow()
         {
-            ViewModels.Calendar.CategoryViewModel vm = new ViewModels.Calendar.CategoryViewModel();
+            ViewModels.Calendar.SettingsViewModel vm = new ViewModels.Calendar.SettingsViewModel();
             if (vm.CloseAction == null)
             {
                 vm.CloseAction = new Action(() => this.Dispatcher.BeginInvoke(new Action(() => this.Close())));
