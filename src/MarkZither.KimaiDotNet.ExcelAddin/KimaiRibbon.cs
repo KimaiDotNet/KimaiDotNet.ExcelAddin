@@ -106,15 +106,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                     Globals.ThisAddIn.Categories = categories.Category;
                     Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
                 }
-                var appointments = calendarService.GetAppointments(DateTime.Now.AddDays(-7), DateTime.Now.AddDays(7));
+                var appointments = calendarService.GetAppointments(Globals.ThisAddIn.CalSyncStartDate, Globals.ThisAddIn.CalSyncEndDate);
                 Sheets.Sheet1.Instance.WriteCalendarRows(appointments);
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Calendar coming soon");
         }
 
         private static bool RedirectionUrlValidationCallback(string redirectionUrl)
@@ -151,25 +149,27 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private void btnBug_Click(object sender, RibbonControlEventArgs e)
         {
-#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
 #pragma warning disable S1075 // URIs should not be hardcoded
-            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/issues");
+            Process.Start("https://github.com/MarkZither/KimaiDotNet/issues");
 #pragma warning restore S1075 // URIs should not be hardcoded
-#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
         }
 
         private void btnHelp_Click(object sender, RibbonControlEventArgs e)
         {
-#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
 #pragma warning disable S1075 // URIs should not be hardcoded
-            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/discussions");
+            Process.Start("https://github.com/MarkZither/KimaiDotNet/discussions");
 #pragma warning restore S1075 // URIs should not be hardcoded
-#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
         }
 
-        private void btnSetCalendarImportDates_Click(object sender, RibbonControlEventArgs e)
+        private void btnSyncCalendarCategories_Click(object sender, RibbonControlEventArgs e)
         {
-            MessageBox.Show("Coming in the next version");
+            // the format of the EWS URL should be https://owa.youdomain.com/EWS/Exchange.asmx"
+            string mbx = Globals.ThisAddIn.OWAUsername;
+            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, Globals.ThisAddIn.OWAPassword);
+
+            var categories = calendarService.GetCategories();
+            Globals.ThisAddIn.Categories = categories.Category;
+            Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
         }
     }
 }

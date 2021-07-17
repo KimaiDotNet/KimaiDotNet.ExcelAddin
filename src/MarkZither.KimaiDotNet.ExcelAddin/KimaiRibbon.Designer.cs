@@ -58,7 +58,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSync = this.Factory.CreateRibbonButton();
             this.btnCalendar = this.Factory.CreateRibbonButton();
             this.btnSettings = this.Factory.CreateRibbonButton();
-            this.btnSetCalendarImportDates = this.Factory.CreateRibbonButton();
+            this.btnSyncCalendarCategories = this.Factory.CreateRibbonButton();
             this.btnSyncCustomers = this.Factory.CreateRibbonButton();
             this.btnSyncProjects = this.Factory.CreateRibbonButton();
             this.btnBuy = this.Factory.CreateRibbonButton();
@@ -108,7 +108,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpCalendar.Items.Add(this.btnSettings);
             this.grpCalendar.Items.Add(this.box1);
             this.grpCalendar.Items.Add(this.box2);
-            this.grpCalendar.Items.Add(this.btnSetCalendarImportDates);
+            this.grpCalendar.Items.Add(this.btnSyncCalendarCategories);
             this.grpCalendar.Label = "Calendar Import";
             this.grpCalendar.Name = "grpCalendar";
             // 
@@ -242,13 +242,13 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSettings.ShowImage = true;
             this.btnSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSettings_Click);
             // 
-            // btnSetCalendarImportDates
+            // btnSyncCalendarCategories
             // 
-            this.btnSetCalendarImportDates.Label = "Set Date Range";
-            this.btnSetCalendarImportDates.Name = "btnSetCalendarImportDates";
-            this.btnSetCalendarImportDates.OfficeImageId = "CalendarToolSelectDate";
-            this.btnSetCalendarImportDates.ShowImage = true;
-            this.btnSetCalendarImportDates.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSetCalendarImportDates_Click);
+            this.btnSyncCalendarCategories.Label = "Import Categories";
+            this.btnSyncCalendarCategories.Name = "btnSyncCalendarCategories";
+            this.btnSyncCalendarCategories.OfficeImageId = "DataRefreshDialog";
+            this.btnSyncCalendarCategories.ShowImage = true;
+            this.btnSyncCalendarCategories.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncCalendarCategories_Click);
             // 
             // btnSyncCustomers
             // 
@@ -365,7 +365,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         internal Microsoft.Office.Tools.Ribbon.RibbonBox box2;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblEndDateTitle;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblEndDate;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSetCalendarImportDates;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSyncCalendarCategories;
     }
 
     partial class ThisRibbonCollection
