@@ -57,6 +57,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.txtApiPassword.Location = new System.Drawing.Point(19, 148);
             this.txtApiPassword.Name = "txtApiPassword";
+            this.txtApiPassword.PasswordChar = '*';
             this.txtApiPassword.Size = new System.Drawing.Size(153, 20);
             this.txtApiPassword.TabIndex = 7;
             // 

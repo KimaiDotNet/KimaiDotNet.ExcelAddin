@@ -1,6 +1,7 @@
 ﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
 using MarkZither.KimaiDotNet.Models;
 
+using Appointment = Microsoft.Exchange.WebServices.Data.Appointment;
 using Microsoft.Extensions.Logging;
 using Microsoft.Office.Interop.Excel;
 
@@ -71,16 +72,22 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             ((Range)Worksheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).Value2 = "End Time";
             ((Range)Worksheet.Cells[1, ExcelAddin.Constants.Sheet1.EndTimeIndex]).EntireColumn.ColumnWidth = 25;
 
+            var yearCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlYearCode];
+            var monthCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlMonthCode];
+            var dayCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlDayCode];
+            var hourCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlHourCode];
+            var minuteCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlMinuteCode];
+            var secondCode = (string)Globals.ThisAddIn.Application.International[XlApplicationInternational.xlSecondCode];
             // https://stackoverflow.com/questions/3310800/how-to-make-correct-date-format-when-writing-data-to-excel
             var cell = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.DateColumnIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.DateColumnIndex]];
-            cell.NumberFormat = "dd-MMM-yyyy"; // e.g. dd-MMM-yyyy
+            cell.NumberFormat = $"{dayCode}{dayCode}-{monthCode}{monthCode}{monthCode}-{yearCode}{yearCode}{yearCode}{yearCode}"; // e.g. dd-MMM-yyyy
             var cellBegin = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.BeginTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.BeginTimeIndex]];
-            cellBegin.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            cellBegin.NumberFormat = $"{hourCode}{hourCode}:{minuteCode}{minuteCode}:{secondCode}{secondCode}"; // e.g. hh-mm-ss
             var cellEnd = Worksheet.Range[Worksheet.Cells[2, ExcelAddin.Constants.Sheet1.EndTimeIndex], Worksheet.Cells[10000, ExcelAddin.Constants.Sheet1.EndTimeIndex]];
-            cellEnd.NumberFormat = "hh:mm:ss"; // e.g. dd-MMM-yyyy
+            cellEnd.NumberFormat = $"{hourCode}{hourCode}:{minuteCode}{minuteCode}:{secondCode}{secondCode}"; // e.g. hh-mm-ss
         }
 
-        public void WriteTimesheetRows(IList<Models.TimesheetCollection> timesheets)
+        public void WriteTimesheetRows(IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
         {
             for (int idxRow = 1; idxRow <= timesheets.Count; idxRow++)
             {
@@ -99,7 +106,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                     var activity = Globals.ThisAddIn.GetActivityById(timesheets[idxRow - 1].Activity.Value);
                     ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
                 }
-                            ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
+                ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = timesheets[idxRow - 1].Description;
                 ((Range)Worksheet.Cells[idxRow + 1, ExcelAddin.Constants.Sheet1.BeginTimeIndex]).Value2 = timesheets[idxRow - 1].Begin.ToOADate();
                 if (timesheets[idxRow - 1].End.HasValue)
                 {
@@ -107,7 +114,48 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 }
             }
         }
-        public async Task SyncNewRowsToKimai(IKimaiServices service, IList<Models.TimesheetCollection> timesheets)
+        public void WriteCalendarRows(IList<Appointment> appointments)
+        {
+            int emptyRow = 0;
+            //find a row with no id to post
+            for (int i = 1; i < 10000; i++)
+            {
+                dynamic id = ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
+                if (id is null)
+                {
+                    emptyRow = i;
+                    break;
+                }
+            }
+            foreach (Appointment a in appointments)
+            {
+                var category = Globals.ThisAddIn.GetCategoryByName(a.Categories.FirstOrDefault());
+                if (category != null && category.CustomerId != 0)
+                {
+                    var customer = Globals.ThisAddIn.GetCustomerById(category.CustomerId);
+                    ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.CustomerColumnIndex]).Value2 = customer.Name;
+
+                    if (category.ProjectId != 0)
+                    { 
+                        var project = Globals.ThisAddIn.GetProjectById(category.ProjectId);
+                        ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.ProjectColumnIndex]).Value2 = project.Name;
+                    }
+                    if(category.ActivityId != 0)
+                    {
+                        var activity = Globals.ThisAddIn.GetActivityById(category.ActivityId);
+                        ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.ActivityColumnIndex]).Value2 = activity.Name;
+                    }
+                }
+                ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DescColumnIndex]).Value2 = a.Subject;
+                ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2 = a.Start.Date.ToOADate();
+                ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.DurationColumnIndex]).Value2 = (a.End.TimeOfDay - a.Start.TimeOfDay).TotalMinutes;
+                ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentCategoryIndex]).Value2 = String.Join(",", a.Categories);
+                ((Range)Worksheet.Cells[emptyRow, ExcelAddin.Constants.Sheet1.AppointmentIdIndex]).Value2 = a.Id.UniqueId;
+                emptyRow++;
+            }
+
+        }
+        public async Task SyncNewRowsToKimai(IKimaiServices service, IList<KimaiDotNet.Models.TimesheetCollection> timesheets)
         {
             try
             {
@@ -133,7 +181,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                             DateTime date = DateTime.FromOADate(oADate).Date; //make sure any time is ignored, it shouldn't be there
                             int addMinutes = GetNextAvailableTimeInMinutes(date);
 
-                            var timesheet = await service.PostTimesheet(new Models.TimesheetEditForm()
+                            var timesheet = await service.PostTimesheet(new KimaiDotNet.Models.TimesheetEditForm()
                             {
                                 Project = projectId,
                                 Activity = activityId,
@@ -142,7 +190,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                                 User = Globals.ThisAddIn.CurrentUser.Id.Value,
                                 Description = description,
                             }).ConfigureAwait(false);
-                            Globals.ThisAddIn.Timesheets.Add(new Models.TimesheetCollection() { Id = timesheet.Id, Begin = timesheet.Begin, End = timesheet.End, Activity = timesheet.Activity, Project = timesheet.Project, Duration = duration, User = timesheet.User, Description = timesheet.Description, Tags = timesheet.Tags, });
+                            Globals.ThisAddIn.Timesheets.Add(new KimaiDotNet.Models.TimesheetCollection() { Id = timesheet.Id, Begin = timesheet.Begin, End = timesheet.End, Activity = timesheet.Activity, Project = timesheet.Project, Duration = duration, User = timesheet.User, Description = timesheet.Description, Tags = timesheet.Tags, });
                             UpdateNewTimesheetRecordAfterServerSync(i, timesheet);
                         }
                         else
@@ -158,7 +206,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to sync new rows to kimai", ex);
             }
         }
-
         private void UpdateNewTimesheetRecordAfterServerSync(int rowNo, TimesheetEntity timesheet)
         {
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/f89fe6b3-68c0-4a98-9522-953cc5befb34/how-to-make-a-excel-cell-readonly-by-c-code?forum=vsto
@@ -200,7 +247,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             Worksheet.Protect(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
         }
-
         private int GetNextAvailableTimeInMinutes(DateTime date)
         {
             var lastTimeEntry = Globals.ThisAddIn.Timesheets.OrderByDescending(x => x.End).FirstOrDefault(x => x.Begin.Date.Equals(date.Date) && x.End != null)?.End.Value;
@@ -208,7 +254,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             { return 8 * 60; }
             return lastTimeEntry.Value.Hour * 60 + lastTimeEntry.Value.Minute;
         }
-
         void changesRange_Change(Range Target)
         {
             if (Target.Worksheet.Name.Equals(Constants.Sheet1.TimesheetsSheetName, StringComparison.OrdinalIgnoreCase)

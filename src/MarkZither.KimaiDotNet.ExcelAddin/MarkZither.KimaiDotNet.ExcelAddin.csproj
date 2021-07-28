@@ -34,7 +34,7 @@
     <PublishUrl>c:\publish\KimaiExcel\</PublishUrl>
     <InstallUrl>http://blog.mark-burton.com/assets/exceladdin/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>0.1.0.1</ApplicationVersion>
+    <ApplicationVersion>0.1.0.3</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -136,6 +136,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -200,9 +201,15 @@
     <Compile Include="KimaiRibbon.Designer.cs">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Calendar\Categories.cs" />
+    <Compile Include="Models\Calendar\Category.cs" />
+    <Compile Include="PasswordBoxAssistant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\EwsCalendarService.cs" />
+    <Compile Include="Services\CalendarServiceBase.cs" />
+    <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Services\IKimaiServices.cs" />
     <Compile Include="Services\MockKimaiServices.cs" />
     <Compile Include="Services\KimaiServices.cs" />
@@ -215,11 +222,18 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sheets\CalendarCategoryWorksheet.cs" />
     <Compile Include="Sheets\CustomerWorksheet.cs" />
     <Compile Include="Sheets\ActivityWorksheet.cs" />
     <Compile Include="Sheets\ProjectWorksheet.cs" />
     <Compile Include="Sheets\KimaiWorksheet.cs" />
     <Compile Include="Sheets\Sheet1.cs" />
+    <Compile Include="ucSettings.xaml.cs">
+      <DependentUpon>ucSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ucAbout.xaml.cs">
       <DependentUpon>ucAbout.xaml</DependentUpon>
     </Compile>
@@ -229,9 +243,12 @@
     <Compile Include="ucApiCredentials.Designer.cs">
       <DependentUpon>ucApiCredentials.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Calendar\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ValidatableViewModelBase.cs" />
     <Compile Include="VstoUnhandledExceptionAttribute.cs" />
     <EmbeddedResource Include="KimaiRibbon.resx">
       <DependentUpon>KimaiRibbon.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -287,13 +304,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Flurl">
+      <Version>3.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Gu.Wpf.Adorners">
+      <Version>2.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
-      <Version>1.0.662</Version>
+      <Version>1.0.667</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Exchange.WebServices">
+      <Version>2.2.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-      <Version>5.0.1</Version>
+      <Version>5.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <Version>5.0.0</Version>
@@ -307,30 +333,39 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime">
       <Version>2.3.23</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <Version>1.1.31</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmValidation">
+      <Version>3.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="PostSharp">
-      <Version>6.9.6</Version>
+      <Version>6.9.7</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Diagnostics">
-      <Version>6.9.6</Version>
+      <Version>6.9.7</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Diagnostics.Microsoft">
-      <Version>6.9.6</Version>
+      <Version>6.9.7</Version>
+    </PackageReference>
+    <PackageReference Include="Refractored.MvvmHelpers">
+      <Version>1.6.2</Version>
     </PackageReference>
     <PackageReference Include="Roslynator.Analyzers">
-      <Version>3.1.0</Version>
+      <Version>3.2.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Roslynator.Formatting.Analyzers">
-      <Version>1.1.0</Version>
+      <Version>1.2.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SecurityCodeScan.VS2019">
-      <Version>5.1.0</Version>
+      <Version>5.2.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -338,16 +373,16 @@
       <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Console">
-      <Version>3.1.1</Version>
+      <Version>4.0.0</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.File">
-      <Version>4.1.0</Version>
+      <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.InfluxDB.Syslog">
-      <Version>2.0.1</Version>
+      <Version>2.0.2</Version>
     </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp">
-      <Version>8.23.0.32424</Version>
+      <Version>8.26.0.34506</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -363,15 +398,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ucSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ucAbout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\kimai_set_api_password.png">
+    <Resource Include="Resources\kimai_set_api_password.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -394,6 +440,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestTimestampUrl>http://time.certum.pl</ManifestTimestampUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

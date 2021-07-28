@@ -50,7 +50,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             }
         }
 
-        public void CreateOrUpdateActivitiesOnSheet(IList<Models.ActivityCollection> activities)
+        public void CreateOrUpdateActivitiesOnSheet(IList<KimaiDotNet.Models.ActivityCollection> activities)
         {
             SetupActivityHeaderRow();
 

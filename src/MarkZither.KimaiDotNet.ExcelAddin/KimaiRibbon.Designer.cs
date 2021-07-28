@@ -39,10 +39,18 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpSettings = this.Factory.CreateRibbonGroup();
             this.tglApiCreds = this.Factory.CreateRibbonToggleButton();
             this.btnConnect = this.Factory.CreateRibbonButton();
-            this.btnSettings = this.Factory.CreateRibbonButton();
             this.grpTimesheets = this.Factory.CreateRibbonGroup();
             this.btnSync = this.Factory.CreateRibbonButton();
+            this.grpCalendar = this.Factory.CreateRibbonGroup();
             this.btnCalendar = this.Factory.CreateRibbonButton();
+            this.btnSettings = this.Factory.CreateRibbonButton();
+            this.box1 = this.Factory.CreateRibbonBox();
+            this.lblStartDateTitle = this.Factory.CreateRibbonLabel();
+            this.lblStartDate = this.Factory.CreateRibbonLabel();
+            this.box2 = this.Factory.CreateRibbonBox();
+            this.lblEndDateTitle = this.Factory.CreateRibbonLabel();
+            this.lblEndDate = this.Factory.CreateRibbonLabel();
+            this.btnSyncCalendarCategories = this.Factory.CreateRibbonButton();
             this.grpAdmin = this.Factory.CreateRibbonGroup();
             this.btnSyncCustomers = this.Factory.CreateRibbonButton();
             this.btnSyncProjects = this.Factory.CreateRibbonButton();
@@ -61,6 +69,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.tab1.SuspendLayout();
             this.grpSettings.SuspendLayout();
             this.grpTimesheets.SuspendLayout();
+            this.grpCalendar.SuspendLayout();
+            this.box1.SuspendLayout();
+            this.box2.SuspendLayout();
             this.grpAdmin.SuspendLayout();
             this.grpSupport.SuspendLayout();
             this.grpVersion.SuspendLayout();
@@ -71,6 +82,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.grpSettings);
             this.tab1.Groups.Add(this.grpTimesheets);
+            this.tab1.Groups.Add(this.grpCalendar);
             this.tab1.Groups.Add(this.grpAdmin);
             this.tab1.Groups.Add(this.grpSupport);
             this.tab1.Groups.Add(this.grpVersion);
@@ -81,7 +93,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // 
             this.grpSettings.Items.Add(this.tglApiCreds);
             this.grpSettings.Items.Add(this.btnConnect);
-            this.grpSettings.Items.Add(this.btnSettings);
             this.grpSettings.Label = "Settings";
             this.grpSettings.Name = "grpSettings";
             // 
@@ -104,16 +115,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnConnect.ShowImage = true;
             this.btnConnect.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConnect_Click);
             // 
-            // btnSettings
-            // 
-            this.btnSettings.Label = "Settings";
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSettings_Click);
-            // 
             // grpTimesheets
             // 
             this.grpTimesheets.Items.Add(this.btnSync);
-            this.grpTimesheets.Items.Add(this.btnCalendar);
             this.grpTimesheets.Label = "Timesheets";
             this.grpTimesheets.Name = "grpTimesheets";
             // 
@@ -127,6 +131,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnSync.ShowImage = true;
             this.btnSync.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSync_Click);
             // 
+            // grpCalendar
+            // 
+            this.grpCalendar.Items.Add(this.btnCalendar);
+            this.grpCalendar.Items.Add(this.btnSettings);
+            this.grpCalendar.Items.Add(this.box1);
+            this.grpCalendar.Items.Add(this.box2);
+            this.grpCalendar.Items.Add(this.btnSyncCalendarCategories);
+            this.grpCalendar.Label = "Calendar Import";
+            this.grpCalendar.Name = "grpCalendar";
+            // 
             // btnCalendar
             // 
             this.btnCalendar.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -135,6 +149,55 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.btnCalendar.OfficeImageId = "CalendarImport";
             this.btnCalendar.ShowImage = true;
             this.btnCalendar.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCalendar_Click);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSettings.Label = "Settings";
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.OfficeImageId = "PivotTableFieldSettings";
+            this.btnSettings.ShowImage = true;
+            this.btnSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSettings_Click);
+            // 
+            // box1
+            // 
+            this.box1.Items.Add(this.lblStartDateTitle);
+            this.box1.Items.Add(this.lblStartDate);
+            this.box1.Name = "box1";
+            // 
+            // lblStartDateTitle
+            // 
+            this.lblStartDateTitle.Label = "Start Date";
+            this.lblStartDateTitle.Name = "lblStartDateTitle";
+            // 
+            // lblStartDate
+            // 
+            this.lblStartDate.Label = "...";
+            this.lblStartDate.Name = "lblStartDate";
+            // 
+            // box2
+            // 
+            this.box2.Items.Add(this.lblEndDateTitle);
+            this.box2.Items.Add(this.lblEndDate);
+            this.box2.Name = "box2";
+            // 
+            // lblEndDateTitle
+            // 
+            this.lblEndDateTitle.Label = "End Date   ";
+            this.lblEndDateTitle.Name = "lblEndDateTitle";
+            // 
+            // lblEndDate
+            // 
+            this.lblEndDate.Label = "...";
+            this.lblEndDate.Name = "lblEndDate";
+            // 
+            // btnSyncCalendarCategories
+            // 
+            this.btnSyncCalendarCategories.Label = "Import Categories";
+            this.btnSyncCalendarCategories.Name = "btnSyncCalendarCategories";
+            this.btnSyncCalendarCategories.OfficeImageId = "DataRefreshDialog";
+            this.btnSyncCalendarCategories.ShowImage = true;
+            this.btnSyncCalendarCategories.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSyncCalendarCategories_Click);
             // 
             // grpAdmin
             // 
@@ -254,6 +317,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             this.grpSettings.PerformLayout();
             this.grpTimesheets.ResumeLayout(false);
             this.grpTimesheets.PerformLayout();
+            this.grpCalendar.ResumeLayout(false);
+            this.grpCalendar.PerformLayout();
+            this.box1.ResumeLayout(false);
+            this.box1.PerformLayout();
+            this.box2.ResumeLayout(false);
+            this.box2.PerformLayout();
             this.grpAdmin.ResumeLayout(false);
             this.grpAdmin.PerformLayout();
             this.grpSupport.ResumeLayout(false);
@@ -289,6 +358,14 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInfo;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnBug;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnHelp;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpCalendar;
+        internal Microsoft.Office.Tools.Ribbon.RibbonBox box1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblStartDateTitle;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblStartDate;
+        internal Microsoft.Office.Tools.Ribbon.RibbonBox box2;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblEndDateTitle;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel lblEndDate;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSyncCalendarCategories;
     }
 
     partial class ThisRibbonCollection

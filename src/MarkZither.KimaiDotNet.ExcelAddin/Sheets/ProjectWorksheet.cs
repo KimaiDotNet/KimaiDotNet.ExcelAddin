@@ -50,7 +50,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             }
         }
 
-        public void CreateOrUpdateProjectsOnSheet(IList<Models.ProjectCollection> projects)
+        public void CreateOrUpdateProjectsOnSheet(IList<KimaiDotNet.Models.ProjectCollection> projects)
         {
             SetupProjectHeaderRow();
 

@@ -1,4 +1,7 @@
-﻿using MarkZither.KimaiDotNet.ExcelAddin.Services;
+﻿using Flurl;
+
+using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
+using MarkZither.KimaiDotNet.ExcelAddin.Services;
 using MarkZither.KimaiDotNet.ExcelAddin.Sheets;
 using MarkZither.KimaiDotNet.Models;
 
@@ -11,12 +14,18 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Deployment.Application;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -35,6 +44,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void KimaiRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             lblAddinVersionNo.Label = GetVersionNumber();
+            Globals.ThisAddIn.CalSyncStartDate = DateTime.Now.AddDays(-7);
+            Globals.ThisAddIn.CalSyncEndDate = DateTime.Now.AddDays(7);
+            lblStartDate.Label = Globals.ThisAddIn.CalSyncStartDate.Date.ToShortDateString();
+            lblEndDate.Label = Globals.ThisAddIn.CalSyncEndDate.Date.ToShortDateString();
         }
         private void tglApiCreds_Click(object sender, RibbonControlEventArgs e)
         {
@@ -77,12 +90,46 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         private void btnSettings_Click(object sender, RibbonControlEventArgs e)
         {
             // Method intentionally left empty.
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog();
         }
         private void btnCalendar_Click(object sender, RibbonControlEventArgs e)
         {
-            MessageBox.Show("Coming Soon!");
-            ExcelAddin.Globals.ThisAddIn.Logger.LogInformation("Calendar coming soon");
+            // the format of the EWS URL should be https://owa.youdomain.com/EWS/Exchange.asmx"
+            string mbx = Globals.ThisAddIn.OWAUsername;
+            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, Globals.ThisAddIn.OWAPassword);
+            try
+            {
+                if (Globals.ThisAddIn.Categories is null)
+                {
+                    var categories = calendarService.GetCategories();
+                    Globals.ThisAddIn.Categories = categories.Category;
+                    Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
+                }
+                var appointments = calendarService.GetAppointments(Globals.ThisAddIn.CalSyncStartDate, Globals.ThisAddIn.CalSyncEndDate);
+                Sheets.Sheet1.Instance.WriteCalendarRows(appointments);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
+
+        private static bool RedirectionUrlValidationCallback(string redirectionUrl)
+        {
+            // The default for the validation callback is to reject the URL.
+            bool result = false;
+            Uri redirectionUri = new Uri(redirectionUrl);
+            // Validate the contents of the redirection URL. In this simple validation
+            // callback, the redirection URL is considered valid if it is using HTTPS
+            // to encrypt the authentication credentials. 
+            if (string.Equals(redirectionUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            {
+                result = true;
+            }
+            return result;
+        }
+
         private void btnSyncPremuim_Click(object sender, RibbonControlEventArgs e)
         {
             MessageBox.Show("This is a premium feature please consider sponsoring the project.");
@@ -102,20 +149,27 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         private void btnBug_Click(object sender, RibbonControlEventArgs e)
         {
-#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
 #pragma warning disable S1075 // URIs should not be hardcoded
-            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/issues");
+            Process.Start("https://github.com/MarkZither/KimaiDotNet/issues");
 #pragma warning restore S1075 // URIs should not be hardcoded
-#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
         }
 
         private void btnHelp_Click(object sender, RibbonControlEventArgs e)
         {
-#pragma warning disable RCS1192 // Unnecessary usage of verbatim string literal.
 #pragma warning disable S1075 // URIs should not be hardcoded
-            Process.Start(@"https://github.com/MarkZither/KimaiDotNet/discussions");
+            Process.Start("https://github.com/MarkZither/KimaiDotNet/discussions");
 #pragma warning restore S1075 // URIs should not be hardcoded
-#pragma warning restore RCS1192 // Unnecessary usage of verbatim string literal.
+        }
+
+        private void btnSyncCalendarCategories_Click(object sender, RibbonControlEventArgs e)
+        {
+            // the format of the EWS URL should be https://owa.youdomain.com/EWS/Exchange.asmx"
+            string mbx = Globals.ThisAddIn.OWAUsername;
+            ICalendarService calendarService = new EwsCalendarService(Globals.ThisAddIn.OWAUrl, mbx, Globals.ThisAddIn.OWAPassword);
+
+            var categories = calendarService.GetCategories();
+            Globals.ThisAddIn.Categories = categories.Category;
+            Sheets.CalendarCategoryWorksheet.Instance.CreateOrUpdateCalendarCategoriesOnSheet(categories);
         }
     }
 }

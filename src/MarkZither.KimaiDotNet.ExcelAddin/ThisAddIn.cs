@@ -21,6 +21,8 @@ using PostSharp;
 using PostSharp.Patterns.Diagnostics;
 using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
 using System.Windows.Forms;
+using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
+using System.Security;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -32,11 +34,17 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
+        public string OWAUrl { get; set; }
+        public string OWAUsername { get; set; }
+        public string OWAPassword { get; set; }
+        public DateTime CalSyncStartDate { get; set; }
+        public DateTime CalSyncEndDate { get; set; }
         public UserEntity CurrentUser { get; set; }
         public IList<ProjectCollection> Projects { get; set; }
         public IList<ActivityCollection> Activities { get; set; }
         public IList<CustomerCollection> Customers { get; set; }
         public IList<TimesheetCollection> Timesheets { get; set; }
+        public IList<Category> Categories { get; set; }
         //https://docs.microsoft.com/en-us/visualstudio/vsto/walkthrough-synchronizing-a-custom-task-pane-with-a-ribbon-button?view=vs-2019
         private Microsoft.Office.Tools.CustomTaskPane apiCredentialsTaskPane;
         public Microsoft.Office.Tools.CustomTaskPane TaskPane
@@ -72,7 +80,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
             return activity;
         }
-
+        public CustomerCollection GetCustomerById(int id)
+        {
+            var customer = Customers.SingleOrDefault(x => x.Id.Equals(id));
+            if (customer == default(CustomerCollection))
+            {
+                Debug.Write($"Id not found: {id}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Customer Id not found: {id}");
+            }
+            return customer;
+        }
         public ActivityCollection GetActivityByName(string name, int? projectId)
         {
             var activity = Activities.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal)
@@ -122,7 +139,16 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
             return customer;
         }
-
+        internal Category GetCategoryByName(string name)
+        {
+            var category = Categories.SingleOrDefault(x => x.Name.Equals(name, StringComparison.Ordinal));
+            if (category == default(Category))
+            {
+                Debug.WriteLine($"name not found: {name}");
+                ExcelAddin.Globals.ThisAddIn.Logger.LogInformation($"Category Name not found: {name}");
+            }
+            return category;
+        }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             // attempt to make a global exception handler to avoid crashes
@@ -158,11 +184,12 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
             Globals.ThisAddIn.ApiUrl = Settings.Default?.ApiUrl;
             Globals.ThisAddIn.ApiUsername = Settings.Default?.ApiUsername;
+            Globals.ThisAddIn.OWAUrl = Settings.Default?.OWAUrl;
+            Globals.ThisAddIn.OWAUsername = Settings.Default?.OWAUsername;
 
             this.Application.WorkbookActivate += Application_WorkbookActivate;
             this.Application.WorkbookOpen += Application_WorkbookOpen;
         }
-
         private void Application_WorkbookOpen(Excel.Workbook Wb)
         {
             Logger.LogInformation("In Workbook Open", Wb);
@@ -183,6 +210,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-write-user-settings-at-run-time-with-csharp?view=netframeworkdesktop-4.8
             Settings.Default.ApiUrl = Globals.ThisAddIn.ApiUrl;
             Settings.Default.ApiUsername = Globals.ThisAddIn.ApiUsername;
+            Settings.Default.OWAUrl = Globals.ThisAddIn.OWAUrl;
+            Settings.Default.OWAUsername = Globals.ThisAddIn.OWAUsername;
             Settings.Default.Save();
         }
 

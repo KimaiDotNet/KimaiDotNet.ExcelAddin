@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -80,7 +81,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             return ping;
         }
 
-        public async Task<Models.Version> GetVersion()
+        public async Task<KimaiDotNet.Models.Version> GetVersion()
         {
             Kimai2APIDocs docs = new Kimai2APIDocs(Client, disposeHttpClient: false);
             var version = await docs.VersionMethodAsync().ConfigureAwait(false);
