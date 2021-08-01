@@ -293,12 +293,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KimaiDotNet.Core\KimaiDotNet.Core.csproj">
-      <Project>{1522ab8b-41da-4f65-9666-2fca563c4555}</Project>
-      <Name>KimaiDotNet.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AsyncFixer">
       <Version>1.5.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -309,6 +303,9 @@
     </PackageReference>
     <PackageReference Include="Gu.Wpf.Adorners">
       <Version>2.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="MarkZither.KimaiDotNet.ApiClient">
+      <Version>0.2.0-beta</Version>
     </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
       <Version>1.0.667</Version>
