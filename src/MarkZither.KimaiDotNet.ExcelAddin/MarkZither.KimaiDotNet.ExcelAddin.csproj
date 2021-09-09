@@ -305,7 +305,7 @@
       <Version>2.1.1</Version>
     </PackageReference>
     <PackageReference Include="MarkZither.KimaiDotNet.ApiClient">
-      <Version>0.2.0-beta</Version>
+      <Version>0.2.1</Version>
     </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
       <Version>1.0.667</Version>

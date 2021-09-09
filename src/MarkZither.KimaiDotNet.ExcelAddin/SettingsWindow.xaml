@@ -102,7 +102,7 @@
             </Border.Effect>
         </Border>
         <Border Background="#2f5cb6"/>
-        <Border Grid.Column ="1" Background="#1f3d7a"/>
+        <Border Grid.Column="1" Background="#1f3d7a"/>
         <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#152951"/>
         <StackPanel Grid.Column="1" Margin="40,0,40,0" VerticalAlignment="Center">
             <TextBlock Foreground="White" FontSize="25" Text="Enter your OWA credentials"/>
