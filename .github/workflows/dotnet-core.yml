@@ -37,20 +37,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd Publish'
-        run: ./build.cmd Publish
+      - name: Run './build.cmd Compile'
+        run: ./build.cmd Compile
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
-      - uses: actions/upload-artifact@v1
-        with:
-          name: packages
-          path: output/packages
-      - uses: actions/upload-artifact@v1
-        with:
-          name: test-results
-          path: output/test-results
-      - uses: actions/upload-artifact@v1
-        with:
-          name: coverage-report.zip
-          path: output/coverage-report.zip

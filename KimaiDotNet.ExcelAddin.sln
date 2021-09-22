@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkZither.KimaiDotNet.Exce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkZither.KimaiDotNet.ExcelAddin.Tests", "tests\MarkZither.KimaiDotNet.ExcelAddin.Tests\MarkZither.KimaiDotNet.ExcelAddin.Tests.csproj", "{E3ED1437-227F-4A97-B76E-0653B0AEFC10}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{C7535485-55E5-49C6-90BB-629CD191EE62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,16 @@ Global
 		{E3ED1437-227F-4A97-B76E-0653B0AEFC10}.Release|x64.Build.0 = Release|Any CPU
 		{E3ED1437-227F-4A97-B76E-0653B0AEFC10}.Release|x86.ActiveCfg = Release|Any CPU
 		{E3ED1437-227F-4A97-B76E-0653B0AEFC10}.Release|x86.Build.0 = Release|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Debug|x64.Build.0 = Debug|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Debug|x86.Build.0 = Debug|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Release|x64.ActiveCfg = Release|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Release|x64.Build.0 = Release|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Release|x86.ActiveCfg = Release|Any CPU
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +74,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1ADD34B4-4785-428C-BBB7-68A476542DFC} = {3F4A1FDE-A863-4AC4-A51B-228BCB3A31DB}
 		{E3ED1437-227F-4A97-B76E-0653B0AEFC10} = {ADEC8EE5-8ADA-4E81-8A29-B9BFEA3EA1DB}
+		{6EE8BA4A-2A93-40F5-B0C2-B8B7022AEF88} = {C7535485-55E5-49C6-90BB-629CD191EE62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE0972FC-1A73-4909-B9D7-80386767C50C}
