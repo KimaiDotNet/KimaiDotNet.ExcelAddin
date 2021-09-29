@@ -1,18 +1,13 @@
-﻿using MvvmHelpers;
+﻿
+using MarkZither.KimaiDotNet.ExcelAddin.Services;
+
+using MvvmHelpers.Commands;
+
+using MvvmValidation;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using MvvmHelpers.Commands;
 using System.Windows.Input;
-using MvvmValidation;
-using System.ComponentModel;
-using System.Collections;
-using System.Security;
-using MarkZither.KimaiDotNet.ExcelAddin.Services;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin.ViewModels.Calendar
 {

@@ -89,7 +89,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         }
         private void btnSettings_Click(object sender, RibbonControlEventArgs e)
         {
-            // Method intentionally left empty.
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog();
         }
