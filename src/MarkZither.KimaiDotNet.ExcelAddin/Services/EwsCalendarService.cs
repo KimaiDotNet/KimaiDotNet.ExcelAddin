@@ -65,7 +65,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
             }
         }
 
-        public Collection<Appointment> FindRecurringCalendarItems(ExchangeService service,
+        public ICollection<Appointment> FindRecurringCalendarItems(ExchangeService service,
                                                             DateTime startSearchDate,
                                                             DateTime endSearchDate)
         {

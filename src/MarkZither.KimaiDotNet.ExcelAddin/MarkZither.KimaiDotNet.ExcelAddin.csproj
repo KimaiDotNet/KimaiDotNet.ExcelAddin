@@ -294,7 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer">
-      <Version>1.5.1</Version>
+      <Version>1.6.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -308,7 +308,7 @@
       <Version>0.2.1</Version>
     </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
-      <Version>1.0.681</Version>
+      <Version>2.0.5</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -352,17 +352,17 @@
       <Version>1.6.2</Version>
     </PackageReference>
     <PackageReference Include="Roslynator.Analyzers">
-      <Version>3.3.0</Version>
+      <Version>4.2.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Roslynator.Formatting.Analyzers">
-      <Version>3.3.0</Version>
+      <Version>4.2.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SecurityCodeScan.VS2019">
-      <Version>5.6.0</Version>
+      <Version>5.6.7</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -379,7 +379,7 @@
       <Version>2.0.2</Version>
     </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp">
-      <Version>8.33.0.40503</Version>
+      <Version>8.51.0.59060</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
