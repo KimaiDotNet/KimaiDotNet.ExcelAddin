@@ -34,7 +34,7 @@
     <PublishUrl>c:\publish\KimaiExcel\</PublishUrl>
     <InstallUrl>http://blog.mark-burton.com/assets/exceladdin/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>0.1.0.3</ApplicationVersion>
+    <ApplicationVersion>0.2.0.2</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>0</UpdateInterval>
@@ -267,7 +267,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="App.config" />
-    <None Include="MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx" />
+    <None Include="MarkZither.KimaiDotNet.ExcelAddin_1_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -424,16 +424,17 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>MarkZither.KimaiDotNet.ExcelAddin_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>46029462B12D61AA136F94DC835DD9DB6CEFBFA9</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>09D262344A7D162A030C3C9760ACB9D9791A0098</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>MarkZither.KimaiDotNet.ExcelAddin_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestTimestampUrl>http://time.certum.pl</ManifestTimestampUrl>
