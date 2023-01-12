@@ -162,6 +162,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
                 //find a row with no id to post
                 for (int i = timesheets.Count; i < 10000; i++)
                 {
+                    if(i == 0)
+                    {
+                        continue;
+                    }
                     dynamic id = ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.IdColumnIndex]).Value2;
                     dynamic oADate = ((Range)Worksheet.Cells[i, ExcelAddin.Constants.Sheet1.DateColumnIndex]).Value2;
                     if (id is null && (oADate is int || oADate is double))
@@ -203,7 +207,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ExcelAddin.Globals.ThisAddIn.Logger.LogWarning("Failed to sync new rows to kimai", ex);
+                ExcelAddin.Globals.ThisAddIn.Logger.LogWarning(ex, "Failed to sync new rows to kimai");
             }
         }
         private void UpdateNewTimesheetRecordAfterServerSync(int rowNo, TimesheetEntity timesheet)
