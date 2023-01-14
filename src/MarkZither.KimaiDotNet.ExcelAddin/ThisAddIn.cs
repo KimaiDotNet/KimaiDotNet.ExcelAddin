@@ -23,12 +23,43 @@ using PostSharp.Patterns.Diagnostics.Backends.Microsoft;
 using System.Windows.Forms;
 using MarkZither.KimaiDotNet.ExcelAddin.Models.Calendar;
 using System.Security;
+using Serilog.Sinks.InfluxDB;
+using Serilog.Events;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
     [VstoUnhandledException]
     public partial class ThisAddIn
     {
+        private InfluxDBSinkOptions GetInfluxDBSinkOptions()
+        {
+            #pragma warning disable S1075 // URIs should not be hardcoded
+            string InfluxCloudUrl = "https://westeurope-1.azure.cloud2.influxdata.com";
+            #pragma warning restore S1075 // URIs should not be hardcoded   
+            string kimaiExcelInfluxCloudOrg = Environment.GetEnvironmentVariable("KimaiExcelInfluxCloudOrg");
+            string kimaiExcelInfluxCloudToken = Environment.GetEnvironmentVariable("KimaiExcelInfluxCloudToken");
+            return new InfluxDBSinkOptions()
+            {
+                ApplicationName = "fluentSample",
+                InstanceName = "fluentSampleInstance",
+                ConnectionInfo = new InfluxDBConnectionInfo()
+                {
+                    Uri = new Uri(InfluxCloudUrl),
+                    BucketName = "logs",
+                    OrganizationId = kimaiExcelInfluxCloudOrg,  // Organization Id - unique id can be found under Profile > About > Common Ids
+                                                          // To be set if bucket already created and give write permission and set CreateBucketIfNotExists to false
+                    Token = kimaiExcelInfluxCloudToken,
+                    CreateBucketIfNotExists = false,
+                    //To specify if Bucket needs to be created and if token not known or without all access permissions
+                    //AllAccessToken = "",
+                    //BucketRetentionPeriod = TimeSpan.FromDays(1)
+                }
+            };
+        }
+
         //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-create-and-modify-custom-document-properties?redirectedfrom=MSDN&view=vs-2019
         #region Properties
         public string ApiUrl { get; set; }
@@ -45,6 +76,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         public IList<CustomerCollection> Customers { get; set; }
         public IList<TimesheetCollection> Timesheets { get; set; }
         public IList<Category> Categories { get; set; }
+
         //https://docs.microsoft.com/en-us/visualstudio/vsto/walkthrough-synchronizing-a-custom-task-pane-with-a-ribbon-button?view=vs-2019
         private Microsoft.Office.Tools.CustomTaskPane apiCredentialsTaskPane;
         public Microsoft.Office.Tools.CustomTaskPane TaskPane
@@ -157,6 +189,8 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             // https://exceptionalcode.wordpress.com/2010/02/17/centralizing-vsto-add-in-exception-management-with-postsharp/
             // https://www.add-in-express.com/forum/read.php?FID=5&TID=12667
             RegisterToExceptionEvents();
+            var kimaiExcelAppCenterKey = Environment.GetEnvironmentVariable("KimaiExcelAppCenterKey");
+            AppCenter.Start(kimaiExcelAppCenterKey, typeof(Analytics), typeof(Crashes));
 
             var myUserControl1 = new ucApiCredentials();
             apiCredentialsTaskPane = this.CustomTaskPanes.Add(myUserControl1, "API Credentials");
@@ -171,8 +205,10 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 #pragma warning disable S1075 // URIs should not be hardcoded
                 .WriteTo.File("c:\\temp\\logs\\myapp.txt", rollingInterval: RollingInterval.Day)
 #pragma warning restore S1075 // URIs should not be hardcoded
+           .WriteTo.InfluxDB(GetInfluxDBSinkOptions(), restrictedToMinimumLevel: LogEventLevel.Information)
                 .CreateLogger();
             loggerFactory.AddSerilog(loggerConfig);
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
 
             // create logger and put it to work.
             var logProvider = loggerFactory.CreateLogger<ThisAddIn>();
