@@ -28,6 +28,7 @@ using Serilog.Events;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System.Configuration;
 
 namespace MarkZither.KimaiDotNet.ExcelAddin
 {
@@ -62,6 +63,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
 
         //https://docs.microsoft.com/en-us/visualstudio/vsto/how-to-create-and-modify-custom-document-properties?redirectedfrom=MSDN&view=vs-2019
         #region Properties
+        public bool UseMocks { get; private set; }
         public string ApiUrl { get; set; }
         public string ApiUsername { get; set; }
         public string ApiPassword { get; set; }
@@ -183,16 +185,23 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
         }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+#if DEBUG
+            bool.TryParse(ConfigurationManager.AppSettings["UseMocks"], out bool useMocks);
+            UseMocks = useMocks;
+#endif
             // attempt to make a global exception handler to avoid crashes
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/c37599d9-21e8-4c32-b00e-926f97c8f639/global-exception-handler-for-vs-2008-excel-addin?forum=vsto
             // https://stackoverflow.com/questions/12115030/catch-c-sharp-wpf-unhandled-exception-in-word-add-in-before-microsoft-displays-e
             // https://exceptionalcode.wordpress.com/2010/02/17/centralizing-vsto-add-in-exception-management-with-postsharp/
             // https://www.add-in-express.com/forum/read.php?FID=5&TID=12667
             RegisterToExceptionEvents();
-            var kimaiExcelAppCenterKey = Environment.GetEnvironmentVariable("KimaiExcelAppCenterKey");
-            AppCenter.Start(kimaiExcelAppCenterKey, typeof(Analytics), typeof(Crashes));
 
+#pragma warning disable S125 // Sections of code should not be commented out
+                            //var kimaiExcelAppCenterKey = Environment.GetEnvironmentVariable("KimaiExcelAppCenterKey");
+                            //AppCenter.Start(kimaiExcelAppCenterKey, typeof(Analytics), typeof(Crashes));
+#pragma warning restore S125 // Sections of code should not be commented out
             var myUserControl1 = new ucApiCredentials();
+
             apiCredentialsTaskPane = this.CustomTaskPanes.Add(myUserControl1, "API Credentials");
             apiCredentialsTaskPane.VisibleChanged +=
                 new EventHandler(myCustomTaskPane_VisibleChanged);

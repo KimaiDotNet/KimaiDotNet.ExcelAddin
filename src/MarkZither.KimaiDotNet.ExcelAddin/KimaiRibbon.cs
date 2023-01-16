@@ -62,8 +62,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             IKimaiServices services;
             try
             {
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
-                    || mockWorksheet is Worksheet)
+                if (Globals.ThisAddIn.UseMocks || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices();
                 }
