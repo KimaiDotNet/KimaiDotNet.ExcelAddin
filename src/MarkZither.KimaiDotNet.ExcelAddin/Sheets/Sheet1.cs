@@ -311,7 +311,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Sheets
         {
             var mockWorksheet = Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                                    .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
-            IKimaiServices services = !(string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase) || mockWorksheet is Worksheet) ? (IKimaiServices)new KimaiServices() : new MockKimaiServices();
+            IKimaiServices services = !(Globals.ThisAddIn.UseMocks || mockWorksheet is Worksheet) ? (IKimaiServices)new KimaiServices() : new MockKimaiServices();
 
             var projects = await services.GetProjects().ConfigureAwait(false);
             Globals.ThisAddIn.Projects = projects.ToList();

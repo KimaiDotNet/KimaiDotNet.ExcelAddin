@@ -39,8 +39,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
                 IKimaiServices services;
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
-                    || mockWorksheet is Worksheet)
+                if (Globals.ThisAddIn.UseMocks || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices();
                 }
@@ -96,8 +95,7 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
                 Globals.ThisAddIn.Application.Worksheets.Cast<Worksheet>()
                        .SingleOrDefault(w => string.Equals(w.Name, "Mock", StringComparison.OrdinalIgnoreCase));
                 IKimaiServices services;
-                if (string.Equals(ConfigurationManager.AppSettings["UseMocks"], "true", StringComparison.OrdinalIgnoreCase)
-                    || mockWorksheet is Worksheet)
+                if (Globals.ThisAddIn.UseMocks || mockWorksheet is Worksheet)
                 {
                     services = new MockKimaiServices(userName, password, APIUrl);
                 }
