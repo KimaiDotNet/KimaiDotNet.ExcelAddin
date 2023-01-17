@@ -17,13 +17,12 @@ using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 
 [ShutdownDotNetAfterServerBuild]
-[CheckBuildProjectConfigurations]
 [GitHubActions(
     "dotnet-core",
     GitHubActionsImage.WindowsLatest,
     OnPushBranches = new[] { MainBranch, DevelopBranch, ReleaseBranchPrefix + "/*", VersionBranchPrefix + "*" },
     InvokedTargets = new[] { nameof(Compile) },
-    ImportGitHubTokenAs = nameof(GitHubToken),
+    EnableGitHubToken = true,
     ImportSecrets =
         new[]
         {
@@ -61,7 +60,7 @@ partial class Build : NukeBuild
     private bool IsOriginalRepository => GitRepository != null && GitRepository.Identifier == "KimaiDotNet/KimaiDotNet.ApiClient";
 
     private string NuGetPackageSource => "https://api.nuget.org/v3/index.json";
-    private string GitHubPackageSource => $"https://nuget.pkg.github.com/{GitHubActions.GitHubRepositoryOwner}/index.json";
+    private string GitHubPackageSource => $"https://nuget.pkg.github.com/{GitHubActions.RepositoryOwner}/index.json";
     string Source => IsOriginalRepository ? NuGetPackageSource : GitHubPackageSource;
 
     [Parameter] private readonly string NuGetApiKey;

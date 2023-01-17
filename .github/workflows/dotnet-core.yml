@@ -29,9 +29,9 @@ jobs:
     name: windows-latest
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Cache .nuke/temp, ~/.nuget/packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .nuke/temp
@@ -40,5 +40,5 @@ jobs:
       - name: Run './build.cmd Compile'
         run: ./build.cmd Compile
         env:
-          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
