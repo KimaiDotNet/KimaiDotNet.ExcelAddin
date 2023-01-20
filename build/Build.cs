@@ -97,4 +97,18 @@ partial class Build : NukeBuild
                 .SetNodeReuse(IsLocalBuild));
         });
 
+    Target Publish => _ => _
+    .DependsOn(Restore)
+    .Executes(() =>
+    {
+        MSBuild(s => s
+            .SetTargetPath(Solution.Projects.SingleOrError(x => x.Name.Equals("MarkZither.KimaiDotNet.ExcelAddin", StringComparison.InvariantCultureIgnoreCase), "Could not find the project"))
+            .SetTargets("Publish")
+            .SetConfiguration(Configuration)
+            .SetAssemblyVersion(GitVersion.AssemblySemVer)
+            .SetFileVersion(GitVersion.AssemblySemFileVer)
+            .SetInformationalVersion(GitVersion.InformationalVersion)
+            .SetMaxCpuCount(Environment.ProcessorCount)
+            .SetNodeReuse(IsLocalBuild));
+    });
 }
