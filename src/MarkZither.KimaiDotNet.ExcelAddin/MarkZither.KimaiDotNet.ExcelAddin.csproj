@@ -299,7 +299,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Flurl">
-      <Version>3.0.2</Version>
+      <Version>3.0.7</Version>
     </PackageReference>
     <PackageReference Include="Gu.Wpf.Adorners">
       <Version>2.1.1</Version>
