@@ -40,8 +40,8 @@
     <UpdateInterval>0</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
     <ProductName>MarkZither.KimaiDotNet.ExcelAddin</ProductName>
-    <PublisherName />
-    <SupportUrl />
+    <PublisherName>MarkZither</PublisherName>
+    <SupportUrl>https://github.com/KimaiDotNet/KimaiDotNet.ExcelAddin/issues</SupportUrl>
     <FriendlyName>MarkZither.KimaiDotNet.ExcelAddin</FriendlyName>
     <OfficeApplicationDescription />
     <LoadBehavior>3</LoadBehavior>
@@ -308,7 +308,7 @@
       <Version>0.2.1</Version>
     </PackageReference>
     <PackageReference Include="Meziantou.Analyzer">
-      <Version>2.0.10</Version>
+      <Version>2.0.19</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -385,7 +385,7 @@
       <Version>2.0.2</Version>
     </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp">
-      <Version>8.51.0.59060</Version>
+      <Version>8.54.0.64047</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
