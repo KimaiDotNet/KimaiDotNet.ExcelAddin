@@ -346,13 +346,13 @@
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="PostSharp">
-      <Version>6.10.5</Version>
+      <Version>2023.0.3</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Diagnostics">
-      <Version>6.10.5</Version>
+      <Version>2023.0.3</Version>
     </PackageReference>
     <PackageReference Include="PostSharp.Patterns.Diagnostics.Microsoft">
-      <Version>6.10.5</Version>
+      <Version>2023.0.3</Version>
     </PackageReference>
     <PackageReference Include="Refractored.MvvmHelpers">
       <Version>1.6.2</Version>
