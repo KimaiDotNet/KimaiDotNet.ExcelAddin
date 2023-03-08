@@ -113,21 +113,6 @@ namespace MarkZither.KimaiDotNet.ExcelAddin
             }
         }
 
-        private static bool RedirectionUrlValidationCallback(string redirectionUrl)
-        {
-            // The default for the validation callback is to reject the URL.
-            bool result = false;
-            Uri redirectionUri = new Uri(redirectionUrl);
-            // Validate the contents of the redirection URL. In this simple validation
-            // callback, the redirection URL is considered valid if it is using HTTPS
-            // to encrypt the authentication credentials. 
-            if (string.Equals(redirectionUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
-            {
-                result = true;
-            }
-            return result;
-        }
-
         private void btnSyncPremuim_Click(object sender, RibbonControlEventArgs e)
         {
             MessageBox.Show("This is a premium feature please consider sponsoring the project.");
