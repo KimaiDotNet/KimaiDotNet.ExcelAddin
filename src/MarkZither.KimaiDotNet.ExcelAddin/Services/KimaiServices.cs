@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security;
 using System.Text;
@@ -21,6 +22,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         private HttpClient Client { get; set; }
         public KimaiServices()
         {
+#pragma warning disable S4423 // Weak SSL/TLS protocols should not be used
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11; //DevSkim: ignore DS440020,DS440000,DS144436
+#pragma warning restore S4423 // Weak SSL/TLS protocols should not be used
             Username = Globals.ThisAddIn.ApiUsername;
             Password = Globals.ThisAddIn.ApiPassword;
             ApiUrl = Globals.ThisAddIn.ApiUrl;
@@ -31,6 +35,9 @@ namespace MarkZither.KimaiDotNet.ExcelAddin.Services
         }
         public KimaiServices(string username, string password, string apiUrl)
         {
+#pragma warning disable S4423 // Weak SSL/TLS protocols should not be used
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11; //DevSkim: ignore DS440020,DS440000,DS144436
+#pragma warning restore S4423 // Weak SSL/TLS protocols should not be used
             Username = username;
             Password = password;
             ApiUrl = apiUrl;
