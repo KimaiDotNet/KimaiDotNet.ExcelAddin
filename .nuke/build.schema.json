@@ -32,6 +32,7 @@
             "AppVeyor",
             "AzurePipelines",
             "Bamboo",
+            "Bitbucket",
             "Bitrise",
             "GitHubActions",
             "GitLab",
@@ -79,6 +80,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Publish",
               "Restore"
             ]
           }
@@ -95,6 +97,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Publish",
               "Restore"
             ]
           }
